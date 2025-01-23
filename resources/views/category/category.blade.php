@@ -9,7 +9,7 @@
         <div class="grid grid-cols-3 gap-10 mb-8">
             @foreach ($categories as $category)
                 <a href="{{ route('category.show', $category->slug) }}" class="bg-white rounded-lg overflow-hidden relative">
-                    <img src="{{ asset('storage/' . $category->image) }}" alt=""
+                    <img src="{{ asset('' . $category->image) }}" alt=""
                         class="h-32 w-full rounded-lg object-cover">
                     <div
                         class="bg-gradient-to-b from-zinc-600/[0.6] to-zinc-800/[0.8] top-0 bottom-0 left-0 right-0 absolute flex transition-all duration-300 backdrop-blur-none hover:backdrop-blur-sm hover:backdrop-brightness-150">

@@ -9,10 +9,10 @@
                     <span class="ml-2 text-sky-600">Detail Buku</span>
                 </a>
             </div>
-            <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="w-full h-52 object-cover">
+            <img src="{{ asset('' . $category->image) }}" alt="{{ $category->name }}" class="w-full h-52 object-cover">
             <div class="p-7">
                 <div class="flex items-center mb-6">
-                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
+                    <img src="{{ asset('' . $category->image) }}" alt="{{ $category->name }}"
                         class="w-20 h-20 rounded-full" />
                     <div class="ml-3">
                         <h1 class="text-gray-700 text-2xl font-bold">{{ $category->name }}</h1>
@@ -47,7 +47,7 @@
                                     <div class="bg-green-600 p-3 py-1 text-white rounded-r text-sm absolute top-3">Tersedia</div>
                                 @endif
                             @endif
-                            <img src="{{ asset('storage/' . $book->image) }}" alt="gusdur" class="w-full h-96 object-cover rounded">
+                            <img src="{{ asset('' . $book->image) }}" alt="gusdur" class="w-full h-96 object-cover rounded">
                             <h1 class="mt-2 font-bold text-lg text-gray-700 truncate group-hover:truncate-none peer">
                                 {{ $book->title }}</h1>
                             <div

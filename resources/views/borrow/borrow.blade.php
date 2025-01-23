@@ -9,7 +9,7 @@
     <div class="bg-white rounded-lg">
         <a href="{{ route('books.show', $borrow->book->slug) }}">
             <div class="grid grid-cols-3 gap-4 p-4">
-                <img src="{{ asset('public/' . $borrow->book->image) }}" alt="{{ $borrow->book->title }}"
+                <img src="{{ asset('    ' . $borrow->book->image) }}" alt="{{ $borrow->book->title }}"
                     class="object-cover h-40 rounded-lg shadow">
                 <div class="col-span-2">
                     <div class="mb-2">
