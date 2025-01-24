@@ -1,69 +1,74 @@
 @extends('layouts.main')
 
-    @section('content')
-    <div class="p-4 h-full">
-        <div class="w-full bg-white rounded-lg p-3">
-            <div class="flex">
-                <a href="{{ route('books.index') }}" class="text-sm font-medium text-blue-500 flex items-center">
-                    <i data-feather="arrow-left" class="w-5 h-5 text-sky-600"></i>
-                    <span class="ml-2 text-sky-600">Detail Buku</span>
-                </a>
+@section('content')
+<div class="p-4 h-full">
+    <div class="w-full bg-white rounded-lg p-3">
+        <div class="flex">
+            <a href="{{ route('books.index') }}" class="text-sm font-medium text-blue-500 flex items-center">
+                <i data-feather="arrow-left" class="w-5 h-5 text-sky-600"></i>
+                <span class="ml-2 text-sky-600">Detail Buku</span>
+            </a>
+        </div>
+        <div class="grid grid-cols-4 gap-6 mt-3 relative">
+            <div class="flex flex-col items-center sticky top-0">
+                <img src="{{ asset('' . $book->image) }}" alt="{{ $book->title }}"
+                    class="w-full h-96 object-cover rounded-lg shadow-lg">
+                <form action="{{ route('borrow.store') }}" method="post" class="w-full">
+                    @csrf
+                    <input type="text" name="user_id" id="" value="{{ auth()->user()->id }}" hidden>
+                    <input type="text" name="book_id" id="" value="{{ $book->id }}" hidden>
+                    <input type="text" name="kode_peminjaman"
+                        value="{{ date('d') . auth()->user()->id . $book->kode_buku }}" hidden>
+                    <input type="text" name="status" value="meminjam" hidden>
+                    <button type="submit"
+                        class="w-full mt-3 transition-all duration-500 enabled:bg-gradient-to-br enabled:from-blue-400 enabled:to-blue-600 rounded-lg text-white font-medium p-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-200 focus:shadow-none disabled:shadow-none disabled:bg-slate-700 disabled:cursor-not-allowed"
+                        @if ($book->stok == 0)
+                        @disabled(true)
+                        @elseif ($book->borrow->isNotEmpty())
+                        @foreach ($book->borrow->where('status', 'meminjam') as $borrow)
+                        @if ($book->stok == 0 || $borrow->user_id == auth()->user()->id)
+                        @disabled(true)
+                        @endif
+                        @endforeach
+                        @endif>Pinjam
+                    </button>
+                </form>
+                <button
+                    class="w-full mt-2 flex items-center justify-center bg-gradient-to-br from-green-400 to-green-600 text-white font-medium p-4 rounded-lg text-sm shadow-lg hover:shadow-xl shadow-green-200 hover:shadow-green-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-500">
+                    <i data-feather="bookmark" class="w-5 h-5 mr-2"></i>
+                    Simpan ke Wishlist
+                </button>
+                <p class="text-slate-700 mt-2 text-sm font-medium">Jumlah Buku : {{ $book->stok }}</p>
             </div>
-            <div class="grid grid-cols-4 gap-6 mt-3 relative">
-                <div class="flex flex-col items-center sticky top-0">
-                    <img src="{{ asset('' . $book->image) }}" alt="{{ $book->title }}"
-                        class="w-full h-96 object-cover rounded-lg shadow-lg">
-                    <form action="{{ route('borrow.store') }}" method="post" class="w-full">
-                        @csrf
-                        <input type="text" name="user_id" id="" value="{{ auth()->user()->id }}" hidden>
-                        <input type="text" name="book_id" id="" value="{{ $book->id }}" hidden>
-                        <input type="text" name="kode_peminjaman"
-                            value="{{ date('d') . auth()->user()->id . $book->kode_buku }}" hidden>
-                        <input type="text" name="status" value="meminjam" hidden>
-                        <button type="submit"
-                            class="w-full mt-3 transition-all duration-500 enabled:bg-gradient-to-br enabled:from-blue-400 enabled:to-blue-600 rounded-lg text-white font-medium p-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-200 focus:shadow-none disabled:shadow-none disabled:bg-slate-700 disabled:cursor-not-allowed"
-                            @if ($book->stok == 0)
-                            @disabled(true)
-                            @elseif ($book->borrow->isNotEmpty())
-                            @foreach ($book->borrow->where('status', 'meminjam') as $borrow)
-                            @if ($book->stok == 0 || $borrow->user_id == auth()->user()->id)
-                            @disabled(true)
-                            @endif
-                            @endforeach
-                            @endif>Pinjam
-                        </button>
-                    </form>
-                    <p class="text-slate-700 mt-2 text-sm font-medium">Jumlah Buku : {{ $book->stok }}</p>
-                </div>
-                <div class="col-span-3">
-                    <h1 class="text-3xl font-semibold text-slate-800">{{ $book->title }}</h1>
-                    <h2 class="text-base font-medium mt-2 text-slate-700">
-                        {{ $book->penulis }} - {{ $book->penerbit }}
-                    </h2>
-                    <div class="flex items-center">
-                        <div class="flex relative @if ($book->histories->isNotEmpty()) ml-2 @endif mt-2 items-center">
-                            @if ($book->histories)
-                            @if ($book->histories->isNotEmpty())
-                            @foreach ($book->histories->unique('user_id') as $history)
-                            <img src="{{ asset('' . $history->user->image) }}"
-                                alt="{{ $history->user->name }}"
-                                class="w-10 h-10 overflow-hidden rounded-full object-cover border border-white relative -ml-3">
-                            @endforeach
-                            @endif
-                            <span
-                                class="text-slate-700 @if ($book->histories->isNotEmpty()) ml-2 @else mr-2 @endif">{{ $book->histories->count() }}
-                                people have read</span>
-                            @endif
-                        </div>
-                        <div class="flex mt-2 @if ($book->histories->isNotEmpty()) ml-2 @endif">
-                            <h2 class="text-slate-700">| Kategori :</h2>
-                            <a href="{{ route('category.show', $book->category->slug) }}"
-                                class="text-slate-700 ml-1 underline decoration-double decoration-blue-600">{{ $book->category->name }}</a>
-                        </div>
+            <div class="col-span-3">
+                <h1 class="text-3xl font-semibold text-slate-800">{{ $book->title }}</h1>
+                <h2 class="text-base font-medium mt-2 text-slate-700">
+                    {{ $book->penulis }} - {{ $book->penerbit }}
+                </h2>
+                <div class="flex items-center">
+                    <div class="flex relative @if ($book->histories->isNotEmpty()) ml-2 @endif mt-2 items-center">
+                        @if ($book->histories)
+                        @if ($book->histories->isNotEmpty())
+                        @foreach ($book->histories->unique('user_id') as $history)
+                        <img src="{{ asset('' . $history->user->image) }}"
+                            alt="{{ $history->user->name }}"
+                            class="w-10 h-10 overflow-hidden rounded-full object-cover border border-white relative -ml-3">
+                        @endforeach
+                        @endif
+                        <span
+                            class="text-slate-700 @if ($book->histories->isNotEmpty()) ml-2 @else mr-2 @endif">{{ $book->histories->count() }}
+                            people have read</span>
+                        @endif
                     </div>
-                    <p class="text-base text-slate-700 mt-2">{{ $book->description }}</p>
+                    <div class="flex mt-2 @if ($book->histories->isNotEmpty()) ml-2 @endif">
+                        <h2 class="text-slate-700">| Kategori :</h2>
+                        <a href="{{ route('category.show', $book->category->slug) }}"
+                            class="text-slate-700 ml-1 underline decoration-double decoration-blue-600">{{ $book->category->name }}</a>
+                    </div>
                 </div>
+                <p class="text-base text-slate-700 mt-2">{{ $book->description }}</p>
             </div>
+        </div>
 
 <!-- Card for Reviews and Ratings -->
 <div class="mt-6">
