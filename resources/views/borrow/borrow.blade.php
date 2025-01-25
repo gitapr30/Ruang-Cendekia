@@ -15,6 +15,8 @@
                     <div class="mb-2">
                         <h1 class="font-semibold text-gray-800 text-sm">Kode Peminjaman</h1>
                         <p class="text-gray-800 text-sm">{{ $borrow->kode_peminjaman }}</p>
+                        <!-- Barcode image for kode_peminjaman -->
+                        <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($borrow->kode_peminjaman, 'C128') }}" alt="Barcode" class="mt-2"/>
                     </div>
                     <div class="mb-2">
                         <h1 class="font-semibold text-gray-800 text-sm">Judul</h1>
