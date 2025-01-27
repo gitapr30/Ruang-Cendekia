@@ -15,8 +15,8 @@
                 <form class="space-y-4 md:space-y-6" method="POST" action="/login">
                     @csrf
                     <div>
-                        <label for="nisn" class="block mb-2 text-sm font-medium text-black dark:text-black">NISN</label>
-                        <input type="text" name="nisn" id="nisn"
+                        <label for="nip_nisn" class="block mb-2 text-sm font-medium text-black dark:text-black">NISN</label>
+                        <input type="text" name="nip_nisn" id="nip_nisn"
                             class="form-control bg-white border text-black sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                             placeholder="Nomor Induk Siswa Nasional" required>
                     </div>
@@ -48,10 +48,10 @@
                     <button type="submit"
                         class="w-full text-white bg-sky-600 hover:bg-sky-700 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign
                         in</button>
-                    <p class="text-sm font-light text-black">
+                    {{-- <p class="text-sm font-light text-black">
                         Don’t have an account yet? <a href="/register"
                             class="font-medium text-sky-600 hover:underline">Sign up</a>
-                    </p>
+                    </p> --}}
                 </form>
             </div>
         </div>
