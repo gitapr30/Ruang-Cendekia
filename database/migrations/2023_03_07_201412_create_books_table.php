@@ -24,9 +24,12 @@ return new class extends Migration
             $table->string('penerbit');
             $table->integer('stok');
             $table->date('thn_terbit');
+            $table->string('suka');
+            $table->string('penonton');
             $table->string('status')->default('ready');
             $table->foreignId('user_id');
             $table->foreignId('category_id');
+            $table->foreignId('rak_id');
             $table->timestamps();
         });
     }

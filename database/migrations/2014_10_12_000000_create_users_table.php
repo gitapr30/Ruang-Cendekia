@@ -18,9 +18,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('image');
             $table->string('username');
+            $table->string('nip_nisn');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('no_telp');
             $table->string('role');
             $table->rememberToken();
             $table->timestamps();
