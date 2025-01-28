@@ -72,6 +72,7 @@
                             <tr>
                                 <th class="w-10 p-3 text-sm font-semibold tracking-wide text-left">#</th>
                                 <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Books title</th>
+                                <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Kode Buku</th>
                                 <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Penulis</th>
                                 <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Penerbit</th>
                                 <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Category</th>
@@ -96,6 +97,9 @@
                                         {{ $book->title }}
                                     </td>
                                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                                        {{ $book->kode_buku }}
+                                    </td>
+                                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                         {{ $book->penulis }}
                                     </td>
                                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
@@ -104,6 +108,7 @@
                                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                         {{ $book->category->name }}
                                     </td>
+                                    
                                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                         {{ $book->stok }}
                                     </td>

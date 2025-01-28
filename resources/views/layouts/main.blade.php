@@ -16,8 +16,7 @@
         body {
             font-family: 'Poppins', sans-serif !important;
         }
-    </style>
-    <title>{{ $title }} - iLibrary</title>
+    </style>x
 </head>
 
 <body class="w-full h-screen overflow-hidden">

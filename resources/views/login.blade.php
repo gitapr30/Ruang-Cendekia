@@ -48,10 +48,10 @@
                     <button type="submit"
                         class="w-full text-white bg-sky-600 hover:bg-sky-700 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Sign
                         in</button>
-                    {{-- <p class="text-sm font-light text-black">
+                   <p class="text-sm font-light text-black">
                         Don’t have an account yet? <a href="/register"
                             class="font-medium text-sky-600 hover:underline">Sign up</a>
-                    </p> --}}
+                    </p> 
                 </form>
             </div>
         </div>

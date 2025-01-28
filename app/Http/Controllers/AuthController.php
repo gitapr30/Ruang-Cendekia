@@ -20,34 +20,43 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/');
+            // Update kolom last_login_at
+            $user = Auth::user(); // Mendapatkan pengguna yang sedang login
+            $user->last_login_at = now(); // Menyimpan waktu login saat ini ke kolom last_login_at
+            return redirect()->intended('/'); // Redirect ke halaman tujuan
         }
 
         return back()->with('errorMessage', 'Login failed!');
     }
-    public function Register(Request $request)
+
+    public function register(Request $request)
     {
         $image = [
             'image_post/profdef1.jpg',
             'image_post/profdef2.jpg'
         ];
+
         $credentials = $request->validate([
             'name' => 'required',
             'username' => 'required|unique:users',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
         ]);
+
         $credentials['password'] = Hash::make($credentials['password']);
         $credentials['role'] = 'visitor';
-        $credentials['image'] = $image[rand(0,1)];
+        $credentials['image'] = $image[rand(0, 1)];
+
         $store = User::create($credentials);
+
         if ($store) {
             $request->session()->regenerate();
             return redirect()->route('books.index');
-        }else{
+        } else {
             return redirect()->route('register');
         }
     }
+
     public function logout(Request $request)
     {
         Auth::logout();

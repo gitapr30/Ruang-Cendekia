@@ -5,6 +5,7 @@ use App\Http\Controllers\BooksController;
 use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PDFController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,7 @@ Route::middleware(['auth'])->group(function(){
         'borrow' => 'kode_peminjaman',
     ]);
     Route::get('/barcode/{kodePeminjaman}', [BarcodeController::class, 'saveBarcode']);
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/generate-pdf/{id}', [PDFController::class, 'generatePDF']);
