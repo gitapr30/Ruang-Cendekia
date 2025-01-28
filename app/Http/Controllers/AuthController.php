@@ -37,9 +37,10 @@ class AuthController extends Controller
         ];
 
         $credentials = $request->validate([
+            'nip_nisn' => 'required',
             'name' => 'required',
-            'username' => 'required|unique:users',
-            'email' => 'required|email|unique:users',
+            'username' => 'required|unique:users',  // Keep this unique for username
+            'email' => 'required|email',  // Remove the unique validation for email
             'password' => 'required|min:6',
         ]);
 

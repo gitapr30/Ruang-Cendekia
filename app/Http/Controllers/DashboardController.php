@@ -1,49 +1,48 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\User; // Pastikan ini ada
-use App\Models\Borrow; // Jika Anda menggunakan model Borrow
+use App\Models\User;
+use App\Models\Borrow;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
-{
-    // Fetch borrowing data grouped by month
-    $borrowingData = Borrow::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-                           ->groupBy('month')
-                           ->get();
+    {
+        // Fetch borrowing data grouped by month
+        $borrowingData = Borrow::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+                               ->groupBy('month')
+                               ->get();
 
-    // Fetch active user data grouped by month
-    $activeUserData = User::selectRaw('MONTH(last_login_at) as month, COUNT(*) as count')
-                          ->whereNotNull('last_login_at') // Only include users who have logged in
-                          ->groupBy('month')
-                          ->get();
+        // Fetch registered user data grouped by month
+        $registeredUserData = User::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+                                  ->groupBy('month')
+                                  ->get();
 
-    // Initialize arrays for months and counts
-    $months = [];
-    $borrowCounts = [];
-    $activeUserCounts = [];
+        // Initialize arrays for months and counts
+        $months = [];
+        $borrowCounts = [];
+        $registeredUserCounts = [];
 
-    // Prepare borrowing data
-    foreach ($borrowingData as $data) {
-        $months[] = Carbon::createFromFormat('m', $data->month)->format('F');
-        $borrowCounts[] = $data->count;
+        // Prepare borrowing data
+        foreach ($borrowingData as $data) {
+            $months[] = Carbon::createFromFormat('m', $data->month)->format('F');
+            $borrowCounts[] = $data->count;
+        }
+
+        // Prepare registered user data
+        foreach ($registeredUserData as $data) {
+            $registeredUserCounts[] = $data->count; // Add registered user counts
+        }
+
+        // Pass the data to the view
+        return view('dashboard.index', [
+            'data' => [
+                'months' => $months,
+                'borrowCounts' => $borrowCounts,
+                'registeredUserCounts' => $registeredUserCounts,
+            ]
+        ]);
     }
-
-    // Prepare active user data
-    foreach ($activeUserData as $data) {
-        $activeUserCounts[] = $data->count; // Add active user counts
-    }
-
-    // Pass the data to the view
-    return view('dashboard.index', [
-        'data' => [
-            'months' => $months,
-            'borrowCounts' => $borrowCounts,
-            'activeUserCounts' => $activeUserCounts,
-        ]
-    ]);
-}
 }

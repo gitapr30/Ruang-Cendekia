@@ -8,13 +8,29 @@ use Illuminate\Database\Eloquent\Model;
 class History extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
+
+    // Define the table name if it doesn't follow Laravel's plural convention
+    protected $table = 'histories';
+
+    // Define the fillable attributes to allow mass assignment
+    protected $fillable = [
+        'user_id',
+        'books_id',
+    ];
+
+    /**
+     * Get the user associated with the history.
+     */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the book associated with the history.
+     */
     public function book()
     {
-        return $this->belongsTo(Book::class, 'books_id');
+        return $this->belongsTo(Books::class, 'books_id');
     }
 }

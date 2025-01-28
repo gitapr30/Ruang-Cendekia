@@ -10,10 +10,10 @@
         <div id="borrowChart" class="w-full h-72"></div> <!-- ApexCharts container -->
     </div>
 
-    <!-- Statistik User Aktif Per Bulan -->
+    <!-- Statistik User Terdaftar Per Bulan -->
     <div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
-        <h2 class="text-xl font-semibold text-gray-800 mb-6">Jumlah User Aktif Per Bulan</h2>
-        <div id="activeUserChart" class="w-full h-72"></div> <!-- ApexCharts container -->
+        <h2 class="text-xl font-semibold text-gray-800 mb-6">Jumlah User Terdaftar Per Bulan</h2>
+        <div id="registeredUserChart" class="w-full h-72"></div> <!-- ApexCharts container -->
     </div>
 </div>
 
@@ -72,15 +72,15 @@
         var borrowChart = new ApexCharts(document.querySelector("#borrowChart"), borrowOptions);
         borrowChart.render();
 
-        // Active User Chart
-        var activeUserOptions = {
+        // Registered User Chart
+        var registeredUserOptions = {
             chart: {
                 type: 'bar',
                 height: 350,
             },
             series: [{
-                name: 'Jumlah User Aktif',
-                data: @json($data['activeUserCounts']) // Active user count per month
+                name: 'Jumlah User Terdaftar',
+                data: @json($data['registeredUserCounts']) // Registered user count per month
             }],
             xaxis: {
                 categories: @json($data['months']), // Label for months (e.g., January, February)
@@ -99,7 +99,7 @@
             },
             yaxis: {
                 title: {
-                    text: 'Jumlah User Aktif',
+                    text: 'Jumlah User Terdaftar',
                     style: {
                         fontSize: '14px',
                         fontWeight: 'bold'
@@ -114,14 +114,14 @@
             tooltip: {
                 y: {
                     formatter: function(value) {
-                        return `Jumlah User Aktif: ${value}`;
+                        return `Jumlah User Terdaftar: ${value}`;
                     }
                 }
             }
         };
 
-        var activeUserChart = new ApexCharts(document.querySelector("#activeUserChart"), activeUserOptions);
-        activeUserChart.render();
+        var registeredUserChart = new ApexCharts(document.querySelector("#registeredUserChart"), registeredUserOptions);
+        registeredUserChart.render();
     });
 </script>
 @endsection

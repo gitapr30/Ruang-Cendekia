@@ -71,7 +71,7 @@
             </div>
         @endforeach
     </div>
-@endsection
+@endsection 
 @section('contentAdmin')
     <div class="p-4">
         <div class="flex justify-between items-center">
