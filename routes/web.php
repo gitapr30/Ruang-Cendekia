@@ -33,9 +33,12 @@ Route::middleware(['auth'])->group(function(){
     Route::resource("/category", CategoryController::class)->scoped([
         'category' => 'slug',
     ]);
-    Route::resource('/borrow', BorrowController::class)->scoped([
-        'borrow' => 'kode_peminjaman',
-    ]);
+    Route::get('/borrow', [BorrowController::class, 'index'])->name('borrow.index'); // GET untuk menampilkan daftar peminjaman
+    Route::post('/borrow', [BorrowController::class, 'index'])->name('borrow.index'); // POST untuk menyimpan peminjaman
+
+
+    
+    // Tambahan route untuk form peminjaman dan penyimpanan
     Route::get('/barcode/{kodePeminjaman}', [BarcodeController::class, 'saveBarcode']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/reviews', [ReviewController::class, 'index'])->name('review.index');

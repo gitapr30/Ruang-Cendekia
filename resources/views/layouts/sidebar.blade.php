@@ -46,7 +46,7 @@
                     <p class="ml-2 font-medium {{ Request::is('books*') ? 'text-white' : 'text-gray-700' }} ">Buku</p>
                 </a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="{{ route('borrow.index') }}" class="transition-all ease-in-out duration-300 flex items-center p-3 rounded-lg mb-1 {{ Request::is('borrow*') ? 'shadow-lg shadow-blue-200 rounded-lg bg-gradient-to-br from-blue-400 to-blue-500' : '' }}">
                     @if (Request::is('borrow*'))
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 fill-white">
@@ -67,7 +67,7 @@
                         class="ml-2 font-medium text-gray-700  {{ Request::is('borrow*') ? 'text-white' : 'text-gray-700' }} ">
                         Peminjaman</p>
                 </a>
-            </li>
+            </li> -->
             <li>
                 <a href="{{ route('category.index') }}"
                     class="transition-all ease-in-out duration-300 flex items-center p-3 rounded-lg {{ Request::is('category*') ? 'shadow-lg shadow-blue-200 rounded-lg bg-gradient-to-br from-blue-400 to-blue-500' : '' }} mb-1">

@@ -7,15 +7,39 @@ use Illuminate\Database\Eloquent\Model;
 
 class Borrow extends Model
 {
+    protected $dates = ['tanggal_pinjam'];
+    protected $datess = ['tanggal_kembali']; 
     use HasFactory;
-    protected $guarded = ['id'];
 
-    public function Book()
-    {
-        return $this->belongsTo(Books::class, 'book_id');
-    }
+    protected $table = 'borrows';
+
+    protected $fillable = [
+        'user_id',
+        'book_id',
+        'status',
+        'denda',
+        'tanggal_pinjam',
+        'tanggal_kembali',
+        'kode_peminjaman',
+    ];
+    // protected $casts = [
+    //     'tanggal_pinjam' => 'date',  
+    //     'tanggal_kembali' => 'date', 
+    // ];
+
+    /**
+     * Relasi ke model User
+     */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Relasi ke model Book
+     */
+    public function book()
+    {
+        return $this->belongsTo(Books::class);
     }
 }

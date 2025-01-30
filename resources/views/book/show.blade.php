@@ -13,13 +13,12 @@
             <div class="flex flex-col items-center sticky top-0">
                 <img src="{{ asset('' . $book->image) }}" alt="{{ $book->title }}"
                     class="w-full h-96 object-cover rounded-lg shadow-lg">
-                <form action="{{ route('borrow.store') }}" method="post" class="w-full">
+                    <form action="{{ route('borrow.index') }}" method="post" class="w-full">
                     @csrf
                     <input type="text" name="user_id" id="" value="{{ auth()->user()->id }}" hidden>
                     <input type="text" name="book_id" id="" value="{{ $book->id }}" hidden>
                     <input type="text" name="kode_peminjaman"
                         value="{{ date('d') . auth()->user()->id . $book->kode_buku }}" hidden>
-                    <input type="text" name="status" value="meminjam" hidden>
                     <button type="submit"
                         class="w-full mt-3 transition-all duration-500 enabled:bg-gradient-to-br enabled:from-blue-400 enabled:to-blue-600 rounded-lg text-white font-medium p-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-200 focus:shadow-none disabled:shadow-none disabled:bg-slate-700 disabled:cursor-not-allowed"
                         @if ($book->stok == 0)

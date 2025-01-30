@@ -12,129 +12,108 @@ use Illuminate\Support\Facades\Gate;
 class BorrowController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Tampilkan daftar peminjaman berdasarkan peran pengguna.
      */
     public function index()
     {
         $title = '';
-        $borrow = new Borrow;
+        $borrowQuery = Borrow::query();
 
-        if (request('search') && Gate::allows('isUser')) {
-            $borrow = $borrow->whereHas('book', function (Builder $query) {
-                $query->where('title', 'like', '%' . request('search') . '%');
-            });
-        }else{
-            $borrow = $borrow->where('kode_peminjaman', 'like', '%' . request('search') . '%');
+        if (request()->has('search')) {
+            $search = request('search');
+            $borrowQuery->whereHas('book', function (Builder $query) use ($search) {
+                $query->where('title', 'like', "%$search%");
+            })->orWhere('kode_peminjaman', 'like', "%$search%");
         }
 
         if (Gate::allows('isUser')) {
-            $title .= 'Borrowing';
-            $borrow = $borrow->where('user_id', auth()->user()->id)->get();
-        }
-        if (Gate::allows('isAdmin')) {
-            $title .= 'All Borrowing';
-            $borrow = $borrow->orderByDesc('status')->get();
+            $title = 'Borrowing';
+            $borrowQuery->where('user_id', auth()->id());
+        } elseif (Gate::allows('isAdmin')) {
+            $title = 'All Borrowing';
+            $borrowQuery->orderByDesc('status');
         }
 
-        return view('borrow.borrow', [
-            'title' => $title,
-            'borrows' => $borrow
-        ]);
+        $borrows = $borrowQuery->with(['user', 'book'])->get();
+
+        // ✅ Perbaikan: Menambahkan query untuk users dan books
+        $users = \App\Models\User::all();
+        $books = Books::all();
+
+        $user = auth()->user();
+        $book = null;
+        if (request()->has('book_id')) {
+            $book = Books::find(request('book_id'));
+        }
+
+        return view('borrow.borrow', compact('user', 'borrows', 'title', 'users', 'books', 'book'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Simpan data peminjaman baru.
      */
     public function store(Request $request)
     {
         $validateData = $request->validate([
-            'user_id' => 'required',
-            'book_id' => 'required',
-            'kode_peminjaman' => 'required',
-            'status' => 'required'
+            'user_id'           => 'required|exists:users,id',
+            'book_id'           => 'required|exists:books,id',
+            'status'            => 'required|string',
+            'denda'             => 'nullable|numeric',
+            'tanggal_pinjam'    => 'required|date',
+            'tanggal_kembali'   => 'required|date|after_or_equal:tanggal_pinjam',
+            'kode_peminjaman'   => 'required|string|unique:borrows,kode_peminjaman',
         ]);
-        $book = Books::where('id', $request->book_id)->first();
-        $b_update = $book->update([
-            'stok' => $book->stok - 1
-        ]);
-        if ($b_update) {
-            Borrow::create($validateData);
-            History::create([
-                'user_id' => $validateData['user_id'],
-                'books_id' => $validateData['book_id'],
-            ]);
-            return back()->with('successMessage', 'Buku berhasil dipinjam');
+
+        $book = Books::findOrFail($request->book_id);
+
+        if ($book->stok <= 0) {
+            return back()->with('errorMessage', 'Buku tidak tersedia untuk dipinjam');
         }
-        return back()->with('errorMessage', 'Buku gagal dipinjam');
+
+        // Kurangi stok buku
+        $book->decrement('stok');
+
+        // Simpan peminjaman
+        Borrow::create($validateData);
+
+        // Simpan riwayat peminjaman
+        History::create([
+            'user_id'  => $validateData['user_id'],
+            'book_id'  => $validateData['book_id'],
+        ]);
+
+        // Redirect back to the borrow index page
+        return redirect()->route('borrow.index')->with('successMessage', 'Buku berhasil dipinjam');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Perbarui status peminjaman (pengembalian buku).
      */
     public function update(Request $request, Borrow $borrow)
     {
-        $borrow_update = $borrow->update([
-            'status' => $request->status
+        $request->validate([
+            'status' => 'required|string'
         ]);
-        if ($borrow_update) {
-            $book_update = Books::where('id', $request->book_id)->first();
-            $book_update = $book_update->update([
-                'stok' => $book_update->stok + 1 
-            ]);
-            return $borrow_update ? back()->with('successMessage', 'Proses pengembalian berhasil') : back()->with('errorMessage', 'Proses pengembalian gagal');
+
+        $borrow->update(['status' => $request->status]);
+
+        if ($request->status === 'returned') {
+            $book = Books::findOrFail($borrow->book_id);
+            $book->increment('stok');
         }
-        return back()->with('errorMessage', 'Proses pengembalian gagal');
+
+        return back()->with('successMessage', 'Proses peminjaman diperbarui');
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Hapus data peminjaman.
      */
-    public function destroy($id)
+    public function destroy(Borrow $borrow)
     {
-        //
+        if ($borrow->delete()) {
+            return back()->with('successMessage', 'Peminjaman berhasil dihapus');
+        }
+
+        return back()->with('errorMessage', 'Gagal menghapus peminjaman');
     }
 }

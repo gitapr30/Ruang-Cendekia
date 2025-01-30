@@ -16,7 +16,7 @@
         body {
             font-family: 'Poppins', sans-serif !important;
         }
-    </style>x
+    </style>
 </head>
 
 <body class="w-full h-screen overflow-hidden">
