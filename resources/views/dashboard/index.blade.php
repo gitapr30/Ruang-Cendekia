@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<!-- ApexCharts Script -->
+<!-- ApexCharts Script
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsPDF/2.5.1/jspdf.umd.min.js"></script>
@@ -50,23 +50,23 @@
             yaxis: { min: 0 },
             fill: { opacity: 0.9 },
             tooltip: { theme: 'dark' }
-        };
+        }; -->
 
         // Borrow Chart
-        var borrowChart = new ApexCharts(document.querySelector("#borrowChart"), {
-            ...commonChartOptions,
-            series: [{ name: 'Peminjaman', data: @json($data['borrowCounts']) }],
-            colors: ['#1E90FF']
-        });
-        borrowChart.render();
+        // var borrowChart = new ApexCharts(document.querySelector("#borrowChart"), {
+        //     ...commonChartOptions,
+        //     series: [{ name: 'Peminjaman', data: @json($data['borrowCounts']) }],
+        //     colors: ['#1E90FF']
+        // });
+        // borrowChart.render();
 
-        // Registered User Chart
-        var registeredUserChart = new ApexCharts(document.querySelector("#registeredUserChart"), {
-            ...commonChartOptions,
-            series: [{ name: 'User Terdaftar', data: @json($data['registeredUserCounts']) }],
-            colors: ['#32CD32']
-        });
-        registeredUserChart.render();
+        // // Registered User Chart
+        // var registeredUserChart = new ApexCharts(document.querySelector("#registeredUserChart"), {
+        //     ...commonChartOptions,
+        //     series: [{ name: 'User Terdaftar', data: @json($data['registeredUserCounts']) }],
+        //     colors: ['#32CD32']
+        // });
+        // registeredUserChart.render();
 
         function exportToImage(chartId, fileName) {
             html2canvas(document.querySelector(chartId)).then(canvas => {

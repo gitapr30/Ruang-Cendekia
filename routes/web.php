@@ -6,6 +6,7 @@ use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\PDFController;
@@ -49,7 +50,7 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
  //Route::post('/review-store', [BooksController::class, 'store'])->name('review.store');
 Route::post('/review-store', [ReviewController::class, 'store'])->name('review.store');
-
+Route::get('/getwishlist', [WishlistController::class, 'index'])->name('getwishlist.index');
 Route::get('/wishlist', [BooksController::class, 'indexWishlist'])->name('wishlist.index');
 Route::post('/wishlist/{book}', [BooksController::class, 'storeWishlist'])->name('wishlist.store');
 
