@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\PDFController;
+use App\Models\Borrow;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,15 +35,28 @@ Route::middleware(['auth'])->group(function(){
         'category' => 'slug',
     ]);
     Route::get('/borrow', [BorrowController::class, 'index'])->name('borrow.index'); // GET untuk menampilkan daftar peminjaman
-    Route::post('/borrow', [BorrowController::class, 'index'])->name('borrow.index'); // POST untuk menyimpan peminjaman
+    Route::post('/borrow', [BorrowController::class, 'index'])->name('borrow.index');
+    Route::post('/borrow-store', [BorrowController::class, 'store'])->name('borrow.store');
+    Route::post('/borrow-update', [BorrowController::class, 'update'])->name('borrow.update');
 
 
+    Route::get('/books', [BooksController::class, 'show'])->name('books.show');
+    Route::get('/books/{slug}', [BooksController::class, 'show'])->name('books.show');
+    Route::get('/books', [BooksController::class, 'index'])->name('books.index');
     
     // Tambahan route untuk form peminjaman dan penyimpanan
     Route::get('/barcode/{kodePeminjaman}', [BarcodeController::class, 'saveBarcode']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    Route::get('/reviews', [ReviewController::class, 'index'])->name('review.index');
-    Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+ //Route::post('/review-store', [BooksController::class, 'store'])->name('review.store');
+Route::post('/review-store', [ReviewController::class, 'store'])->name('review.store');
+
+Route::get('/wishlist', [BooksController::class, 'indexWishlist'])->name('wishlist.index');
+Route::post('/wishlist/{book}', [BooksController::class, 'storeWishlist'])->name('wishlist.store');
+
+
+    // Route::get('/book/{id}', [BooksController::class, 'showBookReviews'])->name('book.detail');
+    // Route::post('/review', [BooksController::class, 'review'])->name('review.store');
+    Route::get('/history', [BorrowController::class, 'history'])->name('history.index');
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/generate-pdf/{id}', [PDFController::class, 'generatePDF']);
 });

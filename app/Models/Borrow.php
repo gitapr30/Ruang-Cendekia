@@ -21,11 +21,13 @@ class Borrow extends Model
         'tanggal_pinjam',
         'tanggal_kembali',
         'kode_peminjaman',
+        // 'qr_code_path', // Menyimpan lokasi QR Code
+
     ];
-    // protected $casts = [
-    //     'tanggal_pinjam' => 'date',  
-    //     'tanggal_kembali' => 'date', 
-    // ];
+    protected $casts = [
+        'tanggal_pinjam' => 'date',  
+        'tanggal_kembali' => 'date', 
+    ];
 
     /**
      * Relasi ke model User

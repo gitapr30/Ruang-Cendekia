@@ -17,13 +17,14 @@ class Review extends Model
 
     // Relasi ke model User
     public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+{
+    return $this->belongsTo(User::class);
+}
 
     // Relasi ke model Book
     public function book()
     {
-        return $this->belongsTo(Books::class);
+        return $this->belongsTo(Books::class, 'book_id');
     }
+    
 }

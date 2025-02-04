@@ -4,16 +4,17 @@
 <div class="p-4 h-full">
     <div class="w-full bg-white rounded-lg p-3">
         <div class="flex">
-            <a href="{{ route('books.index') }}" class="text-sm font-medium text-blue-500 flex items-center">
+            <a href="{{ route('books.show', $book->slug) }}" class="text-sm font-medium text-blue-500 flex items-center">
+
                 <i data-feather="arrow-left" class="w-5 h-5 text-sky-600"></i>
-                <span class="ml-2 text-sky-600">Detail Buku</span>
+                <span class="ml-2 text-xl">Detail Buku</span>
             </a>
         </div>
         <div class="grid grid-cols-4 gap-6 mt-3 relative">
             <div class="flex flex-col items-center sticky top-0">
                 <img src="{{ asset('' . $book->image) }}" alt="{{ $book->title }}"
                     class="w-full h-96 object-cover rounded-lg shadow-lg">
-                    <form action="{{ route('borrow.index') }}" method="post" class="w-full">
+                <form action="{{ route('borrow.index') }}" method="post" class="w-full">
                     @csrf
                     <input type="text" name="user_id" id="" value="{{ auth()->user()->id }}" hidden>
                     <input type="text" name="book_id" id="" value="{{ $book->id }}" hidden>
@@ -32,11 +33,16 @@
                         @endif>Pinjam
                     </button>
                 </form>
-                <button
-                    class="w-full mt-2 flex items-center justify-center bg-gradient-to-br from-green-400 to-green-600 text-white font-medium p-4 rounded-lg text-sm shadow-lg hover:shadow-xl shadow-green-200 hover:shadow-green-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-500">
-                    <i data-feather="bookmark" class="w-5 h-5 mr-2"></i>
-                    Simpan ke Wishlist
-                </button>
+                <form action="{{ route('wishlist.store', $book->slug) }}" method="POST">
+    @csrf
+    <input type="hidden" name="suka" value="liked">
+    <button
+        type="submit"
+        class="w-full mt-2 flex items-center justify-center bg-gradient-to-br from-green-400 to-green-600 text-white font-medium p-4 rounded-lg text-sm shadow-lg hover:shadow-xl shadow-green-200 hover:shadow-green-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-500">
+        <i data-feather="bookmark" class="w-5 h-5 mr-2"></i>
+        Simpan ke Wishlist
+    </button>
+</form>
                 <p class="text-slate-700 mt-2 text-sm font-medium">Jumlah Buku : {{ $book->stok }}</p>
             </div>
             <div class="col-span-3">
@@ -69,138 +75,70 @@
             </div>
         </div>
 
-<!-- Card for Reviews and Ratings -->
-<div class="mt-6">
-    <h2 class="text-2xl font-semibold text-slate-800 mb-4">Ulasan dan Rating</h2>
+        <!-- Formulir Ulasan Baru -->
+        <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-slate-800 mb-4">Tulis Ulasan Anda</h3>
 
-    <!-- Average Rating -->
-    <div class="text-slate-700 mb-4">
-        <p class="font-medium">Rata-rata Rating: 5.0 dari 5</p>
-    </div>
+            <form action="{{ route('review.store') }}" method="POST">
+                @csrf
+                <div class="mb-4">
+                    <label for="review" class="block text-slate-700">Ulasan</label>
+                    <textarea name="review" id="review" rows="4" class="mt-2 p-2 border rounded w-full" required></textarea>
+                </div>
+                <input type="hidden" name="book_id" value="{{ $book->id }}">
+                <input type="hidden" name="user_id" value="{{ auth()->id() }}"> <!-- Ambil ID user yang sedang login -->
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Kirim Ulasan</button>
+            </form>
+        </div>
 
-    <!-- Reviews and Ratings Cards -->
-    <div class="flex overflow-x-auto space-x-4">
-        <!-- Review Card 1 -->
-        <div class="swiper-slide bg-white rounded-lg shadow-md p-4 mb-4" style="height: 240px;">
-                        <div class="flex items-center mb-4">
-                            <span class="text-yellow-400 flex">
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                            </span>
-                            <span class="ml-2 text-slate-700">5.0 dari 5</span>
-                        </div>
-                        <div class="text-slate-700">
-                            <div class="mb-4">
-                                <p>"Buku ini sangat informatif dan mudah dipahami. Penjelasannya sangat detail dan bermanfaat bagi pembaca. Sangat direkomendasikan!"</p>
-                                <p class="mt-2 font-medium">- Y****</p>
-                            </div>
-                        </div>
+        <!-- Tampilkan Ulasan -->
+
+        <div class="mt-6">
+            <h2 class="text-2xl font-semibold text-slate-800 mb-4">Ulasan dan Rating</h2>
+
+            <div class="space-y-4">
+                @foreach($reviews as $review)
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="text-slate-700">
+                        <p>{{ $review->review }}</p>
+                        <p class="mt-2 font-medium">- {{ $review->user->name ?? 'Unknown' }}</p>
                     </div>
-
-                    <!-- Review Card 2 -->
-                    <div class="swiper-slide bg-white rounded-lg shadow-md p-4 mb-4" style="height: 240px;">
-                        <div class="flex items-center mb-4">
-                            <span class="text-yellow-400 flex">
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                            </span>
-                            <span class="ml-2 text-slate-700">5.0 dari 5</span>
-                        </div>
-                        <div class="text-slate-700">
-                            <div class="mb-4">
-                                <p>"Buku ini memberikan wawasan yang sangat berguna. Saya merasa lebih memahami topik-topik yang sebelumnya asing bagi saya."</p>
-                                <p class="mt-2 font-medium">- A****</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Review Card 3 -->
-                    <div class="swiper-slide bg-white rounded-lg shadow-md p-4 mb-4" style="height: 240px;">
-                        <div class="flex items-center mb-4">
-                            <span class="text-yellow-400 flex">
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                            </span>
-                            <span class="ml-2 text-slate-700">5.0 dari 5</span>
-                        </div>
-                        <div class="text-slate-700">
-                            <div class="mb-4">
-                                <p>"Pengalaman membaca buku ini sangat menyenangkan. Penulis menjelaskan dengan cara yang mudah dipahami dan menarik."</p>
-                                <p class="mt-2 font-medium">- D****</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Review Card 4 (New Review) -->
-                    <div class="swiper-slide bg-white rounded-lg shadow-md p-4 mb-4" style="height: 240px;">
-                        <div class="flex items-center mb-4">
-                            <span class="text-yellow-400 flex">
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                                <i data-feather="star" class="w-5 h-5"></i>
-                            </span>
-                            <span class="ml-2 text-slate-700">5.0 dari 5</span>
-                        </div>
-                        <div class="text-slate-700">
-                            <div class="mb-4">
-                                <p>"Sangat memuaskan! Buku ini memberikan banyak contoh praktis yang membuat saya lebih mudah memahami konsep-konsep yang sulit."</p>
-                                <p class="mt-2 font-medium">- E****</p>
-                            </div>
-                        </div>
-                    </div>
-
-                 <!-- Slider Controls (Removed) -->
-                <!-- <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div> -->
+                </div>
+                @endforeach
             </div>
         </div>
 
+
+        <!-- Include Swiper JS -->
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <script>
+            var swiper = new Swiper('.swiper-container', {
+                slidesPerView: 3,
+                spaceBetween: 10,
+                loop: true,
+                autoplay: {
+                    delay: 3000,
+                    disableOnInteraction: false,
+                },
+            });
+        </script>
+
+        <!-- Include Feather Icons -->
+        <script src="https://unpkg.com/feather-icons"></script>
+        <script>
+            feather.replace(); // Replaces icons with feather icons
+        </script>
+        {{-- <div class="flex mt-4 justify-between"> --}}
+        {{-- <div class="w-1/4">
+                    <img src="{{ asset('storage/' . $book->image) }}" alt="{{ $book->title }}"
+        class="w-full h-96 object-cover rounded-lg shadow-lg">
     </div>
-</div>
-
-<!-- Include Swiper JS -->
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script>
-    var swiper = new Swiper('.swiper-container', {
-        slidesPerView: 3, 
-        spaceBetween: 10,
-        loop: true, 
-        autoplay: {
-            delay: 3000, 
-            disableOnInteraction: false,  
-        },
-        
-    });
-</script>
-
-<!-- Include Feather Icons -->
-<script src="https://unpkg.com/feather-icons"></script>
-<script>
-    feather.replace();  // Replaces icons with feather icons
-</script>
-
-    {{-- <div class="flex mt-4 justify-between"> --}}
-    {{-- <div class="w-1/4">
+    <div class="w-3/4">
+        <h1 class="text-2xl font-bold">{{ $book->title }}</h1>
+    </div> --}}
+    {{-- <div class="w-2/5 rounded overflow-hidden">
                     <img src="{{ asset('storage/' . $book->image) }}" alt="{{ $book->title }}"
-    class="w-full h-96 object-cover rounded-lg shadow-lg">
-</div>
-<div class="w-3/4">
-    <h1 class="text-2xl font-bold">{{ $book->title }}</h1>
-</div> --}}
-{{-- <div class="w-2/5 rounded overflow-hidden">
-                    <img src="{{ asset('storage/' . $book->image) }}" alt="{{ $book->title }}"
-class="w-full object-cover rounded-lg shadow-lg">
+    class="w-full object-cover rounded-lg shadow-lg">
 </div>
 <div class="w-3/5 p-5 pt-0">
     <div class="p-5 rounded-lg shadow-lg">

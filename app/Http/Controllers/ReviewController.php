@@ -32,7 +32,7 @@ class ReviewController extends Controller
 
         // Simpan review
         $reviews = Review::create($validated);
-        return response()->json($reviews, 201);
+        return redirect()->back()->with('successMessage', 'Berhasil review');
     }
 
     /**

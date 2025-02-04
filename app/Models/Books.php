@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Books extends Model
 {
     use HasFactory;
+
+    protected $table = 'books';
     protected $primaryKey = 'id';
     protected $guarded = ["id"];
     public function user()
@@ -30,4 +32,9 @@ class Books extends Model
     {
         return $this->hasMany(History::class, 'books_id');
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'book_id');
+    }
+
 }

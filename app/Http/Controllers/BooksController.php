@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Books;
 use App\Models\Borrow;
 use App\Models\Category;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -83,12 +84,17 @@ class BooksController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Books $book)
-    {
-        return view('book.show', [
-            'title' => $book->title, 'book' => $book
-        ]);
-    }
+    public function show($slug)
+{
+    $book = Books::where('slug', $slug)->firstOrFail(); // Retrieve the book by its slug
+    $reviews = Review::where('book_id', $book->id)->get(); // Fetch reviews for the current book
+
+    return view('book.show', compact('book', 'reviews')); // Pass both book and reviews to the view
+}
+
+    
+    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -159,4 +165,75 @@ class BooksController extends Controller
 
         return redirect()->route('books.index')->with('successDelete', 'Book has been deleted!');
     }
+    public function review(Request $request)
+    {
+        $validateData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'review' => 'required|string',
+        ]);
+
+        // Attempt to create the review
+        $review = Review::create($validateData);
+
+        // Fetch all reviews for the book
+        $reviews = Review::where('book_id', $validateData['book_id'])->get();
+
+        // Fetch the book for the review form
+        $book = Books::find($validateData['book_id']);
+
+        // Store the reviews in session
+        session()->flash('reviews', $reviews);
+
+        // Check if the review was created and send data back to the page
+        if ($review) {
+            return redirect()->back()
+                ->with('success', 'Review added successfully!')
+                ->with('book', $book); // Send the book back to the page for the review form
+        }
+
+        return redirect()->back()->with('failed', 'Failed to add review.');
+    } 
+    public function reviewstore(Request $request)
+    {
+        $validateData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'review' => 'required|string',
+        ]);
+    
+        // Simpan review ke dalam database
+        $review = Review::create($validateData);
+    
+        if ($review) {
+            return redirect()->back()->with('success', 'Review added successfully!');
+        }
+    
+        return redirect()->back()->with('failed', 'Failed to add review.');
+    }
+    public function storeWishlist(Request $request, Books $book)
+    {
+        $request->validate([
+            'suka' => 'required|string',
+        ]);
+    
+        // Update the book's suka field
+        $book->update(['suka' => $request->suka]);
+    
+        return redirect()->route('wishlist.index')->with('success', 'Wishlist updated successfully!');
+    }
+    
+    public function indexWishlist()
+    {
+        $wishlistBooks = Books::where('suka', 'liked')->get(); // Adjust based on your preferred string value
+        return view('wishlist.index', compact('wishlistBooks'));
+    }
+    public function removeFromWishlist(Books $book)
+{
+    $book->update(['suka' => null]); // Set suka jadi null untuk menghapus dari wishlist
+
+    return redirect()->route('wishlist.index')->with('success', 'Buku telah dihapus dari wishlist.');
 }
+      
+    }
+

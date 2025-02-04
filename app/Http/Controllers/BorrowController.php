@@ -8,6 +8,13 @@ use App\Models\History;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use BaconQrCode\Writer;
+use BaconQrCode\Renderer\Image\Png;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+
 
 class BorrowController extends Controller
 {
@@ -35,8 +42,6 @@ class BorrowController extends Controller
         }
 
         $borrows = $borrowQuery->with(['user', 'book'])->get();
-
-        // ✅ Perbaikan: Menambahkan query untuk users dan books
         $users = \App\Models\User::all();
         $books = Books::all();
 
@@ -50,60 +55,102 @@ class BorrowController extends Controller
     }
 
     /**
-     * Simpan data peminjaman baru.
+     * Simpan data peminjaman baru dengan status "Menunggu Konfirmasi".
      */
     public function store(Request $request)
     {
         $validateData = $request->validate([
             'user_id'           => 'required|exists:users,id',
             'book_id'           => 'required|exists:books,id',
-            'status'            => 'required|string',
-            'denda'             => 'nullable|numeric',
             'tanggal_pinjam'    => 'required|date',
             'tanggal_kembali'   => 'required|date|after_or_equal:tanggal_pinjam',
-            'kode_peminjaman'   => 'required|string|unique:borrows,kode_peminjaman',
         ]);
-
+    
         $book = Books::findOrFail($request->book_id);
-
+    
         if ($book->stok <= 0) {
             return back()->with('errorMessage', 'Buku tidak tersedia untuk dipinjam');
         }
-
-        // Kurangi stok buku
-        $book->decrement('stok');
-
-        // Simpan peminjaman
-        Borrow::create($validateData);
-
-        // Simpan riwayat peminjaman
-        History::create([
-            'user_id'  => $validateData['user_id'],
-            'book_id'  => $validateData['book_id'],
+    
+        $kode_peminjaman = hexdec(substr(uniqid(), -8));
+    
+        // Simpan peminjaman dengan status awal "Menunggu Konfirmasi"
+        $borrow = Borrow::create([
+            'user_id'         => $validateData['user_id'],
+            'book_id'         => $validateData['book_id'],
+            'tanggal_pinjam'  => $validateData['tanggal_pinjam'],
+            'tanggal_kembali' => $validateData['tanggal_kembali'],
+            'kode_peminjaman' => $kode_peminjaman,
+            'status'          => 'menunggu konfirmasi',
         ]);
+    
+        return redirect()->route('history.index')->with('successMessage', 'Pinjaman sedang menunggu konfirmasi. Silakan cek di history.');
+    }
+    
+    /**
+     * Perbarui status peminjaman:
+     * - "Menunggu Konfirmasi" → "Dipinjam" (Admin mengonfirmasi, stok buku berkurang)
+     * - "Dipinjam" → "Dikembalikan" (Admin mengembalikan, stok buku bertambah)
+     */
+    public function update(Request $request)
+{
+    $request->validate([
+        'borrow_id' => 'required|exists:borrows,id',
+        'status' => 'required|string'
+    ]);
 
-        // Redirect back to the borrow index page
-        return redirect()->route('borrow.index')->with('successMessage', 'Buku berhasil dipinjam');
+    $borrow = Borrow::findOrFail($request->borrow_id);
+    $book = Books::findOrFail($borrow->book_id);
+
+    if ($request->status === 'dipinjam') {
+        if ($book->stok <= 0) {
+            return back()->with('errorMessage', 'Stok buku habis.');
+        }
+        $book->decrement('stok');
     }
 
-    /**
-     * Perbarui status peminjaman (pengembalian buku).
-     */
-    public function update(Request $request, Borrow $borrow)
-    {
-        $request->validate([
-            'status' => 'required|string'
-        ]);
+    if ($request->status === 'dikembalikan') {
+        // Cek apakah buku dikembalikan setelah tanggal kembali yang seharusnya
+        $today = now(); // Tanggal hari ini
+        $dueDate = \Carbon\Carbon::parse($borrow->tanggal_kembali); // Tanggal kembali yang seharusnya
+        $lateDays = $today->diffInDays($dueDate, false); // Selisih hari (negative jika lebih cepat)
 
-        $borrow->update(['status' => $request->status]);
-
-        if ($request->status === 'returned') {
-            $book = Books::findOrFail($borrow->book_id);
-            $book->increment('stok');
+        if ($lateDays > 0) {
+            // Jika terlambat, hitung denda
+            $denda = $lateDays * 5000;
+            $borrow->update(['denda' => $denda]);
         }
 
-        return back()->with('successMessage', 'Proses peminjaman diperbarui');
+        $book->increment('stok');
     }
+
+    $borrow->update(['status' => $request->status]);
+
+    return back()->with('successMessage', 'Status peminjaman diperbarui.');
+}
+
+/**
+ * Menampilkan history peminjaman berdasarkan pengguna.
+ */
+public function history(Request $request)
+{
+    $title = 'History Borrowing';
+    
+    // Ambil ID pengguna dari cookie
+    $userId = Auth::user()->id;
+
+    // // Pastikan ID pengguna ada dan valid
+    if ($userId) {
+        // Ambil history peminjaman berdasarkan user ID yang diambil dari cookie
+        $history = Borrow::where('user_id', $userId)->with('book')->get();
+    } else {
+        // Jika cookie tidak ada, bisa redirect atau beri pesan error
+        return redirect()->route('login')->with('errorMessage', 'Anda harus login terlebih dahulu.');
+    }
+
+    $history = Borrow::with('book')->where('user_id', auth()->id())->paginate(6);
+    return view('borrow.history', compact('history', 'title'));
+}
 
     /**
      * Hapus data peminjaman.

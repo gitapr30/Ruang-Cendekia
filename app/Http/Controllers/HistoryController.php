@@ -2,80 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\History;
+use App\Models\Borrow;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class HistoryController extends Controller
 {
     /**
-     * Display a listing of the histories.
+     * Show the borrowing history of the user.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $histories = History::with(['user', 'book'])->get();
-        return view('history.history', ['histories' => $histories]); }
+        // Retrieve user_id from cookie or fallback to authenticated user
+        $userId = Cookie::get('user_id') ?? Auth::id();
+
+        // If there's no user_id in the cookie and the user is not logged in, redirect to login page
+        if (!$userId && !Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        // Retrieve all borrows associated with the user
+        $borrow = Borrow::where('user_id', $userId)
+            ->orderBy('tanggal_pinjam', 'desc') // Ordering by borrow date, descending
+            ->get();
+
+        return view('history.index', compact('borrow'));
+    }
+
+    /**
+     * Show the details of a specific borrow record.
+     *
+     * @param  int  $id
+     * @return \Illuminate\View\View
+     */
+    public function show($id)
+    {
+        // Retrieve the specific borrow record
+        $borrow = Borrow::with(['user', 'book'])->find($id);
     
-
-    /**
-     * Store a newly created history in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'books_id' => 'required|exists:books,id',
-        ]);
-
-        $history = History::create($validated);
-
-        return response()->json($history, 201);
-    }
-
-    /**
-     * Display the specified history.
-     *
-     * @param  \App\Models\History  $history
-     * @return \Illuminate\Http\Response
-     */
-    public function show(History $history)
-    {
-        return response()->json($history->load(['user', 'book']));
-    }
-
-    /**
-     * Update the specified history in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\History  $history
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, History $history)
-    {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'books_id' => 'required|exists:books,id',
-        ]);
-
-        $history->update($validated);
-
-        return response()->json($history);
-    }
-
-    /**
-     * Remove the specified history from storage.
-     *
-     * @param  \App\Models\History  $history
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(History $history)
-    {
-        $history->delete();
-
-        return response()->json(null, 204);
+        // Debug: Check if borrow exists
+        if (!$borrow) {
+            return redirect()->route('history.index')->withErrors('Borrow record not found.');
+        }
+    
+        return view('history.show', compact('borrow, history'));
     }
 }
