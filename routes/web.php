@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BooksController;
 use App\Http\Controllers\BorrowController;
+use App\Http\Controllers\BorrowadminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\DashboardController;
@@ -39,6 +40,12 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/borrow', [BorrowController::class, 'index'])->name('borrow.index');
     Route::post('/borrow-store', [BorrowController::class, 'store'])->name('borrow.store');
     Route::post('/borrow-update', [BorrowController::class, 'update'])->name('borrow.update');
+
+    Route::get('/borrow', [BorrowadminController::class, 'index'])->name('borrow.index'); // GET untuk menampilkan daftar peminjaman
+    Route::post('/borrow', [BorrowadminController::class, 'index'])->name('borrow.index');
+    Route::post('/borrow-store', [BorrowadminController::class, 'store'])->name('borrow.store');
+    Route::post('/borrow-update', [BorrowadminController::class, 'update'])->name('borrow.update');
+
 
     Route::get('/books', [BooksController::class, 'show'])->name('books.show');
     Route::get('/books/{slug}', [BooksController::class, 'show'])->name('books.show');
