@@ -42,7 +42,7 @@
         <!-- <input type="hidden" name="status" value="meminjam"> -->
 
         <div>
-            <button type="submit" class="transition-all duration-500 bg-gradient-to-br from-blue-400 to-blue-500 px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:shadow-none shadow-blue-100">
+            <button type="submit" class="transition-all duration-500 bg-gradient-to-br from-blue-400 to-blue-500 px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:shadow-none shadow-blue-100 mt-6">
                 Pinjam Buku
             </button>
         </div>
@@ -63,6 +63,7 @@
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Kembali</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Status</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Aksi</th>
+            <th class="px-4 py-2 text-sm font-medium text-gray-700">Denda</th> <!-- Fine column added here -->
         </tr>
     </thead>
     <tbody>
@@ -75,7 +76,7 @@
                 {{ \Carbon\Carbon::parse($borrow->tanggal_pinjam)->format('d-m-Y') }}
             </td>
             <td class="px-4 py-2 text-sm text-gray-600">
-                {{ \Carbon\Carbon::parse($borrow->tanggal_kembl)->format('d-m-Y') }}
+                {{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}
             </td>
             <td class="px-4 py-2 text-sm text-gray-600">
                 {{ ucfirst($borrow->status) }}
@@ -99,6 +100,14 @@
                         Kembalikan
                     </button>
                 </form>
+                @endif
+            </td>
+            <td class="px-4 py-2 text-sm text-gray-600">
+                <!-- Display denda if exists -->
+                @if($borrow->denda)
+                    Rp {{ number_format($borrow->denda, 0, ',', '.') }}
+                @else
+                    - <!-- If no fine, show a dash -->
                 @endif
             </td>
         </tr>

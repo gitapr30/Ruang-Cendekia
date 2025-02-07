@@ -73,6 +73,8 @@ class BooksController extends Controller
             'stok' => 'required',
             'thn_terbit' => 'required',
         ]);
+        $validateData['suka'] = 0;
+        $validateData['penonton'] = 0;
         $validateData['image'] = $request->file('image')->store('image_post');
         $store = Books::create($validateData);
         return $store ? redirect()->route('books.index')->with('success', 'New post has been added!') : redirect()->route('books.index')->with('failed', 'New post failed to add!');

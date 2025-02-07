@@ -81,6 +81,7 @@ class BorrowController extends Controller
             'tanggal_pinjam'  => $validateData['tanggal_pinjam'],
             'tanggal_kembali' => $validateData['tanggal_kembali'],
             'kode_peminjaman' => $kode_peminjaman,
+            
             'status'          => 'menunggu konfirmasi',
         ]);
     
@@ -109,20 +110,22 @@ class BorrowController extends Controller
         $book->decrement('stok');
     }
 
-    if ($request->status === 'dikembalikan') {
-        // Cek apakah buku dikembalikan setelah tanggal kembali yang seharusnya
-        $today = now(); // Tanggal hari ini
-        $dueDate = \Carbon\Carbon::parse($borrow->tanggal_kembali); // Tanggal kembali yang seharusnya
-        $lateDays = $today->diffInDays($dueDate, false); // Selisih hari (negative jika lebih cepat)
+   // Cek apakah buku dikembalikan setelah tanggal kembali yang seharusnya
+$today = now(); // Tanggal hari ini
+$dueDate = \Carbon\Carbon::parse($borrow->tanggal_kembali); // Tanggal kembali yang seharusnya
+$lateDays = $today->diffInDays($dueDate, false); // Selisih hari (negative jika lebih cepat)
 
-        if ($lateDays > 0) {
-            // Jika terlambat, hitung denda
-            $denda = $lateDays * 5000;
-            $borrow->update(['denda' => $denda]);
-        }
+if ($lateDays > 0) {
+    // Jika terlambat, hitung denda
+    $denda = $lateDays * 500000; // Assuming 500,000 per day
+    $borrow->update(['denda' => $denda]);
+} else {
+    // No fine if returned on time
+    $borrow->update(['denda' => 0]);
+}
 
-        $book->increment('stok');
-    }
+$book->increment('stok');
+
 
     $borrow->update(['status' => $request->status]);
 

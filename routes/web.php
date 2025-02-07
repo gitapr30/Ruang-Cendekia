@@ -10,6 +10,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\ProfileController;
 use App\Models\Borrow;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 
 Route::middleware(['auth'])->group(function(){
     Route::get('/', function(){
@@ -40,7 +40,6 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/borrow-store', [BorrowController::class, 'store'])->name('borrow.store');
     Route::post('/borrow-update', [BorrowController::class, 'update'])->name('borrow.update');
 
-
     Route::get('/books', [BooksController::class, 'show'])->name('books.show');
     Route::get('/books/{slug}', [BooksController::class, 'show'])->name('books.show');
     Route::get('/books', [BooksController::class, 'index'])->name('books.index');
@@ -48,19 +47,22 @@ Route::middleware(['auth'])->group(function(){
     // Tambahan route untuk form peminjaman dan penyimpanan
     Route::get('/barcode/{kodePeminjaman}', [BarcodeController::class, 'saveBarcode']);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
- //Route::post('/review-store', [BooksController::class, 'store'])->name('review.store');
-Route::post('/review-store', [ReviewController::class, 'store'])->name('review.store');
-Route::get('/getwishlist', [WishlistController::class, 'index'])->name('getwishlist.index');
-Route::get('/wishlist', [BooksController::class, 'indexWishlist'])->name('wishlist.index');
-Route::post('/wishlist/{book}', [BooksController::class, 'storeWishlist'])->name('wishlist.store');
+ 
+    Route::post('/review-store', [ReviewController::class, 'store'])->name('review.store');
+    Route::get('/getwishlist', [WishlistController::class, 'index'])->name('getwishlist.index');
+    Route::get('/wishlist', [BooksController::class, 'indexWishlist'])->name('wishlist.index');
+    Route::post('/wishlist/{book}', [BooksController::class, 'storeWishlist'])->name('wishlist.store');
 
-
-    // Route::get('/book/{id}', [BooksController::class, 'showBookReviews'])->name('book.detail');
-    // Route::post('/review', [BooksController::class, 'review'])->name('review.store');
     Route::get('/history', [BorrowController::class, 'history'])->name('history.index');
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/generate-pdf/{id}', [PDFController::class, 'generatePDF']);
+
+    // Route untuk profile
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
 Route::middleware(['guest'])->group(function(){
     Route::get('/login', function () {
         return view('login', [

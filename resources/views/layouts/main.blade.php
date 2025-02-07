@@ -109,31 +109,40 @@
                             <span class="ml-2 font-medium">{{ date('d/m/Y') }}</span>
                         </div>
                         <form  
-                        @if (Request::is('books*'))
-                            action="{{ route('books.index') }}"
-                        @elseif(Request::is('borrow*'))
-                            action="{{ route('borrow.index') }}" 
-                        @elseif(Request::is('category*'))
-                            action="{{ route('category.index') }}" 
-                        @endif 
-                        method="get" class="w-full flex justify-end ml-3">
-                            <label class="relative block w-full">
-                                <span class="sr-only">Search</span>
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" class="w-5 h-5 stroke-slate-400">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                                    </svg>
-                                </span>
-                                <input
-                                    class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-3 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-full"
-                                    placeholder="Cari buku ..." type="text" name="search" 
-                                    value="{{ request('search') }}"/>
-                            </label>
-                            <button type="submit"
-                                class="transition-all duration-500 bg-gradient-to-br from-blue-400 to-blue-500 px-4 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:shadow-none shadow-blue-100">Search</button>
-                        </form>
+    @if (Request::is('books*'))
+        action="{{ route('books.index') }}"
+    @elseif(Request::is('borrow*'))
+        action="{{ route('borrow.index') }}" 
+    @elseif(Request::is('category*'))
+        action="{{ route('category.index') }}" 
+    @endif 
+    method="get" class="w-full flex justify-end ml-3">
+    
+    <label class="relative block w-full">
+        <span class="sr-only">Search</span>
+        <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" class="w-5 h-5 stroke-slate-400">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+        </span>
+        <input
+            class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-3 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-full"
+            placeholder="Cari buku ..." type="text" name="search" 
+            value="{{ request('search') }}"/>
+    </label>
+
+    <button type="submit"
+        class="transition-all duration-500 bg-gradient-to-br from-blue-400 to-blue-500 px-4 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:shadow-none shadow-blue-100">
+        Search
+    </button>
+
+   <!-- Tombol Profile -->
+<a href="{{ route('profile.index') }}" class="transition-all duration-500 bg-gradient-to-br from-gray-400 to-gray-500 px-4 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100">
+    Profile
+</a>
+
                         {{-- <form
                             class="flex items-center bg-white p-3 py-1 rounded-full shadow-sm focus:border-2 focus:border-sky-50 w-full">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

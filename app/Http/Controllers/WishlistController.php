@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Wishlists;
+use App\Models\Borrow;
 use App\Models\Books;
 use Illuminate\Support\Facades\Auth;
 
@@ -60,4 +61,5 @@ class WishlistController extends Controller
             'books' => $books
         ]);
     }
+    
 }
