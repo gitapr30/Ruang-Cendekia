@@ -18,12 +18,13 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('book_id');
             $table->string('status');
-            $table->string('denda');
-            $table->string('tanggal_pinjam');
-            $table->string('tanggal_kembali');
+            $table->integer('denda')->nullable()->change(); // Ubah string ke integer
+            $table->date('tanggal_pinjam'); // Ubah string ke date
+            $table->date('tanggal_kembali'); // Ubah string ke date
             $table->string('kode_peminjaman')->unique();
             $table->timestamps();
         });
+
     }
 
     /**
@@ -31,8 +32,11 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-        Schema::dropIfExists('borrows');
-    }
+public function down()
+{
+    Schema::table('borrows', function (Blueprint $table) {
+        $table->string('denda')->change(); // Kembalikan ke string jika rollback
+    });
+}
+
 };

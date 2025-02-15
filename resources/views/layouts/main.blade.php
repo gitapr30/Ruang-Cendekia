@@ -23,7 +23,7 @@
 
     {{-- {{ Request::is("/login") ? }} --}}
 
-        @if (session()->has('successMessage'))
+        @if (session()->has('SuccessMessage'))
         <div class="alert alert-success bg-green-600 text-white" id="hilangkan">
             <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between flex-wrap">
@@ -96,7 +96,7 @@
             @include('layouts.sidebar')
             <!-- shadow-sm border-slate-300 focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-sky-200 focus:border-sky-500 focus:ring-sky-500 rounded-full placeholder-slate-400 -->
             <div
-                class="{{ auth()->user()->role != 'admin' && Request::is('books') ? 'w-full lg:w-[50rem]' : 'lg:w-5/6' }} bg-slate-50/[0.1] h-screen overflow-y-auto">
+                class="{{ auth()->user()->role != 'admin' && Request::is('books') ? 'w-full' : 'lg:w-5/6' }} bg-slate-50/[0.1] h-screen overflow-y-auto">
                 @if (Request::is('category') || Request::is('books') || Request::is('borrow'))
                     <div class="flex p-2 items-center">
                         <div
@@ -108,16 +108,16 @@
                             </svg>
                             <span class="ml-2 font-medium">{{ date('d/m/Y') }}</span>
                         </div>
-                        <form  
+                        <form
     @if (Request::is('books*'))
         action="{{ route('books.index') }}"
     @elseif(Request::is('borrow*'))
-        action="{{ route('borrow.index') }}" 
+        action="{{ route('borrow.index') }}"
     @elseif(Request::is('category*'))
-        action="{{ route('category.index') }}" 
-    @endif 
+        action="{{ route('category.index') }}"
+    @endif
     method="get" class="w-full flex justify-end ml-3">
-    
+
     <label class="relative block w-full">
         <span class="sr-only">Search</span>
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -129,18 +129,29 @@
         </span>
         <input
             class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-3 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm w-full"
-            placeholder="Cari buku ..." type="text" name="search" 
+            placeholder="Cari buku ..." type="text" name="search"
             value="{{ request('search') }}"/>
     </label>
 
-    <button type="submit"
-        class="transition-all duration-500 bg-gradient-to-br from-blue-400 to-blue-500 px-4 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:shadow-none shadow-blue-100">
-        Search
-    </button>
+  <!-- Tombol Search -->
+<button type="submit"
+    class="transition-all duration-500 bg-gradient-to-br from-blue-400 to-blue-500 px-4 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:shadow-none shadow-blue-100">
+    Search
+</button>
 
-   <!-- Tombol Profile -->
-<a href="{{ route('profile.index') }}" class="transition-all duration-500 bg-gradient-to-br from-gray-400 to-gray-500 px-4 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100">
-    Profile
+ <!-- Ikon Notifikasi dengan indikator -->
+<button type="button" class="transition-all duration-500 bg-transparent px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100 flex items-center relative" onclick="toggleModal()">
+    <img src="notif-icon.svg" alt="Notifikasi" class="w-6 h-6">
+
+    <!-- Indikator Notifikasi (Hijau) -->
+    <span id="notifIndicator" class="absolute top-1 right-0 w-2.5 h-2.5 bg-green-500 rounded-full"></span>
+</button>
+
+    </button>
+<!-- Tombol Profile dengan Icon -->
+<a href="{{ route('profile.index') }}"
+    class="transition-all duration-500 bg-transparent px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100 flex items-center">
+    <img src="user-icon.svg" alt="Profile" class="w-5 h-5">
 </a>
 
                         {{-- <form
@@ -160,6 +171,9 @@
                 @can('isAdmin')
                     @yield('contentAdmin')
                 @endcan
+                @can('isPustakawan')
+                    @yield('contentPustakawan')
+                @endcan
             </div>
             @can('isUser')
                 {{-- w-2/6  --}}
@@ -168,8 +182,18 @@
                     </div>
                 @endif
             @endcan
+            @can('isPustakawan')
+                {{-- w-2/6  --}}
+                @if (Request::is(route('books.index', '*')))
+                    <div class="lg:w-[30rem] w-[0rem] bg-white h-screen">
+                    </div>
+                @endif
+            @endcan
         </div>
     @endif
+    <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-4 text-center">
+        <p class="text-sm">&copy; {{ date('Y') }} Ruang Cendekia. Semua Hak Dilindungi.</p>
+    </footer>
     {{-- {{ : null }} --}}
     <!-- <div class="flex bg-slate-900">
         <div class="w-1/5 flex">
@@ -256,6 +280,7 @@
         </div>
     </div> -->
     <script src="https://unpkg.com/feather-icons"></script>
+
     <script>
         feather.replace()
 
@@ -286,6 +311,66 @@
             side.classList.remove('translate-x-[0rem]')
         }
     </script>
+<!-- Modal Notifikasi -->
+<div id="notifikasiModal" class="fixed top-14 right-4 w-72 mt-10 bg-white rounded-lg shadow-lg hidden p-5 z-50">
+        <h2 class="text-lg font-semibold mb-4">Notifikasi</h2>
+        <ul class="space-y-3">
+            <li class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
+                ✅ Peminjaman telah dikonfirmasi!
+            </li>
+            <li class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg">
+                ⚠️ Masa peminjaman kurang dari 1 hari!
+            </li>
+            <li class="bg-green-100 text-green-800 px-4 py-2 rounded-lg">
+                📚 Peminjaman telah selesai.
+            </li>
+        </ul>
+        <button id="close-notif" class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg w-full">
+            Tutup
+        </button>
+    </div>
+
+    @yield('content')
+
+    <!-- Tambahkan skrip modal di sini -->
+    @yield('scripts')
+    <script>
+    // Fungsi untuk menampilkan atau menyembunyikan modal
+    function toggleModal() {
+        const modal = document.getElementById("notifikasiModal");
+        modal.classList.toggle("hidden");
+
+        // Menyembunyikan indikator setelah modal ditampilkan
+        document.getElementById("notifIndicator").classList.add("hidden");
+    }
+
+    // Fungsi untuk menutup modal
+    document.getElementById("close-notif")?.addEventListener("click", function() {
+        document.getElementById("notifikasiModal").classList.add("hidden");
+        // Menyembunyikan indikator setelah modal ditutup
+        document.getElementById("notifIndicator").classList.remove("hidden");
+    });
+
+    // Fungsi untuk menampilkan indikator ketika ada notifikasi baru
+    function showNewNotification() {
+        document.getElementById("notifIndicator").classList.remove("hidden");
+    }
+
+    // Panggil fungsi untuk menampilkan indikator (contoh)
+    // Misalnya, jika ada notifikasi baru setelah beberapa detik
+    setTimeout(showNewNotification, 3000); // Simulasi munculnya notifikasi baru setelah 3 detik
+</script>
+
+<body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
+    <main class="flex-grow">
+        @yield('content')
+    </main>
+
+    <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-4 text-center">
+        <p class="text-sm">&copy; {{ date('Y') }} Ruang Cendekia. Semua Hak Dilindungi.</p>
+    </footer>
+</body>
+
 </body>
 
 </html>

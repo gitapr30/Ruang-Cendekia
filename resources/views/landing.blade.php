@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>RuangCendekia</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">
+  <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/aos/aos.css" rel="stylesheet') }}">
+  <link href="{{ asset('assets/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: eNno
+  * Template URL: https://bootstrapmade.com/enno-free-simple-bootstrap-template/
+  * Updated: Aug 07 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      <a href="" class="logo d-flex align-items-center me-auto">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1 class="sitename">RuangCendekia</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="#hero" class="active">Beranda</a></li>
+          <li><a href="#about">Tentang</a></li>
+          <li><a href="#services">Rekomendasi</a></li>
+          <li><a href="#testimonials">Ulasan</a></li>
+          <li><a href="#contact">Informasi</a></li>
+        </ul>
+      </nav>
+
+      <a class="btn-getstarted" href="{{ route('login') }}">Masuk</a>
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-up">
+            <h1>Selamat Datang di RuangCendekia</h1>
+            <p>Mari baca buku untuk tingkatkan ilmu</p>
+            <div class="d-flex">
+              <a href="#about" class="btn-get-started">Mulai</a>
+            </div>
+          </div>
+          <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="100">
+            <img src="assets/img/ornamen.svg" class="img-fluid animated" alt="">
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span>Tentang Kami<br></span>
+        <h2>Tentang</h2>
+        <p>Pelajari lebih lanjut tentang siapa kami, apa yang kami lakukan, dan bagaimana kami dapat membantu Anda.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+          <div class="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="100">
+            <img src="assets/img/about.png" class="img-fluid" alt="">
+          </div>
+          <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="200">
+            <h3>Perpustakaan Sekolah: Membaca, Belajar, dan Berkembang.</h3>
+            <p class="fst-italic">
+              Perpustakaan sekolah kami merupakan pusat sumber belajar yang menyediakan berbagai koleksi buku, referensi
+              digital, serta fasilitas nyaman untuk membaca dan berdiskusi. Kami berkomitmen untuk mendukung siswa dan
+              guru dalam mengembangkan wawasan dan keterampilan literasi.
+            </p>
+            <p class="fst-italic">
+              Apa yang kami tawarkan?
+            </p>
+            <ul>
+              <li><i class="bi bi-check2-all"></i> <span>Koleksi buku yang lengkap, mulai dari buku pelajaran hingga
+                  literatur fiksi dan nonfiksi.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Ruang baca yang nyaman dan kondusif untuk belajar.</span></li>
+              <li><i class="bi bi-check2-all"></i> <span>Akses ke sumber digital dan referensi online.</span></li>
+            </ul>
+            <p>
+              Dengan lingkungan yang mendukung dan koleksi yang terus diperbarui, perpustakaan kami menjadi tempat
+              terbaik untuk memperluas pengetahuan. Mari bersama-sama membangun budaya membaca yang lebih baik! 📖✨
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <!-- Stats Section -->
+    <section id="stats" class="stats section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-6 mx-auto">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="{{ $totalUsers }}" data-purecounter-duration="1"
+                class="purecounter"></span>
+              <p>Pengguna</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6 mx-auto">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="{{ $totalBooks }}" data-purecounter-duration="1"
+                class="purecounter"></span>
+              <p>Koleksi Buku</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6 mx-auto">
+            <div class="stats-item text-center w-100 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="{{ $totalCategories }}"
+                data-purecounter-duration="1" class="purecounter"></span>
+              <p>Kategori</p>
+            </div>
+          </div><!-- End Stats Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Stats Section -->
+
+    <!-- Services Section -->
+    <section id="services" class="services section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span>Rekomendasi</span>
+        <h2>Rekomendasi</h2>
+        <p>Temukan buku terbaik pilihan kami untuk menambah wawasan dan inspirasi Anda!</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-activity"></i>
+              </div>
+              <div class="stretched-link">
+                <h3>Nesciunt Mete</h3>
+              </div>
+              <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis
+                tempore et consequatur.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-broadcast"></i>
+              </div>
+              <div class="stretched-link">
+                <h3>Eosle Commodi</h3>
+              </div>
+              <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut
+                nesciunt dolorem.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-easel"></i>
+              </div>
+              <div class="stretched-link">
+                <h3>Ledo Markt</h3>
+              </div>
+              <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id voluptas adipisci
+                eos earum corrupti.</p>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-bounding-box-circles"></i>
+              </div>
+              <div class="stretched-link">
+                <h3>Asperiores Commodit</h3>
+              </div>
+              <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident
+                adipisci neque.</p>
+              <div class="stretched-link"></div>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-calendar4-week"></i>
+              </div>
+              <div class="stretched-link">
+                <h3>Velit Doloremque</h3>
+              </div>
+              <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem
+                alias eius labore.</p>
+              <div class="stretched-link"></div>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="service-item position-relative">
+              <div class="icon">
+                <i class="bi bi-chat-square-text"></i>
+              </div>
+              <div class="stretched-link">
+                <h3>Dolori Architecto</h3>
+              </div>
+              <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti
+                recusandae ducimus enim.</p>
+              <div class="stretched-link"></div>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Services Section -->
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span>Ulasan</span>
+        <h2>Ulasan</h2>
+        <p>Apa kata mereka?</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="swiper init-swiper" data-speed="600" data-delay="5000"
+          data-breakpoints="{ &quot;320&quot;: { &quot;slidesPerView&quot;: 1, &quot;spaceBetween&quot;: 40 }, &quot;1200&quot;: { &quot;slidesPerView&quot;: 3, &quot;spaceBetween&quot;: 40 } }">
+          <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+              "speed": 600,
+              "autoplay": {
+                "delay": 5000
+              },
+              "slidesPerView": "auto",
+              "pagination": {
+                "el": ".swiper-pagination",
+                "type": "bullets",
+                "clickable": true
+              },
+              "breakpoints": {
+                "320": {
+                  "slidesPerView": 1,
+                  "spaceBetween": 40
+                },
+                "1200": {
+                  "slidesPerView": 3,
+                  "spaceBetween": 20
+                }
+              }
+            }
+          </script>
+          <div class="swiper-wrapper">
+            @foreach($reviews as $review)
+        <div class="swiper-slide">
+          <div class="testimonial-item" "="">
+        <p>
+          <i class=" bi bi-quote quote-icon-left"></i>
+          <span>{{ $review->review }}</span>
+          <i class="bi bi-quote quote-icon-right"></i>
+          </p>
+          <img src="{{ asset('storage/' . $review->user->profile_image) }}" class="testimonial-img" alt="">
+          <h3>{{ $review->user->name }}</h3>
+          <h4>{{ $review->user->role }}</h4>
+          </div>
+        </div><!-- End testimonial item -->
+      @endforeach
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+
+    </section><!-- /Testimonials Section -->
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span>Informasi</span>
+        <h2>Informasi</h2>
+        <p>Hubungi kami untuk informasi lebih lanjut atau bantuan terkait layanan kami.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container p-4 border rounded" data-aos="fade-up" data-aos-delay="100">
+        <div class="row align-items-start">
+          <!-- Kolom Informasi -->
+          <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
+              <i class="bi bi-geo-alt flex-shrink-0"></i>
+              <div>
+                <h3>Alamat</h3>
+                <p>Jl. Tanimbar No.22, Kasin, Kec. Klojen, Kota Malang, Jawa Timur 65117</p>
+              </div>
+            </div>
+
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+              <i class="bi bi-telephone flex-shrink-0"></i>
+              <div>
+                <h3>Hubungi Kami</h3>
+                <p>0341353798</p>
+              </div>
+            </div>
+
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+              <i class="bi bi-envelope flex-shrink-0"></i>
+              <div>
+                <h3>Email</h3>
+                <p>info@example.com</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kolom Maps -->
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.088191723815!2d112.62473577372916!3d-7.98982897967979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6281b75ea5485%3A0x90fd5c6fcedf6acf!2sSMK%20Negeri%204%20Kota%20Malang!5e0!3m2!1sid!2sid!4v1739120937698!5m2!1sid!2sid"
+              frameborder="0" style="border:0; width: 100%; height: 250px;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- </div> -->
+      </div>
+
+      <!-- <div class="col-lg-7">
+            <form action="" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+              <div class="row gy-4"> -->
+
+      <!-- <div class="col-md-6">
+                  <label for="name-field" class="pb-2">Nama</label>
+                  <input type="text" name="name" id="name-field" class="form-control" required="">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="email-field" class="pb-2">Email</label>
+                  <input type="email" class="form-control" name="email" id="email-field" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <label for="subject-field" class="pb-2">Subjek</label>
+                  <input type="text" class="form-control" name="subject" id="subject-field" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <label for="message-field" class="pb-2">Pesan</label>
+                  <textarea class="form-control" name="message" rows="10" id="message-field" required=""></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <div class="loading">Memuat</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Your message has been sent. Thank you!</div>
+
+                  <button type="submit">Kirim Pesan</button>
+                </div> -->
+
+      <!-- </div>
+            </form>
+          </div>End Contact Form -->
+
+      </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main>
+
+  <!-- <footer id="footer" class="footer">
+    <div class="footer-newsletter">
+        <div class="container">
+            <div class="row align-items-center text-center text-md-start"> -->
+  <!-- Brand -->
+  <!-- <div class="col-md-6 col-lg-6 mb-3 mb-md-0"> -->
+  <!-- <h4 class="footer-brand">RuangCendekia</h4> -->
+  <!-- </div> -->
+
+  <!-- Links -->
+  <!-- <div class="col-md-6 col-lg-6 text-md-end text-lg-center">
+                    <ul class="menu-nav list-inline d-flex flex-wrap justify-content-center  justify-content-md-end">
+                        <li class="list-inline-item"><a href="#hero">Beranda</a></li>
+                        <li class="list-inline-item mx-2 d-none d-md-inline">|</li>
+                        <li class="list-inline-item"><a href="#about">Tentang</a></li>
+                        <li class="list-inline-item mx-2 d-none d-md-inline">|</li>
+                        <li class="list-inline-item"><a href="#services">Rekomendasi</a></li>
+                        <li class="list-inline-item mx-2 d-none d-md-inline">|</li>
+                        <li class="list-inline-item"><a href="#testimonials">Ulasan</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container copyright text-center mt-4">
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">RuangCendekia</strong> <span>All Rights Reserved</span></p>
+        </div>
+    </div>
+</footer> -->
+  <footer class="bg-body-tertiary text-center text-lg-start">
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05); color: #444444; font-size: 15px;">
+     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+      <li class="nav-item"><a href="#hero" class="nav-link px-2 text-body-secondary">Beranda</a></li>
+      <li class="nav-item"><a href="#about" class="nav-link px-2 text-body-secondary">Tentang</a></li>
+      <li class="nav-item"><a href="#services" class="nav-link px-2 text-body-secondary">Rekomendasi</a></li>
+      <li class="nav-item"><a href="#testimonials" class="nav-link px-2 text-body-secondary">Ulasan</a></li>
+      <li class="nav-item"><a href="#contact" class="nav-link px-2 text-body-secondary">Informasi</a></li>
+     </ul>
+      © 2025 Copyright:
+      <span class="text-body" style="color: #444444; font-size: 15px;">RuangCendekia</span>
+    </div>
+    <!-- Copyright -->
+  </footer>
+
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
+  <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
+  <script src="{{ asset('assets/vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>
+  <script src="{{ asset('assets/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+  <script src="{{ asset('assets/vendor/swiper/swiper-bundle.min.js') }}"></script>
+
+  <!-- Main JS File -->
+  <script src="{{ asset('assets/js/main.js') }}"></script>
+
+</body>
+
+</html>

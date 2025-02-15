@@ -21,7 +21,10 @@ class BooksController extends Controller
     public function index()
     {
         $title = '';
-        $books = Books::where('title', 'like', '%' . request('search') . '%')->orWhere('penulis', 'like', '%' .  request('search') . '%')->get();
+        $books = Books::where('title', 'like', '%' . request('search') . '%')
+            ->orWhere('penulis', 'like', '%' . request('search') . '%')
+            ->get();
+
         if (request('search')) {
             $title = 'Hasil pencarian dari ' . request('search') . ' | ';
         }
@@ -31,9 +34,17 @@ class BooksController extends Controller
         if (Gate::allows('isAdmin')) {
             $title .= 'All Book';
         }
+
+        // Fetch all categories with their books
+        $categories = Category::with('books')->get();
+
+        // Ambil buku yang dirilis dalam satu bulan terakhir
+        $newBooks = Books::orderByDesc('created_at')->get();
         return view('book.books', [
             'title' => $title,
-            'books' => $books
+            'books' => $books,
+            'categories' => $categories,
+            'newBooks' => $newBooks, // Tambahkan ke view agar tidak error
         ]);
     }
 
@@ -59,7 +70,8 @@ class BooksController extends Controller
     public function store(Request $request)
     {
         $request['user_id'] = auth()->user()->id;
-        $request['slug'] = Str::of($request->title)->slug('-');
+        $request['slug'] = Str::slug($request->title);
+
         $validateData = $request->validate([
             'title' => 'required|max:255',
             'slug' => 'required|unique:books',
@@ -68,17 +80,30 @@ class BooksController extends Controller
             'user_id' => 'required',
             'penulis' => 'required',
             'description' => 'required',
-            'image' => 'required',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
             'penerbit' => 'required',
             'stok' => 'required',
             'thn_terbit' => 'required',
         ]);
+
         $validateData['suka'] = 0;
         $validateData['penonton'] = 0;
-        $validateData['image'] = $request->file('image')->store('image_post');
+
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = $file->getClientOriginalName(); // Ambil nama asli file
+            $path = $file->storeAs('book', $fileName, 'public'); // Simpan dengan nama asli
+            $validateData['image'] = 'storage/book/' . $fileName; // Simpan path lengkap ke database
+        }
+
+
         $store = Books::create($validateData);
-        return $store ? redirect()->route('books.index')->with('success', 'New post has been added!') : redirect()->route('books.index')->with('failed', 'New post failed to add!');
+
+        return $store
+            ? redirect()->route('books.index')->with('success', 'New book has been added!')
+            : redirect()->route('books.index')->with('failed', 'Failed to add new book.');
     }
+
 
     /**
      * Display the specified resource.
@@ -94,8 +119,8 @@ class BooksController extends Controller
     return view('book.show', compact('book', 'reviews')); // Pass both book and reviews to the view
 }
 
-    
-    
+
+
 
 
     /**
@@ -146,8 +171,11 @@ class BooksController extends Controller
             $validate['kode_buku'] = 'sometimes|required|unique:books';
         }
         $validateData = $request->validate($validate);
-        if ($request['image']) {
-            $validateData['image'] = $request->file('image')->store('/');
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = $file->getClientOriginalName(); // Ambil nama asli file
+            $path = $file->storeAs('book', $fileName, 'public'); // Simpan dengan nama asli
+            $validateData['image'] = 'storage/book/' . $fileName; // Simpan path lengkap ke database
         }
         $update = $book->update($validateData);
         return $update ? redirect()->route('books.index')->with('success', 'New post has been added!') : redirect()->route('books.index')->with('failed', 'New post failed to add!');
@@ -195,7 +223,7 @@ class BooksController extends Controller
         }
 
         return redirect()->back()->with('failed', 'Failed to add review.');
-    } 
+    }
     public function reviewstore(Request $request)
     {
         $validateData = $request->validate([
@@ -203,14 +231,14 @@ class BooksController extends Controller
             'book_id' => 'required|exists:books,id',
             'review' => 'required|string',
         ]);
-    
+
         // Simpan review ke dalam database
         $review = Review::create($validateData);
-    
+
         if ($review) {
             return redirect()->back()->with('success', 'Review added successfully!');
         }
-    
+
         return redirect()->back()->with('failed', 'Failed to add review.');
     }
     public function storeWishlist(Request $request, Books $book)
@@ -218,13 +246,13 @@ class BooksController extends Controller
         $request->validate([
             'suka' => 'required|string',
         ]);
-    
+
         // Update the book's suka field
         $book->update(['suka' => $request->suka]);
-    
+
         return redirect()->route('wishlist.index')->with('success', 'Wishlist updated successfully!');
     }
-    
+
     public function indexWishlist()
     {
         $wishlistBooks = Books::where('suka', 'liked')->get(); // Adjust based on your preferred string value
@@ -236,6 +264,6 @@ class BooksController extends Controller
 
     return redirect()->route('wishlist.index')->with('success', 'Buku telah dihapus dari wishlist.');
 }
-      
+
     }
 
