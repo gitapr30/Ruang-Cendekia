@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use BaconQrCode\Writer;
 use BaconQrCode\Renderer\Image\Png;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use Carbon\Carbon;
 
 
 class BorrowadminController extends Controller
@@ -135,16 +136,30 @@ class BorrowadminController extends Controller
 
 public function updateDenda(Request $request)
 {
-    $request->validate([
-        'borrow_id' => 'required|exists:borrows,id',
-        'denda' => 'required|numeric|min:0',
-    ]);
+    $borrow = Borrow::find($request->borrow_id);
 
-    $borrow = Borrow::findOrFail($request->borrow_id);
-    $borrow->update(['denda' => $request->denda]);
+    if (!$borrow) {
+        return redirect()->back()->with('error', 'Data tidak ditemukan.');
+    }
 
-    return back()->with('successMessage', 'Denda berhasil diperbarui.');
+    $borrow->keterangan = $request->keterangan;
+
+    if ($request->keterangan == 'terlambat') {
+        $daysLate = now()->diffInDays($borrow->tanggal_kembali, false);
+        $borrow->denda = $daysLate > 0 ? $daysLate * 2000 : 0;
+    } elseif ($request->keterangan == 'hilang') {
+        $borrow->denda = 300000;
+    } elseif ($request->keterangan == 'rusak') {
+        $borrow->denda = 300000;
+    } else {
+        $borrow->denda = 0;
+    }
+
+    $borrow->save();
+
+    return redirect()->back()->with('success', 'Denda berhasil diperbarui.');
 }
+
 
 public function laporan()
 {
@@ -198,6 +213,18 @@ public function kembalikanBuku($id)
     return back()->with('successMessage', 'Buku berhasil dikembalikan dan stok diperbarui.');
 }
 
+public function returnBook(Request $request, Borrow $borrow)
+{
+    if ($borrow->status !== 'dikembalikan') {
+        $borrow->denda = $borrow->calculated_denda;
+        $borrow->status = 'dikembalikan';
+        $borrow->save();
+    }
+
+    return redirect()->route('laporan.index')->with('success', 'Buku berhasil dikembalikan');
+}
+
+
     /**
      * Perbarui status peminjaman.
      */
@@ -231,6 +258,19 @@ public function kembalikanBuku($id)
 
         return back()->with('successMessage', 'Status peminjaman diperbarui.');
     }
+
+    public function getCalculatedDendaAttribute()
+{
+    if ($this->status === 'dikembalikan') {
+        return $this->denda; // Gunakan denda terakhir yang tersimpan
+    }
+
+    $tanggal_kembali = Carbon::parse($this->tanggal_kembali);
+    $hari_terlambat = max(0, now()->diffInDays($tanggal_kembali, false)); // Hitung hanya jika terlambat
+    $tarif_denda = 1000; // Sesuaikan dengan tarif per hari
+
+    return $hari_terlambat * $tarif_denda;
+}
 
     /**
      * Hapus data peminjaman.

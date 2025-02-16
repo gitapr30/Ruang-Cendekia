@@ -15,6 +15,7 @@ class Borrow extends Model
         'user_id',
         'book_id',
         'status',
+        'keterangan',
         'tanggal_pinjam',
         'tanggal_kembali',
         'kode_peminjaman',

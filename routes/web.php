@@ -82,18 +82,24 @@ Route::middleware(['auth'])->group(function () {
 
     //rak
     Route::get('/bookshelves', [BookshelvesController::class, 'index'])->name('bookshelves.index');
-    Route::post('/bookshelves-store', [BookshelvesController::class, 'store'])->name('bookshelves.store');
+    Route::post('/bookshelves', [BookshelvesController::class, 'store'])->name('bookshelves.store');
+
     Route::get('/bookshelves/{id}/edit', [BookshelvesController::class, 'edit'])->name('bookshelves.edit');
     Route::put('/bookshelves/{id}', [BookshelvesController::class, 'update'])->name('bookshelves.update');
     Route::delete('/bookshelves/{id}', [BookshelvesController::class, 'destroy'])->name('bookshelves.destroy');
     Route::get('/bookshelves/{id}', [BookshelvesController::class, 'show'])->name('bookshelves.show');
     Route::put('/bookshelves/{bookshelves}', [BookshelvesController::class, 'update'])->name('bookshelves.update');
+    Route::get('/bookshelves/create', [BookshelvesController::class, 'create'])->name('bookshelves.create');
 
 
 
     Route::get('/books', [BooksController::class, 'show'])->name('books.show');
     Route::get('/books/{slug}', [BooksController::class, 'show'])->name('books.show');
     Route::get('/books', [BooksController::class, 'index'])->name('books.index');
+    // Route::get('/books/{slug}/detail', [BooksController::class, 'detail'])->name('books.detail');
+
+
+
 
     // Tambahan route untuk form peminjaman dan penyimpanan
     Route::get('/barcode/{kodePeminjaman}', [BarcodeController::class, 'saveBarcode']);

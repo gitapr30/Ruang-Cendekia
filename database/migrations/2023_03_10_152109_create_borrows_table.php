@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('book_id');
             $table->string('status');
-            $table->integer('denda')->nullable()->change(); // Ubah string ke integer
+            $table->string('keterangan')->nullable()->after('status');
+            $table->integer('denda')->default(0)->after('keterangan');
             $table->date('tanggal_pinjam'); // Ubah string ke date
             $table->date('tanggal_kembali'); // Ubah string ke date
             $table->string('kode_peminjaman')->unique();
@@ -35,7 +36,8 @@ return new class extends Migration
 public function down()
 {
     Schema::table('borrows', function (Blueprint $table) {
-        $table->string('denda')->change(); // Kembalikan ke string jika rollback
+        $table->dropColumn('keterangan');
+            $table->dropColumn('denda');
     });
 }
 

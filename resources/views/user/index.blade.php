@@ -138,7 +138,7 @@
                     </td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                         @if($user->image)
-                            <img src="{{ asset('storage/' . $user->image) }}" alt="Profile Image" class="img-fluid rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                        <img src="{{ asset($user->image ?? 'images/default-book.jpg') }}" alt="Profile Image" class="img-fluid rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
                         @else
                             <span>No Image</span>
                         @endif

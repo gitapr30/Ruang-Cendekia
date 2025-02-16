@@ -12,19 +12,22 @@ class BookshelvesController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $bookshelves = Bookshelves::with('category')->get();
-        return view('bookshelves.index', compact('bookshelves'));
+{
+    $bookshelves = Bookshelves::paginate(10);
+
+    if ($bookshelves->total() == 0) { 
+        return view('bookshelves.index', ['message' => 'Tidak ada rak buku.']);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     $categories = Category::all();
-    //     return view('bookshelves.create', compact('categories'));
-    // }
+    return view('bookshelves.index', compact('bookshelves'));
+}
+
+public function create()
+{
+    $categories = Category::all(); // Jika kategori diperlukan dalam form
+    return view('bookshelves.create', compact('categories'));
+}
+
 
     /**
      * Store a newly created resource in storage.
@@ -53,41 +56,32 @@ class BookshelvesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
-{
-    $bookshelves = Bookshelves::findOrFail($id);
-    $categories = Category::all();
-    return view('bookshelves.update', compact('bookshelves', 'categories'));
-}
-
+    public function edit(Bookshelves $bookshelves) // Gunakan route model binding
+    {
+        $categories = Category::all();
+        return view('bookshelves.update', compact('bookshelves', 'categories'));
+    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-{
-    $bookshelves = Bookshelves::findOrFail($id); // Gunakan findOrFail agar error lebih jelas
+    public function update(Request $request, Bookshelves $bookshelves) // Gunakan route model binding
+    {
+        $request->validate([
+            'rak' => 'required|string|max:255',
+            'baris' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+        ]);
 
-    $request->validate([
-        'rak' => 'required|string|max:255',
-        'baris' => 'required|string|max:255',
-        'category_id' => 'required|exists:categories,id',
-    ]);
+        $bookshelves->update($request->only(['rak', 'baris', 'category_id']));
 
-    $bookshelves->update([
-        'rak' => $request->rak,
-        'baris' => $request->baris,
-        'category_id' => $request->category_id,
-    ]);
-
-    return redirect()->route('bookshelves.index')->with('success', 'Rak buku berhasil diperbarui.');
-}
-
+        return redirect()->route('bookshelves.index')->with('success', 'Rak buku berhasil diperbarui.');
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(bookshelves $bookshelves)
+    public function destroy(Bookshelves $bookshelves) // Perbaikan huruf kapital
     {
         $bookshelves->delete();
 

@@ -279,53 +279,6 @@
                     <p class="ml-2 font-medium text-white {{ Request::is('bookshelves*') ? 'text-white' : 'text-gray-700' }} ">rak</p>
                 </a>
             </li>
-            <li class="relative">
-                <button
-                    class="w-full flex items-center p-3 rounded-lg mb-1 transition-all ease-in-out duration-300 focus:outline-none text-white"
-                    onclick="toggleDropdown()">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-white">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25" />
-                    </svg>
-                    <p class="ml-2 font-medium text-white">peminjaman</p>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-auto transition-transform duration-300"
-                        id="dropdownArrow" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M12 15.25a.75.75 0 01-.53-.22l-6-6a.75.75 0 111.06-1.06L12 13.44l5.47-5.47a.75.75 0 111.06 1.06l-6 6a.75.75 0 01-.53.22z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </button>
-
-                <ul id="dropdownMenu" class="hidden mt-1 pl-4 space-y-1" >
-                    @php
-                        $statuses = [
-                            'menunggu konfirmasi' => 'borrow.konfirmasi',
-                            'dipinjam' => 'borrow.dipinjam',
-                            'dikembalikan' => 'borrow.kembali',
-                            'didenda' => 'borrow.denda'
-                        ];
-                    @endphp
-
-                    @foreach ($statuses as $status => $route)
-                        <li>
-                            <a href="{{ route($route) }}"
-                                class="block p-2 rounded-md transition-all ease-in-out duration-300
-                                                {{ request()->routeIs($route) ? 'bg-blue-500 text-white shadow-lg' : 'text-white' }}">
-                                {{ ucfirst($status) }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </li>
-            <script>
-                function toggleDropdown() {
-                    const menu = document.getElementById("dropdownMenu");
-                    const arrow = document.getElementById("dropdownArrow");
-                    menu.classList.toggle("hidden");
-                    arrow.classList.toggle("rotate-180");
-                }
-            </script>
             <li>
                 <a href="{{ route('category.index') }}"
                     class="transition-all ease-in-out duration-300 flex items-center p-3 rounded-lg {{ Request::is('category*') ? 'rounded-lg bg-gradient-to-br from-blue-400 to-blue-500' : '' }} mb-1">
@@ -406,7 +359,7 @@
         <p class="m-0 px-5 text-base font-medium text-slate-400 mb-2">PUSTAKAWAN</p>
         <ul class="list-none list-inside px-5 mb-3">
             <li>
-                <a href="{{ route('books.index') }}"
+                <a href="{{ route('reviews.index') }}"
                     class="transition-all ease-in-out duration-300 flex items-center p-3 rounded-lg mb-1 {{ Request::is('review*') ? 'shadow-lg shadow-blue-200 rounded-lg bg-gradient-to-br from-blue-400 to-blue-500' : '' }}">
                     @if (Request::is('review*'))
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
@@ -623,26 +576,6 @@
                     @endif
                     <p class="ml-2 font-medium {{ Request::is('laporan*') ? 'text-white' : 'text-gray-700' }} ">Laporan
                         Peminjaman
-                    </p>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('change.index') }}"
-                    class="transition-all ease-in-out duration-300 flex items-center p-3 rounded-lg {{ Request::is('change*') ? 'shadow-lg shadow-blue-200 rounded-lg bg-gradient-to-br from-blue-400 to-blue-500' : '' }} mb-1">
-                    @if (Request::is('chage*'))
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                            class="w-6 h-6 fill-white">
-                            <path
-                                d="M19.5 21a3 3 0 003-3v-4.5a3 3 0 00-3-3h-15a3 3 0 00-3 3V18a3 3 0 003 3h15zM1.5 10.146V6a3 3 0 013-3h5.379a2.25 2.25 0 011.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 013 3v1.146A4.483 4.483 0 0019.5 9h-15a4.483 4.483 0 00-3 1.146z" />
-                        </svg>
-                    @else
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6 stroke-gray-700 ">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 002.227 1.932H19.05a2.25 2.25 0 002.227-1.932l.857-6a2.25 2.25 0 00-1.883-2.542m-16.5 0V6A2.25 2.25 0 016 3.75h3.879a1.5 1.5 0 011.06.44l2.122 2.12a1.5 1.5 0 001.06.44H18A2.25 2.25 0 0120.25 9v.776" />
-                        </svg>
-                    @endif
-                    <p class="ml-2 font-medium {{ Request::is('change*') ? 'text-white' : 'text-gray-700' }} ">ubah
                     </p>
                 </a>
             </li>

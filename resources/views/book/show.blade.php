@@ -310,3 +310,53 @@
 </div>
 </div>
 @endsection
+
+@section('contentPustakawan')
+<div class="p-4">
+    <div class="bg-white rounded-xl shadow p-6">
+        <h1 class="text-xl font-semibold text-gray-800 mb-4">Detail Buku</h1>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm font-medium text-gray-600">Judul:</p>
+                <p class="text-lg text-gray-900">{{ $book->title }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Kode Buku:</p>
+                <p class="text-lg text-gray-900">{{ $book->kode_buku }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Penulis:</p>
+                <p class="text-lg text-gray-900">{{ $book->penulis }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Penerbit:</p>
+                <p class="text-lg text-gray-900">{{ $book->penerbit }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Kategori:</p>
+                <p class="text-lg text-gray-900">{{ $book->category->name }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Tahun Terbit:</p>
+                <p class="text-lg text-gray-900">{{ $book->thn_terbit }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Jumlah Buku:</p>
+                <p class="text-lg text-gray-900">{{ $book->stok }}</p>
+            </div>
+        </div>
+        
+        @if($book->image)
+        <div class="mt-6 text-center">
+            <p class="text-sm font-medium text-gray-600">Gambar Buku:</p>
+            <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}"
+                            alt="{{ $book->title }}" class="w-48 h-64 object-cover mx-auto rounded-lg shadow-md">
+        </div>
+        @endif
+        
+        <div class="mt-6 flex gap-4">
+            <a href="{{ route('books.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600">Kembali</a>
+        </div>
+    </div>
+</div>
+@endsection

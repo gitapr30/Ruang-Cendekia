@@ -288,6 +288,11 @@
                             {{ $book->stok }}
                         </td>
                         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                            <a href="{{ route('books.show', $book->id) }}" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 no-underline">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.5 4.5M19.5 10L15 14.5" />
+                                </svg>
+                            </a>
                             {{-- url('/' . $book->slug . '/edit') --}}
                             <a href="{{ route('books.edit', $book->slug) }}" type="submit"
                                 class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-400 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 no-underline">
@@ -318,38 +323,7 @@
                 </tbody>
             </table>
         </div>
-        {{-- <div class="md:grid md:grid-cols-1 md:gap-6"> --}}
-        {{-- <div class="grid grid-cols-1 xl:grid-col-1 gap-4 lg:hidden">
-                        @foreach ($books as $book)
-                            <div class="bg-white space-y-3 p-4 rounded-lg shadow">
-                                <div class="flex flex-col items-center space-x-2 text-sm">
-                                    <div class="text-blue-500 font-bold">{{ $loop->iteration }}
     </div>
-    <div class="text-center">{{ $book->title }}</div>
-    <div>{{ $book->categories->name }}</div>
-    <div>{{ $book->author }}</div>
-    <div>{{ $book->publisher }}</div>
-</div>
-<div class="flex justify-center">
-    <div>
-        <a href="{{ url('/books/' . $book->id . '/edit') }}" type="submit"
-            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-400 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 no-underline">Edit</a>
-        <form action="/books/destroy" method="post" class="inline">
-            @method('delete')
-            @csrf
-            <input type="hidden" name="id" value="{{ $book->id }}">
-            <button type="submit"
-                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 no-underline"
-                id="deletePost"
-                onclick="return confirm('Are you sure you want to delete this?');">Delete</button>
-        </form>
-    </div>
-</div>
-</div>
-@endforeach
-</div> --}}
-{{-- </div> --}}
-</div>
 </div>
 @endsection
 
@@ -368,13 +342,13 @@
                 <thead class="bg-gray-50 border-b-2 border-gray-200">
                     <tr>
                         <th class="w-10 p-3 text-sm font-semibold tracking-wide text-left">#</th>
-                        <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Books title</th>
+                        <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Judul</th>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Kode Buku</th>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Penulis</th>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Penerbit</th>
-                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Category</th>
+                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Kategori</th>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Jumlah Buku</th>
-                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Action</th>
+                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -410,6 +384,11 @@
                             {{ $book->stok }}
                         </td>
                         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                            <a href="{{ route('books.show', $book->slug) }}" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 no-underline">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.5 4.5M19.5 10L15 14.5" />
+                                </svg>
+                            </a>
                             {{-- url('/' . $book->slug . '/edit') --}}
                             <a href="{{ route('books.edit', $book->slug) }}" type="submit"
                                 class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-400 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 no-underline">

@@ -12,6 +12,7 @@
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Pinjam</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Kembali</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Status</th>
+            <th class="px-4 py-2 text-sm font-medium text-gray-700">Keterangan</th> <!-- Tambahan Kolom -->
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Aksi</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Denda</th> <!-- Fine column added here -->
         </tr>
@@ -31,6 +32,20 @@
             <td class="px-4 py-2 text-sm text-gray-600">
                 {{ ucfirst($borrow->status) }}
             </td>
+            <td class="px-4 py-2 text-sm text-gray-600">
+                <form action="{{ route('borrow.updateDenda') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="borrow_id" value="{{ $borrow->id }}">
+                    
+                    <select name="keterangan" class="border p-1 bg-gray-100 text-gray-800 rounded" onchange="this.form.submit()">
+                        <option value="">Pilih</option>
+                        <option value="terlambat" {{ $borrow->keterangan == 'terlambat' ? 'selected' : '' }}>Terlambat</option>
+                        <option value="hilang" {{ $borrow->keterangan == 'hilang' ? 'selected' : '' }}>Hilang</option>
+                        <option value="rusak" {{ $borrow->keterangan == 'rusak' ? 'selected' : '' }}>Rusak</option>
+                    </select>
+                </form>
+            </td>
+            
             <td class="px-4 py-2 text-sm text-gray-600">
                 @if($borrow->status === 'menunggu konfirmasi')
                 <form action="{{ route('borrow.update') }}" method="post">
@@ -56,9 +71,10 @@
                 <form action="{{ route('borrow.updateDenda') }}" method="POST">
                     @csrf
                     <input type="hidden" name="borrow_id" value="{{ $borrow->id }}">
-                    <span class="border p-1 w-20 inline-block bg-gray-100 text-gray-800 rounded">
-                        Rp {{ number_format($borrow->denda, 0, ',', '.') }}
-                    </span>
+                        <span class="border p-1 w-20 inline-block bg-gray-100 text-gray-800 rounded">
+                            Rp {{ number_format($borrow->denda, 0, ',', '.') }}
+                        </span>
+                    
                 </form>
             </td>
         </tr>
@@ -82,6 +98,7 @@
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Pinjam</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Kembali</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Status</th>
+            <th class="px-4 py-2 text-sm font-medium text-gray-700">Keterangan</th> <!-- Tambahan Kolom -->
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Aksi</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Denda</th> <!-- Fine column added here -->
         </tr>
@@ -100,6 +117,19 @@
             </td>
             <td class="px-4 py-2 text-sm text-gray-600">
                 {{ ucfirst($borrow->status) }}
+            </td>
+            <td class="px-4 py-2 text-sm text-gray-600">
+                <form action="{{ route('borrow.updateDenda') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="borrow_id" value="{{ $borrow->id }}">
+                    
+                    <select name="keterangan" class="border p-1 bg-gray-100 text-gray-800 rounded" onchange="this.form.submit()">
+                        <option value="">Pilih</option>
+                        <option value="terlambat" {{ $borrow->keterangan == 'terlambat' ? 'selected' : '' }}>Terlambat</option>
+                        <option value="hilang" {{ $borrow->keterangan == 'hilang' ? 'selected' : '' }}>Hilang</option>
+                        <option value="rusak" {{ $borrow->keterangan == 'rusak' ? 'selected' : '' }}>Rusak</option>
+                    </select>
+                </form>
             </td>
             <td class="px-4 py-2 text-sm text-gray-600">
                 @if($borrow->status === 'menunggu konfirmasi')
