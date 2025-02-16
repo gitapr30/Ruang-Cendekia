@@ -7,34 +7,34 @@ use Illuminate\Database\Eloquent\Model;
 
 class Borrow extends Model
 {
-    protected $dates = ['tanggal_pinjam'];
-    protected $datess = ['tanggal_kembali']; 
     use HasFactory;
 
-    protected $table = 'borrows';
+    protected $table = 'borrows'; // Pastikan tabel sesuai dengan database
 
     protected $fillable = [
         'user_id',
         'book_id',
         'status',
-        'denda',
         'tanggal_pinjam',
         'tanggal_kembali',
         'kode_peminjaman',
-        // 'qr_code_path', // Menyimpan lokasi QR Code
+        'denda',
+    ];
 
-    ];
     protected $casts = [
-        'tanggal_pinjam' => 'date',  
-        'tanggal_kembali' => 'date', 
+        'tanggal_pinjam' => 'date',
+        'tanggal_kembali' => 'date',
+        'denda' => 'integer', // Tambahkan ini
     ];
+
+    public $timestamps = true; // Pastikan timestamps diaktifkan jika tabel memiliki 'created_at' dan 'updated_at'
 
     /**
      * Relasi ke model User
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**
@@ -42,6 +42,6 @@ class Borrow extends Model
      */
     public function book()
     {
-        return $this->belongsTo(Books::class);
+        return $this->belongsTo(Books::class, 'book_id');
     }
 }

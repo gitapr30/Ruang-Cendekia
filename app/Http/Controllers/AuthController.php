@@ -23,49 +23,51 @@ class AuthController extends Controller
             // Update kolom last_login_at
             $user = Auth::user(); // Mendapatkan pengguna yang sedang login
             $user->last_login_at = now(); // Menyimpan waktu login saat ini ke kolom last_login_at
-            return redirect()->intended('/'); // Redirect ke halaman tujuan
+            return redirect()->intended('/books'); // Redirect ke halaman tujuan
         }
 
         return back()->with('errorMessage', 'Login failed!');
     }
 
     public function register(Request $request)
-    {
-        $image = [
-            'image_post/profdef1.jpg',
-            'image_post/profdef2.jpg'
-        ];
+{
+    $defaultImages = ['image_post/profdef1.jpg', 'image_post/profdef2.jpg'];
 
-        $credentials = $request->validate([
-            'nip_nisn' => 'required',
-            'name' => 'required',
-            'username' => 'required|unique:users',  // Keep this unique for username
-            'email' => 'required|email',  // Remove the unique validation for email
-            'password' => 'required|min:6',
-        ]);
+    $credentials = $request->validate([
+        'nip_nisn' => 'required',
+        'name' => 'required',
+        'username' => 'required|unique:users',
+        'email' => 'required|email|unique:users', // Email harus unik
+        'password' => 'required|min:6',
+    ]);
 
-        $credentials['password'] = Hash::make($credentials['password']);
-        $credentials['role'] = 'visitor';
-        $credentials['image'] = $image[rand(0, 1)];
+    $credentials['password'] = Hash::make($credentials['password']);
+    $credentials['role'] = 'pengguna';
+    $credentials['image'] = $defaultImages[array_rand($defaultImages)];
 
-        $store = User::create($credentials);
+    $user = User::create($credentials);
 
-        if ($store) {
-            $request->session()->regenerate();
-            return redirect()->route('books.index');
-        } else {
-            return redirect()->route('register');
-        }
+    if ($user) {
+        Auth::login($user);
+        return redirect()->route('books.index');
     }
 
-    public function logout(Request $request)
-    {
-        Auth::logout();
+    return back()->withErrors(['register' => 'Registration failed']);
+}
 
-        $request->session()->invalidate();
+    public function index()
+{
+    $users = User::all(); // Get all users
+    return view('user.index', compact('users')); // Pass users to the view
+}
 
-        $request->session()->regenerateToken();
+public function logout(Request $request)
+{
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
 
-        return redirect()->route('login');
-    }
+    return redirect('/'); // Langsung ke homepage tanpa route() jika masih error
+}
+
 }

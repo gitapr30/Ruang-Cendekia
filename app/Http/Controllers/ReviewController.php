@@ -14,9 +14,10 @@ class ReviewController extends Controller
     public function index()
     {
         // Menampilkan semua review
-  // Menampilkan semua review
-  $reviews = Review::with(['user', 'book'])->get();
-  return view('reviews.review', ['reviews' => $reviews]); }
+        // Menampilkan semua review
+        $reviews = Review::with(['user', 'book'])->get();
+        return view('reviews.review', ['reviews' => $reviews]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -66,11 +67,16 @@ class ReviewController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    {
-        // Hapus review
-        $reviews = Review::findOrFail($id);
-        $reviews->delete();
+{
+    $review = Review::find($id);
 
-        return response()->json(['message' => 'Review deleted successfully']);
+    if (!$review) {
+        return response()->json(['message' => 'Review not found'], 404);
     }
+
+    $review->delete();
+
+    return redirect()->back()->with('successMessage', 'Review deleted successfully');
+}
+
 }

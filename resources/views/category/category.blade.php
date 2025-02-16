@@ -71,15 +71,15 @@
             </div>
         @endforeach
     </div>
-@endsection 
+@endsection
 @section('contentAdmin')
     <div class="p-4">
         <div class="flex justify-between items-center">
-            <h1 class="text-lg font-semibold text-gray-800 mb-3">Data Category</h1>
+            <h1 class="text-lg font-semibold text-gray-800 mb-3">Data Kategori</h1>
             <a href="{{ route('category.create') }}"
                 class="transition-all duration-500 bg-blue-500 rounded-lg text-white font-medium px-5 py-2.5 focus:ring-2
                 focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm">Tambah
-                Category</a>
+                Kategori</a>
         </div>
         <div class="mt-6">
             <div class="overflow-auto rounded-lg shadow hidden lg:block w-full mt-5 md:mt-0 md:col-span-2">
@@ -87,9 +87,9 @@
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
                         <tr>
                             <th class="w-6 p-3 text-sm font-semibold tracking-wide text-left">#</th>
-                            <th class="w-44 p-3 text-sm font-semibold tracking-wide text-left">Name</th>
+                            <th class="w-44 p-3 text-sm font-semibold tracking-wide text-left">Nama</th>
                             <th class="w-28 p-3 text-sm font-semibold tracking-wide text-left">Jumlah Buku</th>
-                            <th class="w-8 p-3 text-sm font-semibold tracking-wide text-left">Action</th>
+                            <th class="w-8 p-3 text-sm font-semibold tracking-wide text-left">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">

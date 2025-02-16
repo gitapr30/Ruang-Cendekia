@@ -1,194 +1,312 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="p-4 h-full">
-    <div class="w-full bg-white rounded-lg p-3">
-        <div class="flex">
-            <a href="{{ route('books.show', $book->slug) }}" class="text-sm font-medium text-blue-500 flex items-center">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<div class="p-4">
+    <div class="text-lg" style="margin-top: 40px;"></div>
 
-                <i data-feather="arrow-left" class="w-5 h-5 text-sky-600"></i>
-                <span class="ml-2 text-xl">Detail Buku</span>
-            </a>
+    <div class="grid grid-cols-4 gap-6">
+        <!-- Bagian Kiri: Informasi Buku -->
+        <div class="flex flex-col items-center sticky top-0">
+            <img src="{{ asset('' . $book->image) }}" alt="{{ $book->title }}"
+                class="w-full object-cover rounded-lg shadow-lg">
         </div>
-        <div class="grid grid-cols-4 gap-6 mt-3 relative">
-            <div class="flex flex-col items-center sticky top-0">
-                <img src="{{ asset('' . $book->image) }}" alt="{{ $book->title }}"
-                    class="w-full h-96 object-cover rounded-lg shadow-lg">
-                <form action="{{ route('borrow.index') }}" method="post" class="w-full">
-                    @csrf
-                    <input type="text" name="user_id" id="" value="{{ auth()->user()->id }}" hidden>
-                    <input type="text" name="book_id" id="" value="{{ $book->id }}" hidden>
-                    <input type="text" name="kode_peminjaman"
-                        value="{{ date('d') . auth()->user()->id . $book->kode_buku }}" hidden>
-                    <button type="submit"
-                        class="w-full mt-3 transition-all duration-500 enabled:bg-gradient-to-br enabled:from-blue-400 enabled:to-blue-600 rounded-lg text-white font-medium p-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-200 focus:shadow-none disabled:shadow-none disabled:bg-slate-700 disabled:cursor-not-allowed"
-                        @if ($book->stok == 0)
-                        @disabled(true)
-                        @elseif ($book->borrow->isNotEmpty())
-                        @foreach ($book->borrow->where('status', 'meminjam') as $borrow)
-                        @if ($book->stok == 0 || $borrow->user_id == auth()->user()->id)
-                        @disabled(true)
-                        @endif
-                        @endforeach
-                        @endif>Pinjam
-                    </button>
-                </form>
-                <form action="{{ route('wishlist.store', $book->slug) }}" method="POST">
-    @csrf
-    <input type="hidden" name="suka" value="liked">
-    <button
-        type="submit"
-        class="w-full mt-2 flex items-center justify-center bg-gradient-to-br from-green-400 to-green-600 text-white font-medium p-4 rounded-lg text-sm shadow-lg hover:shadow-xl shadow-green-200 hover:shadow-green-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-500">
-        <i data-feather="bookmark" class="w-5 h-5 mr-2"></i>
-        Simpan ke Wishlist
-    </button>
-</form>
-                <p class="text-slate-700 mt-2 text-sm font-medium">Jumlah Buku : {{ $book->stok }}</p>
+
+        <!-- Bagian Kanan: Formulir Peminjaman dan Tabel -->
+        <div class="col-span-3">
+            <h1 class="text-3xl font-semibold text-slate-800">{{ $book->title }}</h1>
+            <p class="text-slate-700 mt-2 text-sm font-medium">Jumlah Buku: {{ $book->stok }}</p>
+            <h2 class="text-base font-medium mt-2 text-slate-700">
+                {{ $book->penulis }}
+            </h2>
+
+            <!-- Rating Bintang -->
+            <div class="flex items-center mt-2">
+                <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
+                <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
+                <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
+                <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
+                <i data-feather="star" class="w-4 h-4 text-gray-300"></i>
             </div>
-            <div class="col-span-3">
-                <h1 class="text-3xl font-semibold text-slate-800">{{ $book->title }}</h1>
-                <h2 class="text-base font-medium mt-2 text-slate-700">
-                    {{ $book->penulis }} - {{ $book->penerbit }}
-                </h2>
-                <div class="flex items-center">
-                    <div class="flex relative @if ($book->histories->isNotEmpty()) ml-2 @endif mt-2 items-center">
-                        @if ($book->histories)
-                        @if ($book->histories->isNotEmpty())
-                        @foreach ($book->histories->unique('user_id') as $history)
-                        <img src="{{ asset('' . $history->user->image) }}"
-                            alt="{{ $history->user->name }}"
-                            class="w-10 h-10 overflow-hidden rounded-full object-cover border border-white relative -ml-3">
-                        @endforeach
-                        @endif
-                        <span
-                            class="text-slate-700 @if ($book->histories->isNotEmpty()) ml-2 @else mr-2 @endif">{{ $book->histories->count() }}
-                            people have read</span>
-                        @endif
+
+            <!-- Tabel Informasi Buku -->
+            <div class="mt-6 bg-white p-4 rounded-lg shadow-lg border-2 border-slate-300">
+                <table class="w-full table-auto border-collapse">
+                    <tbody>
+                        <tr class="border-b-2">
+                            <td class="text-[12px] font-medium text-slate-700 py-2 px-4 border-r-2">Penerbit</td>
+                            <td class="text-[12px] text-slate-600 py-2 px-4"> {{ $book->penerbit }} </td>
+                        </tr>
+                        <tr class="border-b-2">
+                            <td class="text-[12px] font-medium text-slate-700 py-2 px-4 border-r-2">Tahun Terbit</td>
+                            <td class="text-[12px] text-slate-600 py-2 px-4">{{ $book->thn_terbit }}</td>
+                        </tr>
+                        <tr class="border-b-2">
+                            <td class="text-[12px] font-medium text-slate-700 py-2 px-4 border-r-2">Kode Buku</td>
+                            <td class="text-[12px] text-slate-600 py-2 px-4">{{ $book->kode_buku }}</td>
+                        </tr>
+                        <tr class="border-b-2">
+                            <td class="text-[12px] font-medium text-slate-700 py-2 px-4 border-r-2">Stok</td>
+                            <td class="text-[12px] text-slate-600 py-2 px-4">{{ $book->stok }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-[12px] font-medium text-slate-700 py-2 px-4 border-r-2">Dibuat pada</td>
+                            <td class="text-[12px] text-slate-600 py-2 px-4">{{ $book->created_at->format('d M Y') }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Deskripsi Buku -->
+            <h1 class="text-2xl font-semibold text-black mt-6">Deskripsi</h1>
+            <p class="text-base text-slate-700 mt-6">{{ $book->description }}</p>
+        </div>
+
+    </div>
+    <!-- Wishlist and Pinjam Buttons Side by Side -->
+    <div class="flex space-x-4 mt-6">
+        <!-- Pinjam Button -->
+        <form action="{{ route('borrow.index') }}" method="post" class="w-full">
+            @csrf
+            <input type="text" name="user_id" value="{{ auth()->user()->id }}" hidden>
+            <input type="text" name="book_id" value="{{ $book->id }}" hidden>
+            <input type="text" name="kode_peminjaman" value="{{ date('d') . auth()->user()->id . $book->kode_buku }}" hidden>
+            <button type="submit"
+                class="w-full transition-all duration-500 enabled:bg-gradient-to-br enabled:from-blue-400 enabled:to-blue-600 rounded-lg text-white font-medium p-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-200 focus:shadow-none disabled:shadow-none disabled:bg-slate-700 disabled:cursor-not-allowed"
+                @if ($book->stok == 0)
+                @disabled(true)
+                @elseif ($book->borrow->isNotEmpty())
+                @foreach ($book->borrow->where('status', 'meminjam') as $borrow)
+                @if ($book->stok == 0 || $borrow->user_id == auth()->user()->id)
+                @disabled(true)
+                @endif
+                @endforeach
+                @endif>Pinjam
+            </button>
+        </form>
+        <!-- Wishlist Button -->
+        <form action="{{ route('wishlist.store', $book->slug) }}" method="POST" class="w-full">
+            @csrf
+                <input type="hidden" name="suka" value="liked">
+                <button type="submit"
+                    class="w-full flex items-center justify-center bg-blue-200 text-blue-600 font-medium p-4 rounded-lg text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-300 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-500">
+                    <i data-feather="bookmark" class="w-5 h-5 mr-2"></i>
+                    Simpan ke Wishlist
+                </button>
+        </form>
+    </div>
+
+    <!-- Tampilkan Ulasan dan Rating -->
+    <div class="mt-6">
+        <h2 class="text-2xl font-semibold text-slate-800 mb-4">Ulasan dan Rating</h2>
+
+        <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 flex flex-col md:flex-row md:justify-between">
+            <!-- Bagian Kiri: Rata-rata Rating dan Total Ulasan -->
+            <div class="mb-4 md:mb-0 md:w-1/2">
+                <p class="text-black font-bold text-2xl ml-2">4.2 / 5</p>
+                <div class="flex items-center mt-1 space-x-1">
+                    <!-- Bintang Penuh -->
+                    <span class="text-yellow-500 text-xl">⭐</span>
+                    <span class="text-yellow-500 text-xl">⭐</span>
+                    <span class="text-yellow-500 text-xl">⭐</span>
+                    <span class="text-yellow-500 text-xl">⭐</span>
+                    <!-- Bintang Setengah -->
+                    <span class="text-yellow-500 text-xl opacity-70">⭐</span>
+                </div>
+                <p class="text-gray-700 font-medium mt-1">(125)</p>
+            </div>
+
+            <!-- Bagian Kanan: Distribusi Rating -->
+            <div class="md:w-1/2">
+                <p class="text-gray-700 font-semibold mb-3">Distribusi Rating</p>
+
+                <div class="space-y-2">
+                    <!-- 5 Stars -->
+                    <div class="flex items-center space-x-3">
+                        <span class="text-gray-700 font-medium flex items-center">
+                            ⭐ <span class="ml-1">5</span>
+                        </span>
+                        <div class="w-full bg-gray-200 rounded-full h-4">
+                            <div class="h-4 rounded-full" style="width: 70%; background-color: #197BBA;"></div>
+                        </div>
+                        <span class="text-gray-700 font-medium">70%</span>
                     </div>
-                    <div class="flex mt-2 @if ($book->histories->isNotEmpty()) ml-2 @endif">
-                        <h2 class="text-slate-700">| Kategori :</h2>
-                        <a href="{{ route('category.show', $book->category->slug) }}"
-                            class="text-slate-700 ml-1 underline decoration-double decoration-blue-600">{{ $book->category->name }}</a>
+
+                    <!-- 4 Stars -->
+                    <div class="flex items-center space-x-3">
+                        <span class="text-gray-700 font-medium flex items-center">
+                            ⭐ <span class="ml-1">4</span>
+                        </span>
+                        <div class="w-full bg-gray-200 rounded-full h-4">
+                            <div class="h-4 rounded-full" style="width: 20%; background-color: #197BBA;"></div>
+                        </div>
+                        <span class="text-gray-700 font-medium">20%</span>
+                    </div>
+
+                    <!-- 3 Stars -->
+                    <div class="flex items-center space-x-3">
+                        <span class="text-gray-700 font-medium flex items-center">
+                            ⭐ <span class="ml-1">3</span>
+                        </span>
+                        <div class="w-full bg-gray-200 rounded-full h-4">
+                            <div class="h-4 rounded-full" style="width: 5%; background-color: #197BBA;"></div>
+                        </div>
+                        <span class="text-gray-700 font-medium">5%</span>
+                    </div>
+
+                    <!-- 2 Stars -->
+                    <div class="flex items-center space-x-3">
+                        <span class="text-gray-700 font-medium flex items-center">
+                            ⭐ <span class="ml-1">2</span>
+                        </span>
+                        <div class="w-full bg-gray-200 rounded-full h-4">
+                            <div class="h-4 rounded-full" style="width: 3%; background-color: #197BBA;"></div>
+                        </div>
+                        <span class="text-gray-700 font-medium">3%</span>
+                    </div>
+
+                    <!-- 1 Star -->
+                    <div class="flex items-center space-x-3">
+                        <span class="text-gray-700 font-medium flex items-center">
+                            ⭐ <span class="ml-1">1</span>
+                        </span>
+                        <div class="w-full bg-gray-200 rounded-full h-4">
+                            <div class="h-4 rounded-full" style="width: 2%; background-color: #197BBA;"></div>
+                        </div>
+                        <span class="text-gray-700 font-medium">2%</span>
                     </div>
                 </div>
-                <p class="text-base text-slate-700 mt-2">{{ $book->description }}</p>
             </div>
         </div>
+    </div>
 
-        <!-- Formulir Ulasan Baru -->
-        <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold text-slate-800 mb-4">Tulis Ulasan Anda</h3>
+    <!-- Formulir Ulasan Baru -->
+    <div class="mt-8 bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+        <h3 class="text-2xl font-bold text-gray-800 mb-5">Tulis Ulasan Anda</h3>
 
-            <form action="{{ route('review.store') }}" method="POST">
-                @csrf
-                <div class="mb-4">
-                    <label for="review" class="block text-slate-700">Ulasan</label>
-                    <textarea name="review" id="review" rows="4" class="mt-2 p-2 border rounded w-full" required></textarea>
+        <!-- Tambahkan rating statis (misalnya default 4 dari 5 bintang) -->
+        <div class="flex text-yellow-400 mb-4">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span class="text-gray-300">★</span> <!-- Bintang ke-5 abu-abu -->
+        </div>
+        <p class="text-gray-600 text-sm mb-4">Rating Anda: <strong>4/5</strong></p>
+
+        <form action="{{ route('review.store') }}" method="POST" id="reviewForm">
+            @csrf
+            <div class="space-y-4">
+                <div>
+                    <label for="review" class="block text-gray-700 font-medium mb-1">Ulasan</label>
+                    <textarea name="review" id="review" rows="4"
+                        maxlength="150"
+                        class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all shadow-sm"
+                        placeholder="Tulis ulasan tentang buku ini..." required></textarea>
+                    <p class="text-sm text-gray-500 mt-1">Maksimal 150 karakter</p>
                 </div>
                 <input type="hidden" name="book_id" value="{{ $book->id }}">
-                <input type="hidden" name="user_id" value="{{ auth()->id() }}"> <!-- Ambil ID user yang sedang login -->
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Kirim Ulasan</button>
-            </form>
-        </div>
+                <input type="hidden" name="user_id" value="{{ auth()->id() }}">
 
-        <!-- Tampilkan Ulasan -->
+                <div class="flex justify-end mt-4">
+                    <button type="submit"
+                        class="bg-blue-500 text-white w-full font-semibold px-5 py-2.5 rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg transition-all"
+                        id="submitButton" disabled>
+                        Kirim Ulasan
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 
-        <div class="mt-6">
-            <h2 class="text-2xl font-semibold text-slate-800 mb-4">Ulasan dan Rating</h2>
+    <script>
+        const reviewInput = document.getElementById('review');
+        const submitButton = document.getElementById('submitButton');
 
-            <div class="space-y-4">
-                @foreach($reviews as $review)
-                <div class="bg-white rounded-lg shadow-md p-4">
-                    <div class="text-slate-700">
-                        <p>{{ $review->review }}</p>
-                        <p class="mt-2 font-medium">- {{ $review->user->name ?? 'Unknown' }}</p>
+        // Event listener to check the length of the review
+        reviewInput.addEventListener('input', function() {
+            if (reviewInput.value.length > 150) {
+                reviewInput.setCustomValidity('Teks ulasan tidak boleh melebihi 150 karakter.');
+            } else {
+                reviewInput.setCustomValidity('');
+            }
+
+            // Enable the submit button only if the input length is valid (<= 150 characters)
+            if (reviewInput.value.length <= 150 && reviewInput.value.trim() !== '') {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        });
+    </script>
+
+    <style>
+        /* Ensure the swiper container does not overflow */
+        .swiper-container {
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Ensure slides fit within the container */
+        .swiper-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .swiper-slide {
+            display: flex;
+            justify-content: center;
+            /* Center the content */
+            width: 100%;
+            /* Ensure each slide takes full width */
+        }
+
+        /* Prevent body from overflowing */
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            @foreach($reviews as $review)
+            <div class="swiper-slide">
+                <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-md mx-auto mt-6">
+                    <div class="text-gray-700">
+                        <div class="flex text-yellow-400 mb-2">
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span>★</span>
+                            <span class="text-gray-300">★</span> <!-- Bintang ke-5 abu-abu -->
+                        </div>
+                        <p class="text-lg italic">"{{ $review->review }}"</p>
+                        <p class="mt-4 font-medium text-right text-blue-600">- {{ $review->user->name ?? 'Unknown' }}</p>
                     </div>
                 </div>
-                @endforeach
             </div>
+            @endforeach
         </div>
+    </div>
 
-
-        <!-- Include Swiper JS -->
-        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-        <script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
             var swiper = new Swiper('.swiper-container', {
-                slidesPerView: 3,
-                spaceBetween: 10,
                 loop: true,
+                spaceBetween: 20,
+                slidesPerView: 3,
                 autoplay: {
-                    delay: 3000,
-                    disableOnInteraction: false,
+                    delay: 3000, // Adjust time (milliseconds) between slides
+                    disableOnInteraction: false, // Keeps autoplay running after user interaction
                 },
             });
-        </script>
-
-        <!-- Include Feather Icons -->
-        <script src="https://unpkg.com/feather-icons"></script>
-        <script>
-            feather.replace(); // Replaces icons with feather icons
-        </script>
-        {{-- <div class="flex mt-4 justify-between"> --}}
-        {{-- <div class="w-1/4">
-                    <img src="{{ asset('storage/' . $book->image) }}" alt="{{ $book->title }}"
-        class="w-full h-96 object-cover rounded-lg shadow-lg">
-    </div>
-    <div class="w-3/4">
-        <h1 class="text-2xl font-bold">{{ $book->title }}</h1>
-    </div> --}}
-    {{-- <div class="w-2/5 rounded overflow-hidden">
-                    <img src="{{ asset('storage/' . $book->image) }}" alt="{{ $book->title }}"
-    class="w-full object-cover rounded-lg shadow-lg">
+        });
+    </script>
 </div>
-<div class="w-3/5 p-5 pt-0">
-    <div class="p-5 rounded-lg shadow-lg">
-        <div class="bg-white p-5 py-3 shadow rounded relative mb-6">
-            <h1 class="font-semibold absolute -top-3.5 text-slate-800 bg-white text-base">Judul</h1>
-            <p class="mb-0">{{ $book->title }}</p>
-        </div>
-        <div class="bg-white p-5 py-3 shadow rounded relative mb-6">
-            <h1 class="font-semibold absolute -top-3.5 text-slate-800 bg-white text-base">Penulis</h1>
-            <p class="mb-0">{{ $book->penulis }}</p>
-        </div>
-        <div class="bg-white p-5 py-3 shadow rounded relative mb-6">
-            <h1 class="font-semibold absolute -top-3.5 text-slate-800 bg-white text-base">Penerbit</h1>
-            <p class="mb-0">{{ $book->penerbit }}</p>
-        </div>
-        <a href="#" class="bg-white p-5 py-3 shadow rounded relative mb-6 inline-block w-full">
-            <h1 class="font-semibold absolute -top-3.5 text-slate-800 bg-white text-base">Kategori</h1>
-            <div class="flex justify-between items-center">
-                <p class="mb-0">{{ $book->category->name }}</p>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
-                </svg>
-            </div>
-        </a>
-        <div class="bg-white p-5 py-3 shadow rounded relative mb-6">
-            <h1 class="font-semibold absolute -top-3.5 text-slate-800 bg-white text-base">Tahun Terbit</h1>
-            <p class="mb-0">{{ $book->thn_terbit }}</p>
-        </div>
-        <div class="bg-white p-5 py-3 shadow rounded relative mb-6">
-            <h1 class="font-semibold absolute -top-3.5 text-slate-800 bg-white text-base">Jumlah Buku</h1>
-            <p class="mb-0">{{ $book->stok }}</p>
-        </div>
-        <div class="bg-white p-5 py-3 shadow rounded relative mb-6">
-            <h1 class="font-semibold absolute -top-3.5 text-slate-800 bg-white text-base">Status Buku</h1>
-            <p class="mb-0">{{ $book->status }}</p>
-        </div>
-        <div class="bg-white p-5 py-3 shadow rounded relative mb-6">
-            <h1 class="font-semibold absolute -top-3.5 text-slate-800 bg-white text-base">Description</h1>
-            <p class="mb-0">{{ $book->description }}</p>
-        </div>
 
-        <button type="submit"
-            class="w-full transition-all duration-500 bg-blue-500 rounded-lg text-white font-medium px-5 py-2.5 focus:ring-2
-                            focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm">Pinjam
-        </button>
-    </div>
-</div> --}}
-{{-- </div> --}}
+<!-- Include Swiper JS -->
+
 </div>
 </div>
 @endsection
