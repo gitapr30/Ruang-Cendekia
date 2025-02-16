@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Wishlists;
-use App\Models\Borrow;
 use App\Models\Books;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,12 +14,29 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $wishlist = Wishlists::where('user_id', $user->id)
-                             ->with('book')
-                             ->get();
+        $user_id = Auth::id();
 
-        return view('wishlist.index', compact('wishlist'));
+        // Ambil daftar wishlist milik user saat ini
+        $wishlistBooks = Books::whereIn('id', function ($query) use ($user_id) {
+            $query->select('book_id')->from('wishlists')->where('user_id', $user_id);
+        })->get();
+
+        return view('wishlist.index', compact('wishlistBooks'));
+    }
+
+    /**
+     * Mendapatkan daftar wishlist untuk admin
+     */
+    public function getAdminWishlist()
+    {
+        $wishlist = Wishlists::with(['book', 'user'])
+            ->whereHas('book')
+            ->whereHas('user')
+            ->get();
+
+        $books = Books::withCount('wishlists')->get();
+
+        return view('getwishlist.index', compact('books', 'wishlist'));
     }
 
     /**
@@ -31,12 +47,11 @@ class WishlistController extends Controller
         $user = Auth::user();
 
         $wishlist = Wishlists::where('user_id', $user->id)
-            ->with('book') // Eager load the book relationship
+            ->with('book')
             ->get();
 
-        // Include the 'suka' field in the response for each book
         $wishlistWithLikes = $wishlist->map(function ($item) {
-            $item->book->suka = $item->book->suka; // You can directly access 'suka' here
+            $item->book->suka = $item->book->suka;
             return $item;
         });
 
@@ -46,24 +61,34 @@ class WishlistController extends Controller
         ]);
     }
 
+    /**
+     * Menambahkan buku ke wishlist
+     */
     public function store(Request $request, $slug)
     {
         $user_id = Auth::id();
-        $book = Books::where('slug', $slug)->firstOrFail();
+        $book = Books::where('slug', $slug)->first();
 
-        // Cek apakah buku sudah ada di wishlist
+        if (!$book) {
+            return redirect()->route('wishlist.index')->with('error', 'Buku tidak ditemukan.');
+        }
+
+        // Periksa apakah buku sudah ada di wishlist
         $wishlist = Wishlists::where('user_id', $user_id)
                             ->where('book_id', $book->id)
                             ->first();
 
-        if (!$wishlist) {
-            Wishlists::create([
-                'user_id' => $user_id,
-                'book_id' => $book->id
-            ]);
+        if ($wishlist) {
+            return redirect()->route('wishlist.index')->with('error', 'Buku sudah ada di Wishlist.');
         }
 
-        return back()->with('success', 'Buku ditambahkan ke Wishlist.');
+        Wishlists::create([
+            'user_id' => $user_id,
+            'book_id' => $book->id,
+            'keep' => 1,
+        ]);
+
+        return redirect()->route('wishlist.index')->with('success', 'Buku berhasil ditambahkan ke Wishlist.');
     }
 
     /**
@@ -79,17 +104,20 @@ class WishlistController extends Controller
         ]);
     }
 
+    /**
+     * Menghapus buku dari wishlist pengguna
+     */
     public function destroy($id)
     {
         $wishlist = Wishlists::where('user_id', Auth::id())
-                             ->where('book_id', $id)
-                             ->first();
+                            ->where('book_id', $id)
+                            ->first();
 
         if ($wishlist) {
             $wishlist->delete();
-            return back()->with('success', 'Buku dihapus dari Wishlist.');
+            return redirect()->route('wishlist.index')->with('success', 'Buku dihapus dari Wishlist.');
         }
 
-        return back()->with('error', 'Buku tidak ditemukan di Wishlist.');
+        return redirect()->route('wishlist.index')->with('error', 'Buku tidak ditemukan di Wishlist.');
     }
 }

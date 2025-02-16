@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <!-- Tabel Daftar Peminjaman Buku -->
-<h2 class="text-xl font-bold text-gray-800 mt-10 mb-3">Laporan Peminjaman</h2>
+<h2 class="text-xl font-bold text-gray-800 mt-10 mb-3 ml-5">Laporan Peminjaman</h2>
 
 <!-- Filter dan Search -->
 <div class="bg-gray-100 p-4 rounded-lg shadow-sm mb-6">
@@ -34,13 +34,13 @@
 </div>
 
 <!-- Keterangan Laporan -->
-<p id="reportTitle" class="mt-4 text-lg font-semibold text-gray-700 mb-6"></p>
+<p id="reportTitle" class="mt-4 text-lg font-semibold text-gray-700 mb-6 ml-5"></p>
 
 <table class="min-w-full table-auto bg-white border-separate border-spacing-0.5 shadow-lg rounded-lg overflow-hidden">
     <thead class="bg-blue-500 text-white">
         <tr>
             <th class="px-4 py-2 text-sm font-medium">No</th>
-            <th class="px-4 py-2 text-sm font-medium">User</th>
+            <th class="px-4 py-2 text-sm font-medium">Pengguna</th>
             <th class="px-4 py-2 text-sm font-medium">Buku</th>
             <th class="px-4 py-2 text-sm font-medium">Tanggal Pinjam</th>
             <th class="px-4 py-2 text-sm font-medium">Tanggal Kembali</th>
@@ -155,7 +155,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <!-- Tabel Daftar Peminjaman Buku -->
-<h2 class="text-xl font-bold text-gray-800 mt-10 mb-3">Laporan Peminjaman</h2>
+<h2 class="text-xl font-bold text-gray-800 mt-10 mb-3 ml-5">Laporan Peminjaman</h2>
 
 <!-- Filter dan Search -->
 <div class="bg-gray-100 p-4 rounded-lg shadow-sm mb-6">
@@ -191,7 +191,7 @@
     <thead class="bg-blue-500 text-white">
         <tr>
             <th class="px-4 py-2 text-sm font-medium">No</th>
-            <th class="px-4 py-2 text-sm font-medium">User</th>
+            <th class="px-4 py-2 text-sm font-medium">Pengguna</th>
             <th class="px-4 py-2 text-sm font-medium">Buku</th>
             <th class="px-4 py-2 text-sm font-medium">Tanggal Pinjam</th>
             <th class="px-4 py-2 text-sm font-medium">Tanggal Kembali</th>

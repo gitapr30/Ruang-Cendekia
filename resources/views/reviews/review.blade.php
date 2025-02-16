@@ -3,7 +3,7 @@
 @section('contentAdmin')
     <div class="p-4">
         <div class="flex justify-between items-center">
-            <h1 class="text-lg font-semibold text-gray-800 mb-3">Data Review</h1>
+            <h1 class="text-lg font-semibold text-gray-800 mb-3">Data Ulasan</h1>
         </div>
         <div class="mt-6">
             <div class="overflow-auto rounded-lg shadow block w-full mt-5 md:mt-0 md:col-span-2">
@@ -11,9 +11,9 @@
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
                         <tr>
                             <th class="w-10 p-3 text-sm font-semibold tracking-wide text-left">#</th>
-                            <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">User Name</th>
-                            <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Book Title</th>
-                            <th class="w-64 p-3 text-sm font-semibold tracking-wide text-left">Review</th>
+                            <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Username</th>
+                            <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Judul</th>
+                            <th class="w-64 p-3 text-sm font-semibold tracking-wide text-left">Ulasan</th>
                             <th class="w-64 p-3 text-sm font-semibold tracking-wide text-left">Aksi</th>
                         </tr>
                     </thead>

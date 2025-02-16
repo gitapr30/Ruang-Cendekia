@@ -78,8 +78,6 @@ public function selectBook(Request $request)
             return back()->with('errorMessage', 'Buku tidak tersedia atau stok habis.');
         }
 
-        // Kurangi stok buku
-        $book->decrement('stok');
 
         // Buat peminjaman baru
         Borrow::create([
@@ -112,12 +110,11 @@ public function selectBook(Request $request)
         if ($request->status === 'dipinjam') {
             if ($book->stok <= 0) {
                 return back()->with('errorMessage', 'Stok buku habis.');
-            }
-            if ($request->status === 'dikembalikan') {
+            } 
+            $book->decrement('stok');
+        } elseif ($request->status === 'dikembalikan') {
                 $book->increment('stok');
-            }
-
-        }
+            }       
 
         // Cek apakah buku dikembalikan setelah tanggal kembali yang seharusnya
         $today = now(); // Tanggal hari ini
@@ -126,7 +123,7 @@ public function selectBook(Request $request)
 
         if ($lateDays > 0) {
             // Jika terlambat, hitung denda
-            $denda = $lateDays * 500000; // Assuming 500,000 per day
+            $denda = $lateDays * 500; // Assuming 500,000 per day
             $borrow->update(['denda' => $denda]);
         } else {
             // No fine if returned on time

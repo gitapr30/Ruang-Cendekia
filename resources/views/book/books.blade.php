@@ -6,7 +6,7 @@
     <div class="col-span-2 space-y-8">
         <!-- New Release Books -->
         <div>
-            <h1 class="text-xl font-semibold text-gray-800 mb-4">New Release Books</h1>
+            <h1 class="text-xl font-semibold text-gray-800 mb-4">Buku terbaru</h1>
             @if ($newBooks->isEmpty())
             <p class="text-sm text-gray-600">Belum ada rilis baru</p>
             @else
@@ -23,7 +23,7 @@
     )"
                     class="group flex flex-col items-center space-y-3 bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 relative">
 
-                    <div class="bg-blue-600 px-3 py-1 text-white rounded-md text-xs absolute top-2 left-2">New</div>
+                    <div class="bg-blue-600 px-3 py-1 text-white rounded-md text-xs absolute top-2 left-2">Baru</div>
                     <img src="{{ asset($book->image) }}" alt="books" class="w-36 h-52 object-cover rounded-lg">
                     <h1 class="font-bold text-sm text-gray-700 text-center truncate group-hover:whitespace-normal">
                         {{ $book->title }}
@@ -35,7 +35,7 @@
         </div>
 
         <div>
-            <h1 class="text-xl font-semibold text-gray-800 mb-4">Library Collection</h1>
+            <h1 class="text-xl font-semibold text-gray-800 mb-4">Koleksi perpustakaan</h1>
             @if ($books->isEmpty())
             <p class="text-sm text-gray-600">Tidak terdapat buku</p>
             @else
@@ -137,13 +137,13 @@
 
 <!-- Tabs for Categories -->
 <div class="mt-20 mb-12">
-    <h1 class="text-lg font-semibold text-gray-800 mb-3">Categories</h1>
+    <h1 class="text-lg font-semibold text-gray-800 mb-3" style="margin-left: 25px; font-size: 21px;">Kategori</h1>
     <ul class="flex space-x-6 overflow-x-auto px-4">
         <!-- Tab All -->
         <li>
             <button type="button" class="p-3 px-6 cursor-pointer transition duration-300 rounded-full focus:outline-none bg-blue-500 text-white font-semibold"
-                onclick="showCategory(event, 'all', this)">
-                All
+                onclick="showCategory(event, 'all', this)" style="margin-left: 10px;">
+                Semua
             </button>
         </li>
         @foreach ($categories as $category)
@@ -158,8 +158,8 @@
 </div>
 @foreach ($categories as $category)
 <div id="category-{{ $category->id }}" class="category-content mt-6">
-    <h2 class="text-gray-700 text-xl font-bold mb-4">{{ $category->name }}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <h2 class="text-gray-700 text-xl font-bold mb-4" style="margin-left: 21px;">{{ $category->name }}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style="margin-left: 21px;">
         @foreach ($category->books as $book)
         <a href="{{ route('books.show', parameters: $book->slug) }}" class="group transition rounded-md hover:scale-95 duration-300 relative flex space-x-4 p-4 bg-white shadow-md border border-gray-300 rounded-md">
             <img src="{{ asset($book->image) }}" alt="{{ $book->title }}" class="w-32 h-48 object-cover rounded shadow">
@@ -180,7 +180,7 @@
                 </div>
                 <div class="text-sm flex text-gray-700 items-center font-medium mt-2">
                     <i data-feather="layers" width="16px"></i>
-                    <span class="ml-2">200 Pages</span>
+                    <span class="ml-2">200 Halaman</span>
                 </div>
 
                 <!-- Wishlist Button -->
@@ -225,6 +225,10 @@
 
 </script>
 
+<footer class="mt-12 py-4 bg-gray-200 text-grey text-center" style="font-size: 14px;">
+    <p>&copy; {{ date('Y') }} RuangCendekia. Hak Cipta Dilindungi Undang-Undang.</p>
+</footer>
+
 @endsection
 
 @section('contentAdmin')
@@ -242,13 +246,13 @@
                 <thead class="bg-gray-50 border-b-2 border-gray-200">
                     <tr>
                         <th class="w-10 p-3 text-sm font-semibold tracking-wide text-left">#</th>
-                        <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Books title</th>
+                        <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Judul</th>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Kode Buku</th>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Penulis</th>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Penerbit</th>
-                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Category</th>
+                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Kategori</th>
                         <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Jumlah Buku</th>
-                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Action</th>
+                        <th class="w-20 p-3 text-sm font-semibold tracking-wide text-left">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">

@@ -43,8 +43,8 @@
     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       <a href="" class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.png" alt=""> -->
-        <h1 class="sitename">RuangCendekia</h1>
+        <img src="{{ $change->logo }}" alt=""> <!-- perubahan vira -->
+        <!-- <h1 class="sitename">RuangCendekia</h1> -->
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -70,7 +70,7 @@
       <div class="container">
         <div class="row gy-4">
           <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="fade-up">
-            <h1>Selamat Datang di RuangCendekia</h1>
+            <h1>Selamat Datang di {{ $change->nama_website }}</h1> <!-- perubahan vira -->
             <p>Mari baca buku untuk tingkatkan ilmu</p>
             <div class="d-flex">
               <a href="#about" class="btn-get-started">Mulai</a>
@@ -98,27 +98,20 @@
 
         <div class="row gy-4">
           <div class="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="100">
-            <img src="assets/img/about.png" class="img-fluid" alt="">
+            <img src="{{ asset('storage/' . $change->image) }}" class="img-fluid" alt=""> <!-- perubahan vira -->
           </div>
           <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="200">
-            <h3>Perpustakaan Sekolah: Membaca, Belajar, dan Berkembang.</h3>
+            <h3>{{ $change->tittle }}</h3> <!-- perubahan vira -->
             <p class="fst-italic">
-              Perpustakaan sekolah kami merupakan pusat sumber belajar yang menyediakan berbagai koleksi buku, referensi
-              digital, serta fasilitas nyaman untuk membaca dan berdiskusi. Kami berkomitmen untuk mendukung siswa dan
-              guru dalam mengembangkan wawasan dan keterampilan literasi.
-            </p>
-            <p class="fst-italic">
-              Apa yang kami tawarkan?
+              {{ $change->description }} <!-- perubahan vira -->
             </p>
             <ul>
-              <li><i class="bi bi-check2-all"></i> <span>Koleksi buku yang lengkap, mulai dari buku pelajaran hingga
-                  literatur fiksi dan nonfiksi.</span></li>
-              <li><i class="bi bi-check2-all"></i> <span>Ruang baca yang nyaman dan kondusif untuk belajar.</span></li>
-              <li><i class="bi bi-check2-all"></i> <span>Akses ke sumber digital dan referensi online.</span></li>
+            @foreach (explode("\n", $change->content) as $item) <!-- perubahan vira -->
+                    <li><i class="bi bi-check2-all"></i> <span>{{ $item }}</span></li> 
+                @endforeach 
             </ul>
             <p>
-              Dengan lingkungan yang mendukung dan koleksi yang terus diperbarui, perpustakaan kami menjadi tempat
-              terbaik untuk memperluas pengetahuan. Mari bersama-sama membangun budaya membaca yang lebih baik! 📖✨
+            {{ $change->footer }} <!-- perubahan vira -->
             </p>
           </div>
         </div>
@@ -345,7 +338,7 @@
               <i class="bi bi-geo-alt flex-shrink-0"></i>
               <div>
                 <h3>Alamat</h3>
-                <p>Jl. Tanimbar No.22, Kasin, Kec. Klojen, Kota Malang, Jawa Timur 65117</p>
+                <p>{{ $change->alamat }}</p> <!-- perubahan vira -->
               </div>
             </div>
 
@@ -353,7 +346,7 @@
               <i class="bi bi-telephone flex-shrink-0"></i>
               <div>
                 <h3>Hubungi Kami</h3>
-                <p>0341353798</p>
+                <p>{{ $change->no_telp }}</p> <!-- perubahan vira -->
               </div>
             </div>
 
@@ -361,7 +354,7 @@
               <i class="bi bi-envelope flex-shrink-0"></i>
               <div>
                 <h3>Email</h3>
-                <p>info@example.com</p>
+                <p>{{ $change->email }}</p> <!-- perubahan vira -->
               </div>
             </div>
           </div>
@@ -369,10 +362,10 @@
           <!-- Kolom Maps -->
           <div class="col-lg-6 col-md-6 col-sm-12">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.088191723815!2d112.62473577372916!3d-7.98982897967979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd6281b75ea5485%3A0x90fd5c6fcedf6acf!2sSMK%20Negeri%204%20Kota%20Malang!5e0!3m2!1sid!2sid!4v1739120937698!5m2!1sid!2sid"
+              src="{{ $change->maps }}" 
               frameborder="0" style="border:0; width: 100%; height: 250px;" allowfullscreen="" loading="lazy"
               referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+            </iframe> <!-- perubahan vira -->
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
 <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
 <div class="p-4">
-    <h1 class="text-lg font-semibold text-gray-800 mb-3">Peminjaman Buku</h1>
+    <div class="text-lg" style="margin-top: 40px;"></div>
 
     <div class="grid grid-cols-4 gap-6">
         <!-- Bagian Kiri: Informasi Buku -->
@@ -88,12 +88,12 @@
         <!-- Wishlist Button -->
         <form action="{{ route('wishlist.store', $book->slug) }}" method="POST" class="w-full">
             @csrf
-            <input type="hidden" name="suka" value="liked">
-            <button type="submit"
-                class="w-full flex items-center justify-center bg-gradient-to-br from-green-400 to-green-600 text-white font-medium p-4 rounded-lg text-sm shadow-lg hover:shadow-xl shadow-green-200 hover:shadow-green-200 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-500">
-                <i data-feather="bookmark" class="w-5 h-5 mr-2"></i>
-                Simpan ke Wishlist
-            </button>
+                <input type="hidden" name="suka" value="liked">
+                <button type="submit"
+                    class="w-full flex items-center justify-center bg-blue-200 text-blue-600 font-medium p-4 rounded-lg text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-300 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-500">
+                    <i data-feather="bookmark" class="w-5 h-5 mr-2"></i>
+                    Simpan ke Wishlist
+                </button>
         </form>
     </div>
 

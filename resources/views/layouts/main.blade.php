@@ -11,6 +11,7 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -118,6 +119,7 @@
     @endif
     method="get" class="w-full flex justify-end ml-3">
 
+    <form action="{{ route('books.index') }}" method="GET">
     <label class="relative block w-full">
         <span class="sr-only">Search</span>
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -138,6 +140,7 @@
     class="transition-all duration-500 bg-gradient-to-br from-blue-400 to-blue-500 px-4 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:shadow-none shadow-blue-100">
     Search
 </button>
+</form>
 
  <!-- Ikon Notifikasi dengan indikator -->
 <button type="button" class="transition-all duration-500 bg-transparent px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100 flex items-center relative" onclick="toggleModal()">
@@ -191,9 +194,9 @@
             @endcan
         </div>
     @endif
-    <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-4 text-center">
+    <!-- <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-4 text-center">
         <p class="text-sm">&copy; {{ date('Y') }} Ruang Cendekia. Semua Hak Dilindungi.</p>
-    </footer>
+    </footer> -->
     {{-- {{ : null }} --}}
     <!-- <div class="flex bg-slate-900">
         <div class="w-1/5 flex">
@@ -361,7 +364,7 @@
     setTimeout(showNewNotification, 3000); // Simulasi munculnya notifikasi baru setelah 3 detik
 </script>
 
-<body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
+<!-- <body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
     <main class="flex-grow">
         @yield('content')
     </main>
@@ -369,7 +372,7 @@
     <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-4 text-center">
         <p class="text-sm">&copy; {{ date('Y') }} Ruang Cendekia. Semua Hak Dilindungi.</p>
     </footer>
-</body>
+</body> -->
 
 </body>
 

@@ -104,10 +104,11 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::post('/review-store', [ReviewController::class, 'store'])->name('review.store');
-    Route::get('/getwishlist', [WishlistController::class, 'index'])->name('getwishlist.index');
-    Route::post('/wishlist/{book}', [WishlistController::class, 'store'])->name('wishlist.store');
+    // Route::get('/getwishlist', [WishlistController::class, 'index'])->name('getwishlist.index');
+    Route::get('/getwishlist', [WishlistController::class, 'getAdminWishlist'])->name('getwishlist.index');
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-    Route::delete('/wishlist/{book}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::post('/wishlist/{slug}', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 
 
     Route::get('/history', [BorrowController::class, 'history'])->name('history.index');

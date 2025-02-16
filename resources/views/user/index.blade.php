@@ -2,7 +2,7 @@
 
 @section('contentAdmin')
 <div class="container mt-5">
-    <h1 class="mb-4 text-center text-lg font-semibold">User List</h1>
+    <h1 class="mb-4 text-center text-lg font-semibold">Daftar Pengguna</h1>
 
     <!-- Table -->
     <div class="overflow-auto rounded-lg shadow hidden lg:block w-full mt-5 md:mt-0 md:col-span-2">
@@ -11,12 +11,12 @@
                 <tr>
                     <th class="w-6 p-3 text-sm font-semibold tracking-wide text-left">#</th>
                     <th class="w-44 p-3 text-sm font-semibold tracking-wide text-left">NIP/NISN</th>
-                    <th class="w-44 p-3 text-sm font-semibold tracking-wide text-left">Name</th>
+                    <th class="w-44 p-3 text-sm font-semibold tracking-wide text-left">Nama</th>
                     <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Username</th>
                     <th class="w-44 p-3 text-sm font-semibold tracking-wide text-left">Email</th>
-                    <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Role</th>
-                    <th class="w-28 p-3 text-sm font-semibold tracking-wide text-left">Last Login</th>
-                    <th class="w-16 p-3 text-sm font-semibold tracking-wide text-left">Profile Image</th>
+                    <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Aktor</th>
+                    <th class="w-28 p-3 text-sm font-semibold tracking-wide text-left">Terakhir Masuk</th>
+                    <th class="w-16 p-3 text-sm font-semibold tracking-wide text-left">Foto Profil</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
