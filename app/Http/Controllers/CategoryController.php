@@ -13,13 +13,20 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-{
-    return view('category.category', [
-        'title' => 'Category',
-        'categories' => Category::with('books')->get(),
-    ]);
-}
+    public function index(Request $request)
+    {
+        $categories = Category::with('books');
+    
+        if ($request->has('search')) {
+            $categories->where('name', 'like', '%' . $request->search . '%');
+        }
+    
+        return view('category.category', [
+            'title' => 'Category',
+            'categories' => $categories->get(),
+        ]);
+    }
+    
 
     /**
      * Show the form for creating a new resource.

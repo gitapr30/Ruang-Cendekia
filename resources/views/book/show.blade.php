@@ -23,12 +23,26 @@
 
             <!-- Rating Bintang -->
             <div class="flex items-center mt-2">
-                <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
-                <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
-                <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
-                <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
-                <i data-feather="star" class="w-4 h-4 text-gray-300"></i>
+                @php
+                $averageRating = $averageRating ?? 0; // Beri nilai default jika tidak ada
+                $fullStars = floor($averageRating);
+                $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0;
+                $emptyStars = 5 - ($fullStars + $halfStar);
+            @endphp
+            
+                @for ($i = 0; $i < $fullStars; $i++)
+                    <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
+                @endfor
+            
+                @if ($halfStar)
+                    <i data-feather="star" class="w-4 h-4 text-yellow-400 opacity-50"></i>
+                @endif
+            
+                @for ($i = 0; $i < $emptyStars; $i++)
+                    <i data-feather="star" class="w-4 h-4 text-gray-300"></i>
+                @endfor
             </div>
+            
 
             <!-- Tabel Informasi Buku -->
             <div class="mt-6 bg-white p-4 rounded-lg shadow-lg border-2 border-slate-300">
@@ -104,78 +118,59 @@
         <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200 flex flex-col md:flex-row md:justify-between">
             <!-- Bagian Kiri: Rata-rata Rating dan Total Ulasan -->
             <div class="mb-4 md:mb-0 md:w-1/2">
-                <p class="text-black font-bold text-2xl ml-2">4.2 / 5</p>
+                <p class="text-black font-bold text-2xl ml-2">
+                    {{ number_format($averageRating ?? 0, 1) }} / 5
+                </p>
+                
+                
                 <div class="flex items-center mt-1 space-x-1">
+                    @php
+                        $averageRating = $averageRating ?? 0; // Beri nilai default jika tidak ada
+                        $fullStars = floor($averageRating);
+                        $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0;
+                        $emptyStars = 5 - ($fullStars + $halfStar);
+                    @endphp
+            
                     <!-- Bintang Penuh -->
-                    <span class="text-yellow-500 text-xl">⭐</span>
-                    <span class="text-yellow-500 text-xl">⭐</span>
-                    <span class="text-yellow-500 text-xl">⭐</span>
-                    <span class="text-yellow-500 text-xl">⭐</span>
+                    @for ($i = 0; $i < $fullStars; $i++)
+                        <span class="text-yellow-500 text-xl">⭐</span>
+                    @endfor
+            
                     <!-- Bintang Setengah -->
-                    <span class="text-yellow-500 text-xl opacity-70">⭐</span>
+                    @if ($halfStar)
+                        <span class="text-yellow-500 text-xl opacity-70">⭐</span>
+                    @endif
+            
+                    <!-- Bintang Kosong -->
+                    @for ($i = 0; $i < $emptyStars; $i++)
+                        <span class="text-gray-300 text-xl">⭐</span>
+                    @endfor
                 </div>
-                <p class="text-gray-700 font-medium mt-1">(125)</p>
+                <p class="text-gray-700 font-medium mt-1">({{ $totalReviews ?? 0 }})</p>
+
             </div>
+            
 
             <!-- Bagian Kanan: Distribusi Rating -->
             <div class="md:w-1/2">
                 <p class="text-gray-700 font-semibold mb-3">Distribusi Rating</p>
-
+            
                 <div class="space-y-2">
-                    <!-- 5 Stars -->
-                    <div class="flex items-center space-x-3">
-                        <span class="text-gray-700 font-medium flex items-center">
-                            ⭐ <span class="ml-1">5</span>
-                        </span>
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="h-4 rounded-full" style="width: 70%; background-color: #197BBA;"></div>
-                        </div>
-                        <span class="text-gray-700 font-medium">70%</span>
-                    </div>
+                    @php
+                    $ratingDistribution = $ratingDistribution ?? [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
+                @endphp
 
-                    <!-- 4 Stars -->
+                @foreach ($ratingDistribution as $star => $percentage)
                     <div class="flex items-center space-x-3">
                         <span class="text-gray-700 font-medium flex items-center">
-                            ⭐ <span class="ml-1">4</span>
+                            ⭐ <span class="ml-1">{{ $star }}</span>
                         </span>
                         <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="h-4 rounded-full" style="width: 20%; background-color: #197BBA;"></div>
+                            <div class="h-4 rounded-full" style="width: {{ $percentage }}%; background-color: #197BBA;"></div>
                         </div>
-                        <span class="text-gray-700 font-medium">20%</span>
+                        <span class="text-gray-700 font-medium">{{ $percentage }}%</span>
                     </div>
-
-                    <!-- 3 Stars -->
-                    <div class="flex items-center space-x-3">
-                        <span class="text-gray-700 font-medium flex items-center">
-                            ⭐ <span class="ml-1">3</span>
-                        </span>
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="h-4 rounded-full" style="width: 5%; background-color: #197BBA;"></div>
-                        </div>
-                        <span class="text-gray-700 font-medium">5%</span>
-                    </div>
-
-                    <!-- 2 Stars -->
-                    <div class="flex items-center space-x-3">
-                        <span class="text-gray-700 font-medium flex items-center">
-                            ⭐ <span class="ml-1">2</span>
-                        </span>
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="h-4 rounded-full" style="width: 3%; background-color: #197BBA;"></div>
-                        </div>
-                        <span class="text-gray-700 font-medium">3%</span>
-                    </div>
-
-                    <!-- 1 Star -->
-                    <div class="flex items-center space-x-3">
-                        <span class="text-gray-700 font-medium flex items-center">
-                            ⭐ <span class="ml-1">1</span>
-                        </span>
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="h-4 rounded-full" style="width: 2%; background-color: #197BBA;"></div>
-                        </div>
-                        <span class="text-gray-700 font-medium">2%</span>
-                    </div>
+                @endforeach
                 </div>
             </div>
         </div>
@@ -186,17 +181,20 @@
         <h3 class="text-2xl font-bold text-gray-800 mb-5">Tulis Ulasan Anda</h3>
 
         <!-- Tambahkan rating statis (misalnya default 4 dari 5 bintang) -->
-        <div class="flex text-yellow-400 mb-4">
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span>★</span>
-            <span class="text-gray-300">★</span> <!-- Bintang ke-5 abu-abu -->
-        </div>
-        <p class="text-gray-600 text-sm mb-4">Rating Anda: <strong>4/5</strong></p>
-
-        <form action="{{ route('review.store') }}" method="POST" id="reviewForm">
+        <form action="{{ route('review.store') }}" method="POST" class="mt-4">
             @csrf
+            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+            <input type="hidden" name="book_id" value="{{ $book->id }}">
+        
+            <label for="rating" class="block text-gray-700 font-medium">Rating:</label>
+            <select name="rating" id="rating" class="border p-2 rounded w-full">
+                <option value="5">⭐⭐⭐⭐⭐ - Sangat Bagus</option>
+                <option value="4">⭐⭐⭐⭐ - Bagus</option>
+                <option value="3">⭐⭐⭐ - Cukup</option>
+                <option value="2">⭐⭐ - Kurang</option>
+                <option value="1">⭐ - Buruk</option>
+            </select>
+    
             <div class="space-y-4">
                 <div>
                     <label for="review" class="block text-gray-700 font-medium mb-1">Ulasan</label>
@@ -268,50 +266,98 @@
         }
     </style>
 
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            @foreach($reviews as $review)
-            <div class="swiper-slide">
-                <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-md mx-auto mt-6">
-                    <div class="text-gray-700">
-                        <div class="flex text-yellow-400 mb-2">
-                            <span>★</span>
-                            <span>★</span>
-                            <span>★</span>
-                            <span>★</span>
-                            <span class="text-gray-300">★</span> <!-- Bintang ke-5 abu-abu -->
-                        </div>
-                        <p class="text-lg italic">"{{ $review->review }}"</p>
-                        <p class="mt-4 font-medium text-right text-blue-600">- {{ $review->user->name ?? 'Unknown' }}</p>
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        @foreach($reviews as $review)
+        <div class="swiper-slide">
+            <div class="bg-white rounded-lg shadow-md p-6 w-full max-w-md mx-auto mt-6">
+                <div class="text-gray-700">
+                    <div class="flex text-yellow-400 mb-2">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <= $review->rating)
+                                <span>★</span> <!-- Bintang emas -->
+                            @else
+                                <span class="text-gray-300">★</span> <!-- Bintang abu-abu -->
+                            @endif
+                        @endfor
                     </div>
+                    <p class="text-lg italic">"{{ $review->review }}"</p>
+                    <p class="mt-4 font-medium text-right text-blue-600">- {{ $review->user->name ?? 'Unknown' }}</p>
                 </div>
             </div>
-            @endforeach
         </div>
+        @endforeach
     </div>
+</div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var swiper = new Swiper('.swiper-container', {
-                loop: true,
-                spaceBetween: 20,
-                slidesPerView: 3,
-                autoplay: {
-                    delay: 3000, // Adjust time (milliseconds) between slides
-                    disableOnInteraction: false, // Keeps autoplay running after user interaction
-                },
-            });
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var swiper = new Swiper('.swiper-container', {
+            loop: true,
+            spaceBetween: 20,
+            slidesPerView: 3,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
         });
-    </script>
-</div>
-
-<!-- Include Swiper JS -->
-
-</div>
+    });
+</script>
+</div></div>
 </div>
 @endsection
 
 @section('contentPustakawan')
+<div class="p-4">
+    <div class="bg-white rounded-xl shadow p-6">
+        <h1 class="text-xl font-semibold text-gray-800 mb-4">Detail Buku</h1>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <p class="text-sm font-medium text-gray-600">Judul:</p>
+                <p class="text-lg text-gray-900">{{ $book->title }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Kode Buku:</p>
+                <p class="text-lg text-gray-900">{{ $book->kode_buku }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Penulis:</p>
+                <p class="text-lg text-gray-900">{{ $book->penulis }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Penerbit:</p>
+                <p class="text-lg text-gray-900">{{ $book->penerbit }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Kategori:</p>
+                <p class="text-lg text-gray-900">{{ $book->category->name }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Tahun Terbit:</p>
+                <p class="text-lg text-gray-900">{{ $book->thn_terbit }}</p>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Jumlah Buku:</p>
+                <p class="text-lg text-gray-900">{{ $book->stok }}</p>
+            </div>
+        </div>
+        
+        @if($book->image)
+        <div class="mt-6 text-center">
+            <p class="text-sm font-medium text-gray-600">Gambar Buku:</p>
+            <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}"
+                            alt="{{ $book->title }}" class="w-48 h-64 object-cover mx-auto rounded-lg shadow-md">
+        </div>
+        @endif
+        
+        <div class="mt-6 flex gap-4">
+            <a href="{{ route('books.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600">Kembali</a>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('contentAdmin')
 <div class="p-4">
     <div class="bg-white rounded-xl shadow p-6">
         <h1 class="text-xl font-semibold text-gray-800 mb-4">Detail Buku</h1>

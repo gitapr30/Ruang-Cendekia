@@ -15,4 +15,11 @@ class Bookshelves extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    // app/Models/Bookshelves.php
+
+public function books()
+{
+    return $this->hasMany(Books::class);
+}
+
 }

@@ -64,12 +64,12 @@
 
 @section('contentPustakawan')
 <!-- Tabel Daftar Peminjaman Buku -->
-<h2 class="text-lg font-semibold text-gray-800 mt-10 mb-3">Daftar Buku Dipinjam</h2>
+<h2 class="text-lg font-semibold text-gray-800 mt-10 mb-3 ml-7">Daftar Buku Dipinjam</h2>
 <table class="min-w-full table-auto bg-white border-separate border-spacing-0.5">
     <thead>
         <tr>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">No</th>
-            <th class="px-4 py-2 text-sm font-medium text-gray-700">User</th>
+            <th class="px-4 py-2 text-sm font-medium text-gray-700">Pengguna</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Buku</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Pinjam</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Kembali</th>

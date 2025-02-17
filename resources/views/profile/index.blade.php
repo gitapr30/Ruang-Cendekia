@@ -12,28 +12,27 @@
                 <h3 class="text-xl font-semibold text-gray-800 mb-4">Profil Pengguna</h3>
 
                 <!-- Foto Profil -->
-                <div class="flex flex-col items-center mb-6 relative">
-                    <div class="w-32 h-32 bg-gray-100 rounded-full absolute -z-10"></div>
+                <!-- Foto Profil -->
+<div class="flex flex-col items-center mb-6 relative">
+    <div class="w-32 h-32 bg-gray-100 rounded-full absolute -z-10"></div>
 
-                    @if($user->image)
-                    <label for="imageInput" class="cursor-pointer relative">
-                        <img src="{{ asset('' . $user->image) }}" alt="Profile Image" class="w-24 h-24 rounded-full object-cover z-10">
-                        <!-- Edit Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white absolute bottom-0 right-0 mb-1 mr-1 bg-gray-600 p-1 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232a3 3 0 114.242 4.242l-9.396 9.395a2 2 0 01-.728.514l-4.22 1.409a1 1 0 01-1.232-1.231l1.41-4.222a2 2 0 01.513-.728L15.232 5.232z" />
-                        </svg>
-                    </label>
-                    <input type="file" id="imageInput" name="image" class="hidden">
-                    @else
-                    <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold z-10 relative">
-                        No Image
-                        <!-- Edit Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 absolute bottom-0 right-0 mb-1 mr-1 bg-white p-1 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232a3 3 0 114.242 4.242l-9.396 9.395a2 2 0 01-.728.514l-4.22 1.409a1 1 0 01-1.232-1.231l1.41-4.222a2 2 0 01.513-.728L15.232 5.232z" />
-                        </svg>
-                    </div>
-                    @endif
-                </div>
+    <label for="imageInput" class="cursor-pointer relative">
+        <img id="profileImage" src="{{ asset($user->image ?? 'path/default-image.jpg') }}" 
+            alt="Profile Image" 
+            class="w-24 h-24 rounded-full object-cover z-10">
+        
+        <!-- Edit Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            class="w-6 h-6 text-white absolute bottom-0 right-0 mb-1 mr-1 bg-gray-600 p-1 rounded-full" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M15.232 5.232a3 3 0 114.242 4.242l-9.396 9.395a2 2 0 01-.728.514l-4.22 1.409a1 1 0 01-1.232-1.231l1.41-4.222a2 2 0 01.513-.728L15.232 5.232z" />
+        </svg>
+    </label>
+    <input type="file" id="imageInput" name="image" class="hidden">
+</div>
 
                 <!-- Email -->
                 <div class="mb-4">
@@ -85,6 +84,18 @@
         </div>
     </form>
 </div>
+<script>
+    document.getElementById('imageInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImage').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 @endsection
 
 @section('contentAdmin')
@@ -101,25 +112,23 @@
                 <!-- Foto Profil -->
                 <div class="flex flex-col items-center mb-6 relative">
                     <div class="w-32 h-32 bg-gray-100 rounded-full absolute -z-10"></div>
-
-                    @if($user->image)
+                
                     <label for="imageInput" class="cursor-pointer relative">
-                        <img src="{{ asset('' . $user->image) }}" alt="Profile Image" class="w-24 h-24 rounded-full object-cover z-10">
+                        <img id="profileImage" src="{{ asset($user->image ?? 'path/default-image.jpg') }}" 
+                            alt="Profile Image" 
+                            class="w-24 h-24 rounded-full object-cover z-10">
+                        
                         <!-- Edit Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white absolute bottom-0 right-0 mb-1 mr-1 bg-gray-600 p-1 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232a3 3 0 114.242 4.242l-9.396 9.395a2 2 0 01-.728.514l-4.22 1.409a1 1 0 01-1.232-1.231l1.41-4.222a2 2 0 01.513-.728L15.232 5.232z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                            class="w-6 h-6 text-white absolute bottom-0 right-0 mb-1 mr-1 bg-gray-600 p-1 rounded-full" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M15.232 5.232a3 3 0 114.242 4.242l-9.396 9.395a2 2 0 01-.728.514l-4.22 1.409a1 1 0 01-1.232-1.231l1.41-4.222a2 2 0 01.513-.728L15.232 5.232z" />
                         </svg>
                     </label>
                     <input type="file" id="imageInput" name="image" class="hidden">
-                    @else
-                    <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold z-10 relative">
-                        No Image
-                        <!-- Edit Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500 absolute bottom-0 right-0 mb-1 mr-1 bg-white p-1 rounded-full" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232a3 3 0 114.242 4.242l-9.396 9.395a2 2 0 01-.728.514l-4.22 1.409a1 1 0 01-1.232-1.231l1.41-4.222a2 2 0 01.513-.728L15.232 5.232z" />
-                        </svg>
-                    </div>
-                    @endif
                 </div>
 
                 <!-- Email -->
@@ -172,4 +181,16 @@
         </div>
     </form>
 </div>
+<script>
+    document.getElementById('imageInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImage').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 @endsection

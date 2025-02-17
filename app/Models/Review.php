@@ -13,6 +13,7 @@ class Review extends Model
         'user_id',
         'book_id',
         'review',
+        'rating',
     ];
 
     // Relasi ke model User

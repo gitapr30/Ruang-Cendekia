@@ -2,10 +2,10 @@
 
 @section('contentAdmin')
     <div class="container mx-auto mt-8">
-        <h1 class="text-2xl font-bold text-gray-800 mb-4">Wishlist Admin</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-4 ml-7">Data Wishlist</h1>
 
-        <h2 class="text-xl font-semibold text-gray-700 mb-2">Jumlah Wishlist per Buku</h2>
-        <div class="book-list bg-white shadow-md p-4 rounded-lg">
+        <h2 class="text-xl font-semibold text-gray-700 mb-2 ml-7">Jumlah Wishlist per Buku</h2>
+        <div class="book-list bg-white shadow-md p-4 rounded-lg ml-5">
             @if ($books->isEmpty())
                 <p class="text-gray-600">Belum ada buku di database.</p>
             @else
@@ -37,10 +37,10 @@
 
 @section('contentPustakawan')
     <div class="container mx-auto mt-8">
-        <h1 class="text-2xl font-bold text-gray-800 mb-4">Wishlist Admin</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-4 ml-7">Data Wishlist</h1>
 
-        <h2 class="text-xl font-semibold text-gray-700 mb-2">Jumlah Wishlist per Buku</h2>
-        <div class="book-list bg-white shadow-md p-4 rounded-lg">
+        <h2 class="text-xl font-semibold text-gray-700 mb-2 ml-7">Jumlah Wishlist per Buku</h2>
+        <div class="book-list bg-white shadow-md p-4 rounded-lg ml-5">
             @if ($books->isEmpty())
                 <p class="text-gray-600">Belum ada buku di database.</p>
             @else

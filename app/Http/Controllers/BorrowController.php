@@ -145,21 +145,32 @@ public function selectBook(Request $request)
     {
         $title = 'History Borrowing';
         $userId = Auth::id();
-
+    
         if (!$userId) {
             return redirect()->route('login')->with('errorMessage', 'Anda harus login terlebih dahulu.');
         }
-
+    
+        // Ambil semua riwayat peminjaman dengan relasi ke buku
         $history = Borrow::where('user_id', $userId)->with('book');
-
-        if (request()->has('book_id')) {
-            $history->where('book_id', request('book_id'));
+    
+        // Filter berdasarkan book_id jika tersedia
+        if ($request->has('book_id')) {
+            $history->where('book_id', $request->book_id);
         }
-
+    
+        // Filter berdasarkan pencarian
+        if ($request->has('search')) {
+            $search = $request->search;
+            $history->whereHas('book', function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%");
+            });
+        }
+    
         $history = $history->paginate(6);
-
+    
         return view('borrow.history', compact('history', 'title'));
     }
+    
 
 
     /**

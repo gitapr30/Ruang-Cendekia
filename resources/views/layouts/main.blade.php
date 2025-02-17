@@ -110,14 +110,20 @@
                             <span class="ml-2 font-medium">{{ date('d/m/Y') }}</span>
                         </div>
                         <form
-    @if (Request::is('books*'))
-        action="{{ route('books.index') }}"
-    @elseif(Request::is('borrow*'))
-        action="{{ route('borrow.index') }}"
-    @elseif(Request::is('category*'))
-        action="{{ route('category.index') }}"
-    @endif
-    method="get" class="w-full flex justify-end ml-3">
+                        @if (Request::is('books*'))
+                        action="{{ route('books.index') }}"
+                    @elseif (Request::is('borrow*'))
+                        action="{{ route('borrow.index') }}"
+                    @elseif (Request::is('category*'))
+                        action="{{ route('category.index') }}"
+                    @elseif (Request::is('wishlist*'))
+                        action="{{ route('wishlist.index') }}"
+                    @elseif (Request::is('history*'))
+                        action="{{ route('history.index') }}"
+                    @elseif (Request::is('users*'))
+                        action="{{ route('user.index') }}"
+                    @endif
+                    method="get" class="w-full flex justify-end ml-3">
 
     <form action="{{ route('books.index') }}" method="GET">
     <label class="relative block w-full">
@@ -143,29 +149,20 @@
 </form>
 
  <!-- Ikon Notifikasi dengan indikator -->
-<button type="button" class="transition-all duration-500 bg-transparent px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100 flex items-center relative" onclick="toggleModal()">
-    <img src="notif-icon.svg" alt="Notifikasi" class="w-6 h-6">
+@if(auth()->user() && auth()->user()->role == 'pengguna')
+    <button type="button" class="transition-all duration-500 bg-transparent px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100 flex items-center relative" onclick="toggleModal()">
+        <img src="notif-icon.svg" alt="Notifikasi" class="w-6 h-6">
 
-    <!-- Indikator Notifikasi (Hijau) -->
-    <span id="notifIndicator" class="absolute top-1 right-0 w-2.5 h-2.5 bg-green-500 rounded-full"></span>
-</button>
-
+        <span id="notifIndicator" class="absolute top-1 right-0 w-2.5 h-2.5 bg-green-500 rounded-full"></span>
     </button>
+@endif
+
 <!-- Tombol Profile dengan Icon -->
 <a href="{{ route('profile.index') }}"
     class="transition-all duration-500 bg-transparent px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100 flex items-center">
-    <img src="user-icon.svg" alt="Profile" class="w-5 h-5">
+    <img id="profileImage" src="{{ asset(auth()->user()->image ?? 'path/default-image.jpg') }}" class="w-5 h-5">
 </a>
 
-                        {{-- <form
-                            class="flex items-center bg-white p-3 py-1 rounded-full shadow-sm focus:border-2 focus:border-sky-50 w-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5 stroke-gray-700">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                            </svg>
-                            <input type="search" class="peer px-3 py-2 bg-white w-full outline-0 border-0 ">
-                        </form> --}}
                     </div>
                 @endif
                 @can('isUser')
@@ -194,94 +191,7 @@
             @endcan
         </div>
     @endif
-    <!-- <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-4 text-center">
-        <p class="text-sm">&copy; {{ date('Y') }} Ruang Cendekia. Semua Hak Dilindungi.</p>
-    </footer> -->
-    {{-- {{ : null }} --}}
-    <!-- <div class="flex bg-slate-900">
-        <div class="w-1/5 flex">
-            <div class=" transition flex p-3 items-center duration-300">
-                <img src="logo.png" alt="Logo" width="30" height="30" style="object-fit: contain;">
-                <p class="m-0 font-bold text-2xl tracking-wide ml-3 text-white">iLibrary</p>
-            </div>
-        </div>
-        <div class="w-4/5">
-            <div class="flex w-full items-center justify-between p-3 mb-2 backdrop-blur-lg z-50">
-                <h1 class="m-0 text-2xl font-bold text-white tracking-wide">Dashboard</h1>
-                <div>
-                    <div
-                        class="p-2 border-2 border-white-400 rounded-full transition-all  duration-300 text-white hover:border-transparent bg-gradient-to-br from-transparent to-transparent hover:bg-gradient-to-br hover:from-blue-400 hover:to-blue-500">
-                        <div class="h-6 w-6 flex">
-                            <i data-feather="search" width="16px" class="m-auto"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="flex">
-        <div class="w-1/5 h-screen bg-blue-50/30">
-            <div class="p-4">
-                <div class="menu">
-                    <p class="m-0 text-base font-medium text-slate-400">MENU</p>
-                    <ul class="list-none list-inside mt-3">
-                        <li>
-                            <a href=""
-                                class="transition-all flex no-underline text-white items-center	p-3 bg-gradient-to-br from-blue-400 to-blue-500 shadow-xl shadow-blue-500/30 rounded-xl duration-300 hover:from-blue-400 hover:to-blue-400">
-                                <i data-feather="home" width="20px" stroke-width="2.5"></i>
-                                <p class="ml-2 font-semibold">Dashboard</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="flex no-underline text-gray-500 items-center p-3 rounded-lg">
-                                <i data-feather="briefcase" width="20px" stroke-width="2.5"></i>
-                                <p class="ml-2 font-semibold">Borrowed</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="" class="flex no-underline text-gray-500 items-center p-3 rounded-lg">
-                                <i data-feather="user" width="20px" stroke-width="2.5"></i>
-                                <p class="ml-2 font-semibold">My Account</p>
-                            </a>
-                        </li>
-                    </ul>
-                    <p class="m-0 text-base font-medium text-slate-400 mt-6">SETTING</p>
-                    <ul class="list-none list-inside mt-3">
-                        <li>
-                            <a href="" class="flex no-underline text-gray-500 items-center p-3 rounded-lg">
-                                <i data-feather="user" width="20px" stroke-width="2.5"></i>
-                                <p class="ml-2 font-semibold">My Account</p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="w-4/5 h-screen bg-white py-0 overflow-scroll">
-            <div class="p-5">
-                <h1 class="text-lg font-semibold text-gray-800 mb-3">Library Collection</h1>
-                <div class="grid grid-cols-5 gap-10">
-                    <div class="transition rounded-md hover:scale-95 duration-300">
-                        <img src="/gusdur.jpg" alt="gusdur" width="100%" height="325" style="object-fit: cover;"
-                            class="rounded">
-                        <h1 class="mt-2 font-bold text-lg text-gray-800">Gur Dur</h1>
-                        <div class="text-sm flex text-gray-700 items-center font-semibold">
-                            <i data-feather="edit-3" width="16px"></i>
-                            <span class="ml-2">Greg Barton</span>
-                        </div>
-                        <div class="text-sm flex text-gray-700 items-center font-semibold">
-                            <i data-feather="calendar" width="16px"></i>
-                            <span class="ml-2">Maret 20, 2022 </span>
-                        </div>
-                        <div class="text-sm flex text-gray-700 items-center font-semibold">
-                            <i data-feather="layers" width="16px"></i>
-                            <span class="ml-2">200 Pages</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
+
     <script src="https://unpkg.com/feather-icons"></script>
 
     <script>
@@ -363,16 +273,6 @@
     // Misalnya, jika ada notifikasi baru setelah beberapa detik
     setTimeout(showNewNotification, 3000); // Simulasi munculnya notifikasi baru setelah 3 detik
 </script>
-
-<!-- <body class="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900">
-    <main class="flex-grow">
-        @yield('content')
-    </main>
-
-    <footer class="bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 py-4 text-center">
-        <p class="text-sm">&copy; {{ date('Y') }} Ruang Cendekia. Semua Hak Dilindungi.</p>
-    </footer>
-</body> -->
 
 </body>
 

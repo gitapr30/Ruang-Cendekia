@@ -81,15 +81,14 @@ Route::middleware(['auth'])->group(function () {
 
 
     //rak
-    Route::get('/bookshelves', [BookshelvesController::class, 'index'])->name('bookshelves.index');
-    Route::post('/bookshelves', [BookshelvesController::class, 'store'])->name('bookshelves.store');
+    Route::get('/bookshelves/create', [BookshelvesController::class, 'create'])->name('bookshelves.create'); 
+Route::get('/bookshelves', [BookshelvesController::class, 'index'])->name('bookshelves.index');
+Route::post('/bookshelves', [BookshelvesController::class, 'store'])->name('bookshelves.store');
+Route::get('/bookshelves/{bookshelves}/edit', [BookshelvesController::class, 'edit'])->name('bookshelves.edit');
 
-    Route::get('/bookshelves/{id}/edit', [BookshelvesController::class, 'edit'])->name('bookshelves.edit');
-    Route::put('/bookshelves/{id}', [BookshelvesController::class, 'update'])->name('bookshelves.update');
-    Route::delete('/bookshelves/{id}', [BookshelvesController::class, 'destroy'])->name('bookshelves.destroy');
-    Route::get('/bookshelves/{id}', [BookshelvesController::class, 'show'])->name('bookshelves.show');
-    Route::put('/bookshelves/{bookshelves}', [BookshelvesController::class, 'update'])->name('bookshelves.update');
-    Route::get('/bookshelves/create', [BookshelvesController::class, 'create'])->name('bookshelves.create');
+Route::put('/bookshelves/{id}', [BookshelvesController::class, 'update'])->name('bookshelves.update');
+Route::delete('/bookshelves/{id}', [BookshelvesController::class, 'destroy'])->name('bookshelves.destroy');
+Route::get('/bookshelves/{id}', [BookshelvesController::class, 'show'])->name('bookshelves.show');
 
 
 
@@ -141,6 +140,6 @@ Route::middleware(['guest'])->group(function () {
             'title' => 'Register',
         ]);
     })->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    // Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 });

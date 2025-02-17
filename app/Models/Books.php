@@ -36,9 +36,22 @@ class Books extends Model
     {
         return $this->hasMany(Review::class, 'book_id');
     }
-    public function wishlists()
-{
-    return $this->hasMany(Wishlists::class, 'book_id');
-}
+        public function wishlists()
+    {
+        return $this->hasMany(Wishlists::class, 'book_id');
+    }
+
+    public function borrows()
+        {
+            return $this->hasMany(Borrow::class, 'book_id');
+        }
+    // app/Models/Books.php
+
+// Model Book
+    public function bookshelves()
+    {
+        return $this->belongsTo(Bookshelf::class, 'rak_id'); // pastikan 'rak_id' adalah nama kolom yang benar
+    }
+
 
 }

@@ -19,34 +19,44 @@ class BooksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $title = '';
-        $books = Books::where('title', 'like', '%' . request('search') . '%')
-            ->orWhere('penulis', 'like', '%' . request('search') . '%')
-            ->get();
+{
+    $title = '';
+    $search = request('search');
 
-        if (request('search')) {
-            $title = 'Hasil pencarian dari ' . request('search') . ' | ';
-        }
-        if (Gate::allows('isUser')) {
-            $title .= 'Overview';
-        }
-        if (Gate::allows('isAdmin')) {
-            $title .= 'All Book';
-        }
+    $books = Books::where('title', 'like', '%' . $search . '%')
+        ->orWhere('kode_buku', 'like', '%' . $search . '%')
+        ->orWhereHas('category', function ($query) use ($search) {
+            $query->where('name', 'like', '%' . $search . '%'); // Jika kategori berbasis relasi
+        })
+        ->orWhere('penulis', 'like', '%' . $search . '%')
+        ->orWhere('description', 'like', '%' . $search . '%')
+        ->orWhere('penerbit', 'like', '%' . $search . '%')
+        ->orWhere('stok', 'like', '%' . $search . '%')
+        ->orWhere('thn_terbit', 'like', '%' . $search . '%')
+        ->get();
 
-        // Fetch all categories with their books
-        $categories = Category::with('books')->get();
-
-        // Ambil buku yang dirilis dalam satu bulan terakhir
-        $newBooks = Books::orderByDesc('created_at')->get();
-        return view('book.books', [
-            'title' => $title,
-            'books' => $books,
-            'categories' => $categories,
-            'newBooks' => $newBooks, // Tambahkan ke view agar tidak error
-        ]);
+    if ($search) {
+        $title = 'Hasil pencarian dari ' . $search . ' | ';
     }
+
+    if (Gate::allows('isUser')) {
+        $title .= 'Overview';
+    }
+
+    if (Gate::allows('isAdmin')) {
+        $title .= 'All Book';
+    }
+
+    $categories = Category::with('books')->get();
+    $newBooks = Books::orderByDesc('created_at')->get();
+
+    return view('book.books', [
+        'title' => $title,
+        'books' => $books,
+        'categories' => $categories,
+        'newBooks' => $newBooks,
+    ]);
+}
 
     /**
      * Show the form for creating a new resource.

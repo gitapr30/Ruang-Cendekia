@@ -12,20 +12,21 @@ class BookshelvesController extends Controller
      * Display a listing of the resource.
      */
     public function index()
+    {
+        $bookshelves = Bookshelves::paginate(10);
+
+        if ($bookshelves->total() == 0) {
+            return view('bookshelves.index', ['message' => 'Tidak ada rak buku.']);
+        }
+
+        return view('bookshelves.index', compact('bookshelves'));
+    } 
+
+    public function create()
 {
-    $bookshelves = Bookshelves::paginate(10);
-
-    if ($bookshelves->total() == 0) { 
-        return view('bookshelves.index', ['message' => 'Tidak ada rak buku.']);
-    }
-
-    return view('bookshelves.index', compact('bookshelves'));
-}
-
-public function create()
-{
-    $categories = Category::all(); // Jika kategori diperlukan dalam form
-    return view('bookshelves.create', compact('categories'));
+    $categories = Category::all(); // Get all categories
+    $bookshelves = Bookshelves::all(); // Fetch all bookshelves
+    return view('bookshelves.create', compact('categories', 'bookshelves')); // Pass both categories and bookshelves to the view
 }
 
 
@@ -56,11 +57,12 @@ public function create()
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Bookshelves $bookshelves) // Gunakan route model binding
-    {
-        $categories = Category::all();
-        return view('bookshelves.update', compact('bookshelves', 'categories'));
-    }
+    public function edit(Bookshelves $bookshelves) 
+{
+    $categories = Category::all();
+    return view('bookshelves.update', compact('bookshelves', 'categories')); 
+}
+
 
     /**
      * Update the specified resource in storage.

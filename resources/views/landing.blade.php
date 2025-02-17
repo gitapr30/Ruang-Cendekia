@@ -65,7 +65,7 @@
   <main class="main">
 
     <!-- Hero Section -->
-    <section id="hero" class="hero section">
+    <section id="hero" class="hero section light-background">
 
       <div class="container">
         <div class="row gy-4">
@@ -448,16 +448,16 @@
 </footer> -->
   <footer class="bg-body-tertiary text-center text-lg-start">
     <!-- Copyright -->
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05); color: #444444; font-size: 15px;">
-     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05); color: rgba(68, 68, 68, 0.75); font-size: 15px;">
+     <!-- <ul class="nav justify-content-center border-bottom pb-3 mb-3">
       <li class="nav-item"><a href="#hero" class="nav-link px-2 text-body-secondary">Beranda</a></li>
       <li class="nav-item"><a href="#about" class="nav-link px-2 text-body-secondary">Tentang</a></li>
       <li class="nav-item"><a href="#services" class="nav-link px-2 text-body-secondary">Rekomendasi</a></li>
       <li class="nav-item"><a href="#testimonials" class="nav-link px-2 text-body-secondary">Ulasan</a></li>
       <li class="nav-item"><a href="#contact" class="nav-link px-2 text-body-secondary">Informasi</a></li>
-     </ul>
+     </ul> -->
       © 2025 Copyright:
-      <span class="text-body" style="color: #444444; font-size: 15px;">RuangCendekia</span>
+      <span class="text-body" style="font-size: 15px;">RuangCendekia</span>
     </div>
     <!-- Copyright -->
   </footer>

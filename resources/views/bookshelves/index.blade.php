@@ -61,18 +61,13 @@
 </div>
 @endsection
 
-@extends('layouts.main')
-
 @section('contentPustakawan')
 <div class="p-4">
     <div class="flex justify-between items-center">
         <h1 class="text-lg font-semibold text-gray-800 mb-3">Daftar Rak Buku</h1>
-        <a href="{{ route('bookshelves.create') }}"
-    class="transition-all duration-500 bg-blue-500 rounded-lg text-white font-medium px-5 py-2.5 focus:ring-2
-    focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm">
-    Tambah Rak Buku
-</a>
-
+        <a href="{{ route('bookshelves.create') }}" class="transition-all duration-500 bg-blue-500 rounded-lg text-white font-medium px-5 py-2.5 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm">
+            Tambah Rak Buku
+        </a>
     </div>
     <div class="mt-6">
         <div class="overflow-auto rounded-lg shadow block w-full">

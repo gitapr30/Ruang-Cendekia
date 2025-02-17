@@ -34,7 +34,7 @@
     @else
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 ml-7">
             @foreach ($wishlistBooks as $book)
-                <div class="w-full bg-white rounded-lg p-4 shadow-lg flex">
+                <div class="w-full bg-white rounded-lg p-4 shadow-lg flex flex-col">
                     <div class="flex">
                         <div class="w-1/3">
                             <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}" alt="{{ $book->title }}" class="w-full h-40 object-cover rounded-lg shadow-md">
@@ -47,6 +47,15 @@
                             <p class="text-gray-600">Tahun Terbit : {{ $book->thn_terbit }}</p>
                             <p class="text-gray-600">Kode Buku: {{ $book->kode_buku }}</p>
                             <p class="text-gray-600">Penerbit: {{ $book->penerbit }}</p>
+
+                            <!-- Tombol Hapus -->
+                            <form action="{{ route('wishlist.destroy', $book->id) }}" method="POST" class="mt-3">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-300">
+                                    Hapus dari Wishlist
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

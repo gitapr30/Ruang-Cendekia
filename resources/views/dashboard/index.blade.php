@@ -2,7 +2,7 @@
 
 @section('contentAdmin')
 <div class="p-8 space-y-8 bg-gray-100 min-h-screen">
-    <h1 class="text-4xl font-extrabold text-gray-900 mb-8 text-center">📊 Dashboard Statistik</h1>
+    <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">📊 Dashboard Statistik</h1>
 
     <!-- Statistik Peminjaman Per Bulan -->
     <div class="bg-white rounded-xl shadow-xl p-8 max-w-5xl mx-auto transition-all hover:shadow-2xl">

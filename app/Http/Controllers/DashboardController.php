@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Borrow;
+use App\Models\Books;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -20,7 +21,11 @@ class DashboardController extends Controller
                                   ->groupBy('month')
                                   ->get();
 
-        // Initialize arrays for months and counts
+    // Fetch book statistics
+    $totalBooks = Books::count();
+    $borrowedBooks = Borrow::where('status','dikembalikan', null)->count();
+    $availableBooks = $totalBooks - $borrowedBooks;
+    $damagedOrLostBooks = Borrow::where('keterangan', 'rusak')->orWhere('keterangan', 'hilang')->count();
         $months = [];
         $borrowCounts = [];
         $registeredUserCounts = [];
@@ -42,6 +47,12 @@ class DashboardController extends Controller
                 'months' => $months,
                 'borrowCounts' => $borrowCounts,
                 'registeredUserCounts' => $registeredUserCounts,
+                'bookStatistics' => [
+                    'totalBooks' => $totalBooks,
+                    'borrowedBooks' => $borrowedBooks,
+                    'availableBooks' => $availableBooks,
+                    'damagedOrLostBooks' => $damagedOrLostBooks,
+                ]
             ]
         ]);
     }

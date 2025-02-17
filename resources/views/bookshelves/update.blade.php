@@ -5,7 +5,8 @@
     <h1 class="text-lg font-semibold text-gray-800 mb-4">Edit Rak Buku</h1>
 
     <!-- Form Edit -->
-    <form action="{{ route('bookshelves.update', $bookshelves->id) }}" method="POST">
+    <form action="{{ route('bookshelves.update', $bookshelves) }}" method="POST">
+
         @csrf
         @method('PUT')
 

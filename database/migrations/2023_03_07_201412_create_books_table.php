@@ -29,7 +29,8 @@ return new class extends Migration
             $table->string('status')->default('ready');
             $table->foreignId('user_id');
             $table->foreignId('category_id');
-            $table->foreignId('rak_id');
+            $table->unsignedBigInteger('rak_id')->nullable();  // Add rak_id
+            $table->foreign('rak_id')->references('id')->on('bookshelves')->onDelete('set null');  // Set foreign key constraint
             $table->timestamps();
         });
     }
@@ -40,7 +41,10 @@ return new class extends Migration
      * @return void
      */
     public function down()
-    {
-        Schema::dropIfExists('books');
-    }
+{
+    Schema::table('books', function (Blueprint $table) {
+        $table->dropForeign(['rak_id']);
+        $table->dropColumn('rak_id');
+    });
+}
 };

@@ -12,7 +12,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'nip_nisn' => ['required'],
+            'nip_nisn' => ['required', 'regex:/^[0-9]+$/'],
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
@@ -26,18 +26,18 @@ class AuthController extends Controller
             return redirect()->intended('/books'); // Redirect ke halaman tujuan
         }
 
-        return back()->with('errorMessage', 'Login failed!');
+        return back()->with('errorMessage', 'Gagal Masuk!');
     }
 
     public function register(Request $request)
 {
-    $defaultImages = ['image_post/profdef1.jpg', 'image_post/profdef2.jpg'];
+    $defaultImages = ['storage/profil/no-pict.jpg', 'storage/profil/no-pict.jpg'];
 
     $credentials = $request->validate([
         'nip_nisn' => 'required',
         'name' => 'required',
         'username' => 'required|unique:users',
-        'email' => 'required|email|unique:users', // Email harus unik
+        'email' => 'required|email|unique:users',
         'password' => 'required|min:6',
     ]);
 
@@ -48,14 +48,27 @@ class AuthController extends Controller
     $user = User::create($credentials);
 
     if ($user) {
-        Auth::login($user);
-        return redirect()->route('books.index');
+        return response()->json([
+            'success' => true,
+            'message' => 'Registrasi berhasil',
+            'user' => [
+                'id' => $user->id,
+                'nip_nisn' => $user->nip_nisn,
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'role' => $user->role,
+                'image' => asset('storage/' . $user->image)
+            ]
+        ]);
     }
 
-    return back()->withErrors(['register' => 'Registration failed']);
+    return response()->json(['success' => false, 'message' => 'Registrasi gagal'], 500);
 }
 
-    public function index()
+
+
+public function index()
 {
     $users = User::all(); // Get all users
     return view('user.index', compact('users')); // Pass users to the view
