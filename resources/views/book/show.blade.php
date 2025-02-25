@@ -29,20 +29,20 @@
                 $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0;
                 $emptyStars = 5 - ($fullStars + $halfStar);
             @endphp
-            
+
                 @for ($i = 0; $i < $fullStars; $i++)
                     <i data-feather="star" class="w-4 h-4 text-yellow-400"></i>
                 @endfor
-            
+
                 @if ($halfStar)
                     <i data-feather="star" class="w-4 h-4 text-yellow-400 opacity-50"></i>
                 @endif
-            
+
                 @for ($i = 0; $i < $emptyStars; $i++)
                     <i data-feather="star" class="w-4 h-4 text-gray-300"></i>
                 @endfor
             </div>
-            
+
 
             <!-- Tabel Informasi Buku -->
             <div class="mt-6 bg-white p-4 rounded-lg shadow-lg border-2 border-slate-300">
@@ -121,8 +121,8 @@
                 <p class="text-black font-bold text-2xl ml-2">
                     {{ number_format($averageRating ?? 0, 1) }} / 5
                 </p>
-                
-                
+
+
                 <div class="flex items-center mt-1 space-x-1">
                     @php
                         $averageRating = $averageRating ?? 0; // Beri nilai default jika tidak ada
@@ -130,17 +130,17 @@
                         $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0;
                         $emptyStars = 5 - ($fullStars + $halfStar);
                     @endphp
-            
+
                     <!-- Bintang Penuh -->
                     @for ($i = 0; $i < $fullStars; $i++)
                         <span class="text-yellow-500 text-xl">⭐</span>
                     @endfor
-            
+
                     <!-- Bintang Setengah -->
                     @if ($halfStar)
                         <span class="text-yellow-500 text-xl opacity-70">⭐</span>
                     @endif
-            
+
                     <!-- Bintang Kosong -->
                     @for ($i = 0; $i < $emptyStars; $i++)
                         <span class="text-gray-300 text-xl">⭐</span>
@@ -149,12 +149,12 @@
                 <p class="text-gray-700 font-medium mt-1">({{ $totalReviews ?? 0 }})</p>
 
             </div>
-            
+
 
             <!-- Bagian Kanan: Distribusi Rating -->
             <div class="md:w-1/2">
                 <p class="text-gray-700 font-semibold mb-3">Distribusi Rating</p>
-            
+
                 <div class="space-y-2">
                     @php
                     $ratingDistribution = $ratingDistribution ?? [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
@@ -185,7 +185,7 @@
             @csrf
             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
             <input type="hidden" name="book_id" value="{{ $book->id }}">
-        
+
             <label for="rating" class="block text-gray-700 font-medium">Rating:</label>
             <select name="rating" id="rating" class="border p-2 rounded w-full">
                 <option value="5">⭐⭐⭐⭐⭐ - Sangat Bagus</option>
@@ -194,7 +194,7 @@
                 <option value="2">⭐⭐ - Kurang</option>
                 <option value="1">⭐ - Buruk</option>
             </select>
-    
+
             <div class="space-y-4">
                 <div>
                     <label for="review" class="block text-gray-700 font-medium mb-1">Ulasan</label>
@@ -340,16 +340,20 @@
                 <p class="text-sm font-medium text-gray-600">Jumlah Buku:</p>
                 <p class="text-lg text-gray-900">{{ $book->stok }}</p>
             </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Deskripsi:</p>
+                <p class="text-lg text-gray-900">{{ $book->description }}</p>
+            </div>
         </div>
-        
+
         @if($book->image)
-        <div class="mt-6 text-center">
+        <div class="mt-6 text-start">
             <p class="text-sm font-medium text-gray-600">Gambar Buku:</p>
             <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}"
-                            alt="{{ $book->title }}" class="w-48 h-64 object-cover mx-auto rounded-lg shadow-md">
+                            alt="{{ $book->title }}" class="w-48 h-64 object-cover mx-auto rounded-lg shadow-md ml-6">
         </div>
         @endif
-        
+
         <div class="mt-6 flex gap-4">
             <a href="{{ route('books.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600">Kembali</a>
         </div>
@@ -390,8 +394,12 @@
                 <p class="text-sm font-medium text-gray-600">Jumlah Buku:</p>
                 <p class="text-lg text-gray-900">{{ $book->stok }}</p>
             </div>
+            <div>
+                <p class="text-sm font-medium text-gray-600">Deskripsi:</p>
+                <p class="text-lg text-gray-900">{{ $book->description }}</p>
+            </div>
         </div>
-        
+
         @if($book->image)
         <div class="mt-6 text-center">
             <p class="text-sm font-medium text-gray-600">Gambar Buku:</p>
@@ -399,7 +407,7 @@
                             alt="{{ $book->title }}" class="w-48 h-64 object-cover mx-auto rounded-lg shadow-md">
         </div>
         @endif
-        
+
         <div class="mt-6 flex gap-4">
             <a href="{{ route('books.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600">Kembali</a>
         </div>

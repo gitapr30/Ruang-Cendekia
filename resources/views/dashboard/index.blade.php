@@ -103,20 +103,20 @@
 
 @section('contentPustakawan')
 <div class="p-8 space-y-8 bg-gray-100 min-h-screen">
-    <h1 class="text-4xl font-extrabold text-gray-900 mb-8 text-center">Dashboard Statistik</h1>
+    <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">Dashboard Statistik</h1>
 
     <!-- Statistik Peminjaman Per Bulan -->
     <div class="bg-white rounded-xl shadow-xl p-8 max-w-5xl mx-auto transition-all hover:shadow-2xl">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">📅 Jumlah Peminjaman Per Bulan</h2>
         <div id="borrowChart" class="w-full h-96"></div>
-        <button id="exportBorrow" class="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md">📥 Export</button>
+        <button id="exportBorrow" class="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md">📥 Ekspor</button>
     </div>
 
     <!-- Statistik User Terdaftar Per Bulan -->
     <div class="bg-white rounded-xl shadow-xl p-8 max-w-5xl mx-auto transition-all hover:shadow-2xl">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">👤 Jumlah User Terdaftar Per Bulan</h2>
         <div id="registeredUserChart" class="w-full h-96"></div>
-        <button id="exportRegistered" class="mt-6 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md">📥 Export</button>
+        <button id="exportRegistered" class="mt-6 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg shadow-md">📥 Ekspor</button>
     </div>
 </div>
 

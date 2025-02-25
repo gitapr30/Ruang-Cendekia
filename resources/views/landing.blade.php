@@ -43,8 +43,8 @@
     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       <a href="" class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-        <img src="{{ $change->logo }}" alt=""> <!-- perubahan vira -->
-        <!-- <h1 class="sitename">RuangCendekia</h1> -->
+        {{-- <img src="{{ $change->logo }}" alt=""> <!-- perubahan vira --> --}}
+        <h1 class="sitename">RuangCendekia</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -107,8 +107,8 @@
             </p>
             <ul>
             @foreach (explode("\n", $change->content) as $item) <!-- perubahan vira -->
-                    <li><i class="bi bi-check2-all"></i> <span>{{ $item }}</span></li> 
-                @endforeach 
+                    <li><i class="bi bi-check2-all"></i> <span>{{ $item }}</span></li>
+                @endforeach
             </ul>
             <p>
             {{ $change->footer }} <!-- perubahan vira -->
@@ -160,103 +160,32 @@
     <!-- Services Section -->
     <section id="services" class="services section light-background">
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <span>Rekomendasi</span>
-        <h2>Rekomendasi</h2>
-        <p>Temukan buku terbaik pilihan kami untuk menambah wawasan dan inspirasi Anda!</p>
-      </div><!-- End Section Title -->
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <span>Rekomendasi</span>
+            <h2>Rekomendasi</h2>
+            <p>Temukan buku terbaik pilihan kami untuk menambah wawasan dan inspirasi Anda!</p>
+        </div><!-- End Section Title -->
 
-      <div class="container">
-
-        <div class="row gy-4">
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-activity"></i>
-              </div>
-              <div class="stretched-link">
-                <h3>Nesciunt Mete</h3>
-              </div>
-              <p>Provident nihil minus qui consequatur non omnis maiores. Eos accusantium minus dolores iure perferendis
-                tempore et consequatur.</p>
+        <div class="container">
+            <div class="row gy-4">
+                @foreach($recommendedBooks as $book)
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                        <div class="service-item position-relative text-center">
+                            <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}" alt="{{ $book->title }}" class="img-fluid mb-3" style="max-height: 200px; object-fit: cover;">
+                            <div class="stretched-link">
+                                <h3>{{ $book->title }}</h3>
+                            </div>
+                            <p>{{ Str::limit($book->description, 100) }}</p>
+                            <p><strong>Rating:</strong> {{ number_format($book->reviews_avg_rating, 1) }} ⭐</p>
+                        </div>
+                    </div><!-- End Service Item -->
+                @endforeach
             </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-broadcast"></i>
-              </div>
-              <div class="stretched-link">
-                <h3>Eosle Commodi</h3>
-              </div>
-              <p>Ut autem aut autem non a. Sint sint sit facilis nam iusto sint. Libero corrupti neque eum hic non ut
-                nesciunt dolorem.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-easel"></i>
-              </div>
-              <div class="stretched-link">
-                <h3>Ledo Markt</h3>
-              </div>
-              <p>Ut excepturi voluptatem nisi sed. Quidem fuga consequatur. Minus ea aut. Vel qui id voluptas adipisci
-                eos earum corrupti.</p>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-bounding-box-circles"></i>
-              </div>
-              <div class="stretched-link">
-                <h3>Asperiores Commodit</h3>
-              </div>
-              <p>Non et temporibus minus omnis sed dolor esse consequatur. Cupiditate sed error ea fuga sit provident
-                adipisci neque.</p>
-              <div class="stretched-link"></div>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-calendar4-week"></i>
-              </div>
-              <div class="stretched-link">
-                <h3>Velit Doloremque</h3>
-              </div>
-              <p>Cumque et suscipit saepe. Est maiores autem enim facilis ut aut ipsam corporis aut. Sed animi at autem
-                alias eius labore.</p>
-              <div class="stretched-link"></div>
-            </div>
-          </div><!-- End Service Item -->
-
-          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-            <div class="service-item position-relative">
-              <div class="icon">
-                <i class="bi bi-chat-square-text"></i>
-              </div>
-              <div class="stretched-link">
-                <h3>Dolori Architecto</h3>
-              </div>
-              <p>Hic molestias ea quibusdam eos. Fugiat enim doloremque aut neque non et debitis iure. Corrupti
-                recusandae ducimus enim.</p>
-              <div class="stretched-link"></div>
-            </div>
-          </div><!-- End Service Item -->
-
         </div>
 
-      </div>
-
     </section><!-- /Services Section -->
+
 
     <!-- Testimonials Section -->
     <section id="testimonials" class="testimonials section light-background">
@@ -362,7 +291,7 @@
           <!-- Kolom Maps -->
           <div class="col-lg-6 col-md-6 col-sm-12">
             <iframe
-              src="{{ $change->maps }}" 
+              src="{{ $change->maps }}"
               frameborder="0" style="border:0; width: 100%; height: 250px;" allowfullscreen="" loading="lazy"
               referrerpolicy="no-referrer-when-downgrade">
             </iframe> <!-- perubahan vira -->

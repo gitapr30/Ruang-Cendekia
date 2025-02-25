@@ -185,7 +185,8 @@
 </div>
 
 <!-- Keterangan Laporan -->
-<p id="reportTitle" class="mt-4 text-lg font-semibold text-gray-700 mb-6"></p>
+<p id="reportTitle" class="mt-4 text-lg font-semibold text-gray-700 mb-6 ml-5"></p>
+<p id="reportTitle" class="mt-4 text-lg font-semibold text-gray-700 mb-6 "></p>
 
 <table class="min-w-full table-auto bg-white border-separate border-spacing-0.5 shadow-lg rounded-lg overflow-hidden">
     <thead class="bg-blue-500 text-white">

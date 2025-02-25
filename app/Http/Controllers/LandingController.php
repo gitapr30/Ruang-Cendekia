@@ -8,7 +8,7 @@ use App\Models\Books;
 use App\Models\Category;
 use App\Models\Review;
 use App\Models\Change;
-use App\Models\Borrow; //perubahan vira 
+use App\Models\Borrow; //perubahan vira
 
 class LandingController extends Controller
 {

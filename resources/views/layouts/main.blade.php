@@ -127,7 +127,7 @@
 
     <form action="{{ route('books.index') }}" method="GET">
     <label class="relative block w-full">
-        <span class="sr-only">Search</span>
+        <span class="sr-only">Cari</span>
         <span class="absolute inset-y-0 left-0 flex items-center pl-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                 stroke-width="1.5" stroke="currentColor" class="w-5 h-5 stroke-slate-400">
@@ -144,7 +144,7 @@
   <!-- Tombol Search -->
 <button type="submit"
     class="transition-all duration-500 bg-gradient-to-br from-blue-400 to-blue-500 px-4 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:shadow-none shadow-blue-100">
-    Search
+    Cari
 </button>
 </form>
 

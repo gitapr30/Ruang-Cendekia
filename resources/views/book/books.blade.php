@@ -119,7 +119,7 @@
         // Update book details
         document.getElementById('book-title').innerText = title;
         document.getElementById('book-image').src = image || '/default-book.jpg';
-        document.getElementById('book-release').innerText = "Tanggal Rilis: " + releaseDate;
+        // document.getElementById('book-release').innerText = "Tanggal Rilis: " + releaseDate;
         document.getElementById('book-penulis').innerText = "Penulis: " + penulis;
         document.getElementById('book-description').innerText = description.length > 150 ? description.substring(0, 150) + "..." : description;
         document.getElementById('book-detail-link').href = detailUrl;
@@ -288,7 +288,7 @@
                             {{ $book->stok }}
                         </td>
                         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                            <a href="{{ route('books.show', $book->id) }}" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 no-underline">
+                            <a href="{{ route('books.show', $book->slug) }}" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 no-underline">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.5 4.5M19.5 10L15 14.5" />
                                 </svg>

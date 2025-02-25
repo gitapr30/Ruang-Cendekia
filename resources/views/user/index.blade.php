@@ -15,7 +15,7 @@
                     <th class="w-32 p-3 text-sm font-semibold tracking-wide text-left">Username</th>
                     <th class="w-44 p-3 text-sm font-semibold tracking-wide text-left">Email</th>
                     <th class="w-24 p-3 text-sm font-semibold tracking-wide text-left">Aktor</th>
-                    <th class="w-28 p-3 text-sm font-semibold tracking-wide text-left">Terakhir Masuk</th>
+                    {{-- <th class="w-28 p-3 text-sm font-semibold tracking-wide text-left">Terakhir Masuk</th> --}}
                     <th class="w-16 p-3 text-sm font-semibold tracking-wide text-left">Foto Profil</th>
                 </tr>
             </thead>
@@ -39,14 +39,14 @@
                             {{ $user->role }}
                         </span>
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    {{-- <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                         {{ $user->last_login_at ? $user->last_login_at->format('d-m-Y H:i') : 'Never' }}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    </td> --}}
+                    <td class="p-3 text-sm text-gray-700">
                         @if($user->image)
-                            <img src="{{ asset('storage/' . $user->image) }}" alt="Profile Image" class="img-fluid rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                        <img src="{{ asset($user->image) }}" alt="Profile Image" class="rounded-full w-12 h-12 object-cover">
                         @else
-                            <span>No Image</span>
+                        <span>No Image</span>
                         @endif
                     </td>
                 </tr>
@@ -64,12 +64,12 @@
     <h1 class="mb-4 text-center text-lg font-semibold">User List</h1>
 
     <!-- Tombol untuk membuka modal -->
-    <button class="bg-blue-500 text-white px-4 py-2 rounded-md" onclick="openModal()">Register User</button>
+    <button class="bg-blue-500 text-white px-4 py-2 rounded-md ml-5" onclick="openModal()">Registrasi</button>
 
     <!-- Modal -->
     <div id="registerModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-md w-1/3">
-            <h2 class="text-lg font-semibold mb-3">Register User</h2>
+            <h2 class="text-lg font-semibold mb-3">Registras</h2>
             <form id="registerForm">
                 @csrf
                 <div class="grid grid-cols-1 gap-4">
@@ -101,7 +101,7 @@
 
                 </div>
             </form>
-            
+
         </div>
     </div>
 
@@ -116,7 +116,7 @@
                     <th class="p-3 text-sm font-semibold tracking-wide text-left">Username</th>
                     <th class="p-3 text-sm font-semibold tracking-wide text-left">Email</th>
                     <th class="p-3 text-sm font-semibold tracking-wide text-left">Role</th>
-                    <th class="p-3 text-sm font-semibold tracking-wide text-left">Last Login</th>
+                    {{-- <th class="p-3 text-sm font-semibold tracking-wide text-left">Last Login</th> --}}
                     <th class="p-3 text-sm font-semibold tracking-wide text-left">Profile Image</th>
                 </tr>
             </thead>
@@ -134,7 +134,7 @@
                     <td class="p-3 text-sm text-gray-700">{{ $user->username }}</td>
                     <td class="p-3 text-sm text-gray-700">{{ $user->email }}</td>
                     <td class="p-3 text-sm text-gray-700">{{ $user->role }}</td>
-                    <td class="p-3 text-sm text-gray-700">{{ $user->last_login_at ? $user->last_login_at->format('d-m-Y H:i') : 'Never' }}</td>
+                    {{-- <td class="p-3 text-sm text-gray-700">{{ $user->last_login_at ? $user->last_login_at->format('d-m-Y H:i') : 'Never' }}</td> --}}
                     <td class="p-3 text-sm text-gray-700">
                         @if($user->image)
                         <img src="{{ asset($user->image) }}" alt="Profile Image" class="rounded-full w-12 h-12 object-cover">

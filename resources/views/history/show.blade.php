@@ -9,7 +9,7 @@
                 <p><strong>Status:</strong> {{ $borrow->status }}</p>
                 <p><strong>Borrow Date:</strong> {{ $borrow->tanggal_pinjam->format('d M Y') }}</p>
                 <p><strong>Return Date:</strong> {{ $borrow->tanggal_kembali ? $borrow->tanggal_kembali->format('d M Y') : 'Not Returned Yet' }}</p>
-                <p><strong>Penalty:</strong> {{ $borrow->denda ? 'Rp ' . number_format($borrow->denda, 2) : 'No Penalty' }}</p>
+                <p><strong>Penalty:</strong> {{ $borrow->denda ? 'Rp ' . number_format($borrow->denda, 2) : 'Tidak Ada Denda' }}</p>
                 <p><strong>Loan Code:</strong> {{ $borrow->kode_peminjaman }}</p>
             </div>
         </div>

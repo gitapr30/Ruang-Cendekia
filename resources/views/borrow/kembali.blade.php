@@ -12,7 +12,7 @@
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Pinjam</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Kembali</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Status</th>
-            <th class="px-4 py-2 text-sm font-medium text-gray-700">Aksi</th>
+            {{-- <th class="px-4 py-2 text-sm font-medium text-gray-700">Aksi</th> --}}
         </tr>
     </thead>
     <tbody>
@@ -72,7 +72,7 @@
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Pinjam</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Tanggal Kembali</th>
             <th class="px-4 py-2 text-sm font-medium text-gray-700">Status</th>
-            <th class="px-4 py-2 text-sm font-medium text-gray-700">Aksi</th>
+            {{-- <th class="px-4 py-2 text-sm font-medium text-gray-700">Aksi</th> --}}
         </tr>
     </thead>
     <tbody>
