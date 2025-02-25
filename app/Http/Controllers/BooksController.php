@@ -123,11 +123,35 @@ class BooksController extends Controller
      */
     public function show($slug)
 {
-    $book = Books::where('slug', $slug)->firstOrFail(); // Retrieve the book by its slug
-    $reviews = Review::where('book_id', $book->id)->get(); // Fetch reviews for the current book
+    $book = Books::where('slug', $slug)->firstOrFail();
+    $reviews = Review::where('book_id', $book->id)->get();
 
-    return view('book.show', compact('book', 'reviews')); // Pass both book and reviews to the view
+    // Menghitung rata-rata rating
+    $averageRating = Review::where('book_id', $book->id)->avg('rating') ?? 0;
+
+    // Menghitung total ulasan
+    $totalReviews = $reviews->count();
+
+    // Distribusi rating
+    $ratingDistribution = Review::where('book_id', $book->id)
+        ->selectRaw('rating, COUNT(*) as count')
+        ->groupBy('rating')
+        ->pluck('count', 'rating')
+        ->toArray();
+
+    // Pastikan distribusi rating memiliki nilai untuk setiap bintang (1-5)
+    for ($i = 1; $i <= 5; $i++) {
+        if (!isset($ratingDistribution[$i])) {
+            $ratingDistribution[$i] = 0;
+        }
+    }
+
+    krsort($ratingDistribution);
+
+    return view('book.show', compact('book', 'reviews', 'averageRating', 'totalReviews', 'ratingDistribution'));
+
 }
+
 
 
 

@@ -119,13 +119,11 @@
             <!-- Bagian Kiri: Rata-rata Rating dan Total Ulasan -->
             <div class="mb-4 md:mb-0 md:w-1/2">
                 <p class="text-black font-bold text-2xl ml-2">
-                    {{ number_format($averageRating ?? 0, 1) }} / 5
+                    {{ number_format($averageRating, 1) }} / 5
                 </p>
-
 
                 <div class="flex items-center mt-1 space-x-1">
                     @php
-                        $averageRating = $averageRating ?? 0; // Beri nilai default jika tidak ada
                         $fullStars = floor($averageRating);
                         $halfStar = ($averageRating - $fullStars) >= 0.5 ? 1 : 0;
                         $emptyStars = 5 - ($fullStars + $halfStar);
@@ -146,31 +144,28 @@
                         <span class="text-gray-300 text-xl">⭐</span>
                     @endfor
                 </div>
-                <p class="text-gray-700 font-medium mt-1">({{ $totalReviews ?? 0 }})</p>
-
+                <p class="text-gray-700 font-medium mt-1">({{ $totalReviews }})</p>
             </div>
-
 
             <!-- Bagian Kanan: Distribusi Rating -->
             <div class="md:w-1/2">
                 <p class="text-gray-700 font-semibold mb-3">Distribusi Rating</p>
 
                 <div class="space-y-2">
-                    @php
-                    $ratingDistribution = $ratingDistribution ?? [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
-                @endphp
-
-                @foreach ($ratingDistribution as $star => $percentage)
-                    <div class="flex items-center space-x-3">
-                        <span class="text-gray-700 font-medium flex items-center">
-                            ⭐ <span class="ml-1">{{ $star }}</span>
-                        </span>
-                        <div class="w-full bg-gray-200 rounded-full h-4">
-                            <div class="h-4 rounded-full" style="width: {{ $percentage }}%; background-color: #197BBA;"></div>
+                    @foreach ($ratingDistribution as $star => $count)
+                        @php
+                            $percentage = $totalReviews > 0 ? ($count / $totalReviews) * 100 : 0;
+                        @endphp
+                        <div class="flex items-center space-x-3">
+                            <span class="text-gray-700 font-medium flex items-center">
+                                ⭐ <span class="ml-1">{{ $star }}</span>
+                            </span>
+                            <div class="w-full bg-gray-200 rounded-full h-4">
+                                <div class="h-4 rounded-full" style="width: {{ $percentage }}%; background-color: #197BBA;"></div>
+                            </div>
+                            <span class="text-gray-700 font-medium">{{ number_format($percentage, 1) }}%</span>
                         </div>
-                        <span class="text-gray-700 font-medium">{{ $percentage }}%</span>
-                    </div>
-                @endforeach
+                    @endforeach
                 </div>
             </div>
         </div>
