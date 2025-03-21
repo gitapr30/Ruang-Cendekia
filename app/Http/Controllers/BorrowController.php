@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Carbon;
 use App\Models\Books;
 use App\Models\Borrow;
 use App\Models\History;
@@ -32,7 +33,7 @@ class BorrowController extends Controller
 
 public function selectBook(Request $request)
 {
-    $book = Book::find($request->book_id);
+    $book = Books::find($request->book_id);
     return response()->json(['book' => $book]);
 }
 
@@ -89,7 +90,7 @@ public function selectBook(Request $request)
             'status' => 'menunggu konfirmasi',
         ]);
 
-        return redirect()->route('borrow.index')->with('successMessage', 'Pinjaman berhasil diajukan.');
+        return redirect()->route('borrow.index', ['book_id' => $request->book_id])->with('successMessage', 'Pinjaman berhasil diajukan.');
     }
 
     /**
@@ -110,11 +111,11 @@ public function selectBook(Request $request)
         if ($request->status === 'dipinjam') {
             if ($book->stok <= 0) {
                 return back()->with('errorMessage', 'Stok buku habis.');
-            } 
+            }
             $book->decrement('stok');
         } elseif ($request->status === 'dikembalikan') {
                 $book->increment('stok');
-            }       
+            }
 
         // Cek apakah buku dikembalikan setelah tanggal kembali yang seharusnya
         $today = now(); // Tanggal hari ini
@@ -145,19 +146,19 @@ public function selectBook(Request $request)
     {
         $title = 'History Borrowing';
         $userId = Auth::id();
-    
+
         if (!$userId) {
             return redirect()->route('login')->with('errorMessage', 'Anda harus login terlebih dahulu.');
         }
-    
+
         // Ambil semua riwayat peminjaman dengan relasi ke buku
         $history = Borrow::where('user_id', $userId)->with('book');
-    
+
         // Filter berdasarkan book_id jika tersedia
         if ($request->has('book_id')) {
             $history->where('book_id', $request->book_id);
         }
-    
+
         // Filter berdasarkan pencarian
         if ($request->has('search')) {
             $search = $request->search;
@@ -165,12 +166,37 @@ public function selectBook(Request $request)
                 $query->where('title', 'like', "%{$search}%");
             });
         }
-    
+
         $history = $history->paginate(6);
-    
+
         return view('borrow.history', compact('history', 'title'));
     }
-    
+
+    public function getNotifications()
+{
+    $today = Carbon::today()->format('Y-m-d');
+
+    // Ambil daftar peminjaman yang masih dipinjam dan pastikan relasi buku ada
+    $borrows = Borrow::where('status', 'dipinjam')->with('book')->get();
+
+    $notifications = [];
+
+    foreach ($borrows as $borrow) {
+        if (!$borrow->book) continue; // Skip jika buku tidak ditemukan
+
+        $returnDate = Carbon::parse($borrow->tanggal_kembali)->format('Y-m-d');
+
+        $notifications[] = [
+            'book_id' => $borrow->book->id, // ID buku
+            'book_title' => $borrow->book->title, // Ambil judul buku dari relasi
+            'tanggal_kembali' => $returnDate, // Pastikan ini cocok dengan frontend
+            'status' => $borrow->status // Kirim status juga
+        ];
+    }
+
+    return response()->json($notifications);
+}
+
 
 
     /**

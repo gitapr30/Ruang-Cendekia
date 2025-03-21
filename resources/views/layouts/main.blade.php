@@ -43,7 +43,7 @@
                         </p>
                     </div>
                     <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
-                        <button id="btn-notif" type="button"
+                        <button id="btn-notif-succes" type="button"
                             class="-mr-1 flex p-2 rounded-md hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2 ">
                             <!-- Heroicon name: outline/x -->
                             <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -76,7 +76,7 @@
                         </p>
                     </div>
                     <div class="order-2 flex-shrink-0 sm:order-3 sm:ml-3">
-                        <button id="btn-notif" type="button"
+                        <button id="btn-notif-error" type="button"
                             class="-mr-1 flex p-2 rounded-md hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-white sm:-mr-2 ">
                             <!-- Heroicon name: outline/x -->
                             <svg class="h-6 w-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -149,13 +149,57 @@
 </form>
 
  <!-- Ikon Notifikasi dengan indikator -->
-@if(auth()->user() && auth()->user()->role == 'pengguna')
-    <button type="button" class="transition-all duration-500 bg-transparent px-4 py-2 rounded-lg ml-2 font-medium text-sm text-white shadow-lg focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:shadow-none shadow-gray-100 flex items-center relative" onclick="toggleModal()">
-        <img src="notif-icon.svg" alt="Notifikasi" class="w-6 h-6">
-
-        <span id="notifIndicator" class="absolute top-1 right-0 w-2.5 h-2.5 bg-green-500 rounded-full"></span>
+ <div class="relative inline-block">
+    <button id="notifButton" class="relative px-3 py-1">
+        <img src="{{ asset('notif-icon.svg') }}" alt="Notifikasi" class="w-6 h-6">
+        <span id="notifIndicator" class="absolute top-1 right-0 w-3 h-3 bg-red-500 rounded-full hidden"></span>
     </button>
-@endif
+
+    <!-- Pop-up Notifikasi -->
+    <div id="notifPopup" class="hidden">
+        <div class="flex justify-between items-center px-4 py-2 bg-gray-100 border-b">
+            <span class="font-semibold">Notifikasi</span>
+            <button id="closeNotif" class="text-gray-500 hover:text-gray-700">&times;</button>
+        </div>
+        <ul id="notifList" class="p-4">
+            <li>Tidak ada notifikasi baru</li>
+        </ul>
+    </div>
+</div>
+
+
+
+<style>
+    #notifPopup {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        display: none;
+        z-index: 1000;
+    }
+
+    #notifPopup ul {
+        list-style: none;
+        padding: 10px;
+        margin: 0;
+    }
+
+    #notifPopup li {
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+    }
+
+    #notifPopup li:last-child {
+        border-bottom: none;
+    }
+</style>
+
+
 
 <!-- Tombol Profile dengan Icon -->
 <a href="{{ route('profile.index') }}"
@@ -225,54 +269,70 @@
         }
     </script>
 <!-- Modal Notifikasi -->
-<div id="notifikasiModal" class="fixed top-14 right-4 w-72 mt-10 bg-white rounded-lg shadow-lg hidden p-5 z-50">
-        <h2 class="text-lg font-semibold mb-4">Notifikasi</h2>
-        <ul class="space-y-3">
-            <li class="bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
-                ✅ Peminjaman telah dikonfirmasi!
-            </li>
-            <li class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg">
-                ⚠️ Masa peminjaman kurang dari 1 hari!
-            </li>
-            <li class="bg-green-100 text-green-800 px-4 py-2 rounded-lg">
-                📚 Peminjaman telah selesai.
-            </li>
-        </ul>
-        <button id="close-notif" class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg w-full">
-            Tutup
-        </button>
-    </div>
 
     @yield('content')
 
     <!-- Tambahkan skrip modal di sini -->
     @yield('scripts')
     <script>
-    // Fungsi untuk menampilkan atau menyembunyikan modal
-    function toggleModal() {
-        const modal = document.getElementById("notifikasiModal");
-        modal.classList.toggle("hidden");
+        document.addEventListener("DOMContentLoaded", function () {
+            let notifIndicator = document.getElementById("notifIndicator");
+            let notifPopup = document.getElementById("notifPopup");
+            let notifButton = document.getElementById("notifButton");
+            let closeNotif = document.getElementById("closeNotif");
+            let notifMessage = document.getElementById("notifMessage");
 
-        // Menyembunyikan indikator setelah modal ditampilkan
-        document.getElementById("notifIndicator").classList.add("hidden");
-    }
+            // Simulasi sesi notifikasi dari backend Laravel
+            let successMessage = "{{ session('successMessage') }}";
+            let errorMessage = "{{ session('errorMessage') }}";
 
-    // Fungsi untuk menutup modal
-    document.getElementById("close-notif")?.addEventListener("click", function() {
-        document.getElementById("notifikasiModal").classList.add("hidden");
-        // Menyembunyikan indikator setelah modal ditutup
-        document.getElementById("notifIndicator").classList.remove("hidden");
+            if (successMessage) {
+                notifMessage.innerText = successMessage;
+                notifPopup.style.background = "#d4edda";
+                notifPopup.style.color = "#155724";
+                notifPopup.style.border = "1px solid #c3e6cb";
+            } else if (errorMessage) {
+                notifMessage.innerText = errorMessage;
+            }
+
+            if (successMessage || errorMessage) {
+                notifIndicator.classList.remove("hidden");
+                notifPopup.classList.remove("hidden");
+
+                setTimeout(function () {
+                    notifPopup.classList.add("hidden");
+                }, 5000); // Hilang otomatis setelah 5 detik
+            }
+
+            notifButton.addEventListener("click", function () {
+                notifPopup.classList.toggle("hidden");
+            });
+
+            closeNotif.addEventListener("click", function () {
+                notifPopup.classList.add("hidden");
+            });
+        });
+    </script>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("btn-notif-succes")?.addEventListener("click", function () {
+            location.reload();
+        });
+
+        document.getElementById("btn-notif-error")?.addEventListener("click", function () {
+            location.reload();
+        });
+
+        document.getElementById("closeNotif")?.addEventListener("click", function () {
+            document.getElementById("notifPopup").style.display = "none";
+            location.reload();
+        });
     });
-
-    // Fungsi untuk menampilkan indikator ketika ada notifikasi baru
-    function showNewNotification() {
-        document.getElementById("notifIndicator").classList.remove("hidden");
-    }
-
-    // Panggil fungsi untuk menampilkan indikator (contoh)
-    // Misalnya, jika ada notifikasi baru setelah beberapa detik
-    setTimeout(showNewNotification, 3000); // Simulasi munculnya notifikasi baru setelah 3 detik
 </script>
+
+
 
 </body>
 

@@ -81,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     //rak
-    Route::get('/bookshelves/create', [BookshelvesController::class, 'create'])->name('bookshelves.create'); 
+    Route::get('/bookshelves/create', [BookshelvesController::class, 'create'])->name('bookshelves.create');
 Route::get('/bookshelves', [BookshelvesController::class, 'index'])->name('bookshelves.index');
 Route::post('/bookshelves', [BookshelvesController::class, 'store'])->name('bookshelves.store');
 Route::get('/bookshelves/{bookshelves}/edit', [BookshelvesController::class, 'edit'])->name('bookshelves.edit');
@@ -96,6 +96,8 @@ Route::get('/bookshelves/{id}', [BookshelvesController::class, 'show'])->name('b
     Route::get('/books/{slug}', [BooksController::class, 'show'])->name('books.show');
     Route::get('/books', [BooksController::class, 'index'])->name('books.index');
     // Route::get('/books/{slug}/detail', [BooksController::class, 'detail'])->name('books.detail');
+
+    Route::get('/notifications', [BorrowController::class, 'getNotifications'])->name('notifications');
 
 
 

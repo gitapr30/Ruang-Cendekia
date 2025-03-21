@@ -5,11 +5,11 @@
 {{-- md:hidden --}}
 
 <div class="flex justify-center">
-    <div class="space-y-2 m-auto p-2 lg:hidden" onclick="openSide()">
+    <div class="space-y-2 mt-3 p-2 lg:hidden" onclick="openSide()">
         <div class="w-5 h-0.5 bg-gray-600"></div>
         <div class="w-5 h-0.5 bg-gray-600"></div>
         <div class="w-5 h-0.5 bg-gray-600"></div>
-    </div>
+    </div>
 </div>
 <div id="sidebar"
     class="w-0 lg:w-1/6 transition-all duration-300 absolute lg:static z-10 translate-x-[-400rem] lg:translate-x-[0rem] h-screen bg-white"

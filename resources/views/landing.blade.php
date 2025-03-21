@@ -44,7 +44,7 @@
       <a href="" class="logo d-flex align-items-center me-auto">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         {{-- <img src="{{ $change->logo }}" alt=""> <!-- perubahan vira --> --}}
-        <h1 class="sitename">RuangCendekia</h1>
+        <h1 class="sitename">{{ $change->nama_website }}</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -172,7 +172,7 @@
                 @foreach($recommendedBooks as $book)
                     <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
                         <div class="service-item position-relative text-center">
-                            <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}" alt="{{ $book->title }}" class="img-fluid mb-3" style="max-height: 200px; object-fit: cover;">
+                            <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}" alt="{{ $book->title }}" class="img-fluid mb-3" style="max-height: 400px; object-fit: cover;">
                             <div class="stretched-link">
                                 <h3>{{ $book->title }}</h3>
                             </div>

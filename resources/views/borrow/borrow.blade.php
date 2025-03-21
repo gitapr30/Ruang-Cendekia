@@ -2,10 +2,36 @@
 
 @section('content')
     <div class="p-4">
-        <h1 class="text-lg font-semibold text-gray-800 mb-3">Peminjaman Buku</h1>
+        <h1 class="text-xl font-bold text-gray-800 mb-3">Peminjaman Buku</h1>
         <form action="{{ route('borrow.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <!-- Pemilihan User -->
+            @php
+                $selectedBook = isset($books) && request('book_id') ? $books->where('id', request('book_id'))->first() : null;
+            @endphp
+
+        <div class="flex gap-6">
+        <img src="{{ asset($selectedBook->image ?? 'images/default-book.jpg') }}" alt="{{ $selectedBook->title }}" class="w-60 h-80 object-cover rounded-lg border-blue-400">
+
+            <div class="flex-1">
+                <h3 class="text-lg font-bold">{{ $selectedBook->title }}</h3>
+                <p class="text-gray-600">ciptaan: <span class="font-semibold">{{ $selectedBook->penulis }}</span></p>
+                <div class="flex items-center gap-2 mt-2">
+                    <span class="text-yellow-400">⭐⭐⭐⭐☆</span>
+                    <span class="text-gray-700">4.5</span>
+                </div>
+                <p class="mt-1 text-gray-600">Stok: <span class="font-semibold">{{ $selectedBook->stok }}</span></p>
+
+                <table class="mt-4 text-sm w-full border border-gray-300">
+                    <tr><td class="border p-2">Penerbit</td><td class="border p-2">{{ $selectedBook->penerbit }}</td></tr>
+                    <tr><td class="border p-2">Tahun Terbit</td><td class="border p-2">{{ $selectedBook->thn_terbit }}</td></tr>
+                    <tr><td class="border p-2">Nomor Buku</td><td class="border p-2">{{ $selectedBook->kode_buku }}</td></tr>
+                    <tr><td class="border p-2">Sisa Stok</td><td class="border p-2">{{ $selectedBook->stok }}</td></tr>
+                    <tr><td class="border p-2">Tanggal Upload</td><td class="border p-2">{{ $selectedBook->created_at }}</td></tr>
+                </table>
+            </div>
+        </div>
+
             <div>
                 <label for="user_id" class="block text-sm font-medium text-gray-700" style="margin-top: 15px;">Nama
                     User</label>
@@ -17,9 +43,6 @@
                 @enderror
             </div>
 
-            @php
-                $selectedBook = isset($books) && request('book_id') ? $books->where('id', request('book_id'))->first() : null;
-            @endphp
 
             @if($selectedBook)
                 <div class="mt-4">

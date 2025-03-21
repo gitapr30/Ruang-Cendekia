@@ -6,9 +6,9 @@
         @csrf
         <div class="bg-white rounded-xl overflow-hidden">
             <div class="p-3 bg-blue-500">
-                <a href="/" class="text-sm font-medium text-blue-500 flex items-center">
+                <a href="/books" class="text-sm font-medium text-blue-500 flex items-center">
                     <i data-feather="arrow-left" class="w-5 h-5 text-white"></i>
-                    <span class="ml-2 text-white">Edit book</span>
+                    <span class="ml-2 text-white">Edit Buku</span>
                 </a>
             </div>
             <div class="w-full p-3">
@@ -105,6 +105,23 @@
                         @enderror
                     </div>
                     <div>
+                        <label for="Halaman" class="block mb-2 text-sm font-medium text-gray-900">Halaman</label>
+                        <input type="text" name="halaman" id="Halaman"
+                            class="bg-gray-50 border-2
+                            @if($errors->has('halaman'))
+                                    dark:border-rose-500
+                            @else
+                                dark:border-gray-300
+                            @endif
+                            text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring-offset-1 focus:ring-2 focus:ring-blue-500 focus:border-white block w-full p-2.5"
+                            placeholder="111" required value="{{ $book->halaman }}">
+                        @error('halaman')
+                            <p class="mt-1 text-left text-sm text-red-600 mb-0">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+                    <div>
                         <label for="thn_terbit" class="block mb-2 text-sm font-medium text-gray-900">Tahun Terbit</label>
                         <input type="date" name="thn_terbit" id="thn_terbit"
                             class="bg-gray-50 border-2
@@ -120,6 +137,26 @@
                                 {{ $message }}
                             </p>
                         @enderror
+                        <label class="block mt-3">
+                        <span class="sr-only">Choose profile photo</span>
+                        <input type="file"
+                            class="block w-full text-sm text-slate-500
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-full file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-gray-50 file:text-blue-500
+                              hover:file:bg-violet-100"
+                            onchange="showPreview(event)"
+                            name="image" />
+                        @error('image')
+                            <p class="mt-1 text-left text-sm text-red-600 mb-0">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                        @if(isset($book->image) && $book->image)
+                            <img id="file-ip-1-preview" class="rounded-lg mt-3" src="{{ asset($book->image) }}" width="150">
+                        @endif
+                    </label>
                     </div>
                     <div class="w-full">
                         <div>
@@ -156,26 +193,6 @@
                             @enderror
                         </div>
                     </div>
-                    <label class="block">
-                        <span class="sr-only">Choose profile photo</span>
-                        <input type="file"
-                            class="block w-full text-sm text-slate-500
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded-full file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-gray-50 file:text-blue-500
-                              hover:file:bg-violet-100"
-                            onchange="showPreview(event)"
-                            name="image" />
-                        @error('image')
-                            <p class="mt-1 text-left text-sm text-red-600 mb-0">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                        @if(isset($book->image) && $book->image)
-                            <img id="file-ip-1-preview" class="rounded-lg mt-3" src="{{ asset($book->image) }}" width="150">
-                        @endif
-                    </label>
                 </div>
                 <button class="w-full bg-blue-600 mt-3 rounded-lg text-white font-medium p-3 text-sm">Submit</button>
             </div>
@@ -191,9 +208,9 @@
         @csrf
         <div class="bg-white rounded-xl overflow-hidden">
             <div class="p-3 bg-blue-500">
-                <a href="/" class="text-sm font-medium text-blue-500 flex items-center">
+                <a href="/books" class="text-sm font-medium text-blue-500 flex items-center">
                     <i data-feather="arrow-left" class="w-5 h-5 text-white"></i>
-                    <span class="ml-2 text-white">Edit book</span>
+                    <span class="ml-2 text-white">Edit Buku</span>
                 </a>
             </div>
             <div class="w-full p-3">
@@ -290,6 +307,23 @@
                         @enderror
                     </div>
                     <div>
+                        <label for="Halaman" class="block mb-2 text-sm font-medium text-gray-900">Halaman</label>
+                        <input type="text" name="halaman" id="Halaman"
+                            class="bg-gray-50 border-2
+                            @if($errors->has('halaman'))
+                                    dark:border-rose-500
+                            @else
+                                dark:border-gray-300
+                            @endif
+                            text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring-offset-1 focus:ring-2 focus:ring-blue-500 focus:border-white block w-full p-2.5"
+                            placeholder="111" required value="{{ $book->halaman }}">
+                        @error('halaman')
+                            <p class="mt-1 text-left text-sm text-red-600 mb-0">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+                    <div>
                         <label for="thn_terbit" class="block mb-2 text-sm font-medium text-gray-900">Tahun Terbit</label>
                         <input type="date" name="thn_terbit" id="thn_terbit"
                             class="bg-gray-50 border-2
@@ -305,6 +339,26 @@
                                 {{ $message }}
                             </p>
                         @enderror
+                        <label class="block mt-3">
+                        <span class="sr-only">Choose profile photo</span>
+                        <input type="file"
+                            class="block w-full text-sm text-slate-500
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-full file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-gray-50 file:text-blue-500
+                              hover:file:bg-violet-100"
+                            onchange="showPreview(event)"
+                            name="image" />
+                        @error('image')
+                            <p class="mt-1 text-left text-sm text-red-600 mb-0">
+                                {{ $message }}
+                            </p>
+                        @enderror
+                        @if(isset($book->image) && $book->image)
+                            <img id="file-ip-1-preview" class="rounded-lg mt-3" src="{{ asset($book->image) }}" width="150">
+                        @endif
+                        </label>
                     </div>
                     <div class="w-full">
                         <div>
@@ -341,26 +395,6 @@
                             @enderror
                         </div>
                     </div>
-                    <label class="block">
-                        <span class="sr-only">Choose profile photo</span>
-                        <input type="file"
-                            class="block w-full text-sm text-slate-500
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded-full file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-gray-50 file:text-blue-500
-                              hover:file:bg-violet-100"
-                            onchange="showPreview(event)"
-                            name="image" />
-                        @error('image')
-                            <p class="mt-1 text-left text-sm text-red-600 mb-0">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                        @if(isset($book->image) && $book->image)
-                            <img id="file-ip-1-preview" class="rounded-lg mt-3" src="{{ asset($book->image) }}" width="150">
-                        @endif
-                    </label>
                 </div>
                 <button class="w-full bg-blue-600 mt-3 rounded-lg text-white font-medium p-3 text-sm">Submit</button>
             </div>

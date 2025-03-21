@@ -78,37 +78,46 @@
         </div>
 
     </div>
+    @php
+        $isInWishlist = \App\Models\Wishlists::where('user_id', auth()->id())
+            ->where('book_id', $book->id)
+            ->exists();
+    @endphp
+
     <!-- Wishlist and Pinjam Buttons Side by Side -->
     <div class="flex space-x-4 mt-6">
         <!-- Pinjam Button -->
         <form action="{{ route('borrow.index') }}" method="post" class="w-full">
             @csrf
-            <input type="text" name="user_id" value="{{ auth()->user()->id }}" hidden>
-            <input type="text" name="book_id" value="{{ $book->id }}" hidden>
-            <input type="text" name="kode_peminjaman" value="{{ date('d') . auth()->user()->id . $book->kode_buku }}" hidden>
+            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+            <input type="hidden" name="book_id" value="{{ $book->id }}">
+            <input type="hidden" name="kode_peminjaman" value="{{ date('d') . auth()->user()->id . $book->kode_buku }}">
             <button type="submit"
                 class="w-full transition-all duration-500 enabled:bg-gradient-to-br enabled:from-blue-400 enabled:to-blue-600 rounded-lg text-white font-medium p-4 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center hover:bg-blue-600 text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-200 focus:shadow-none disabled:shadow-none disabled:bg-slate-700 disabled:cursor-not-allowed"
-                @if ($book->stok == 0)
-                @disabled(true)
-                @elseif ($book->borrow->isNotEmpty())
-                @foreach ($book->borrow->where('status', 'meminjam') as $borrow)
-                @if ($book->stok == 0 || $borrow->user_id == auth()->user()->id)
-                @disabled(true)
-                @endif
-                @endforeach
-                @endif>Pinjam
+                @if ($book->stok == 0 || ($book->borrow->where('status', 'meminjam')->where('user_id', auth()->id())->isNotEmpty()))
+                    @disabled(true)
+                @endif>
+                Pinjam
             </button>
         </form>
         <!-- Wishlist Button -->
-        <form action="{{ route('wishlist.store', $book->slug) }}" method="POST" class="w-full">
-            @csrf
+        @if ($isInWishlist)
+            <button type="button" disabled
+                class="w-full flex items-center justify-center bg-blue-300 text-blue-700 font-medium p-4 rounded-lg text-sm shadow-lg">
+                <img src="{{ asset('wishlist_filled.png') }}" alt="Wishlist Tersimpan" class="w-5 h-5 mr-2">
+                Tersimpan di Wishlist
+            </button>
+        @else
+            <form action="{{ route('wishlist.store', $book->slug) }}" method="POST" class="w-full">
+                @csrf
                 <input type="hidden" name="suka" value="liked">
                 <button type="submit"
                     class="w-full flex items-center justify-center bg-blue-200 text-blue-600 font-medium p-4 rounded-lg text-sm shadow-lg hover:shadow-xl shadow-blue-200 hover:shadow-blue-300 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-500">
                     <i data-feather="bookmark" class="w-5 h-5 mr-2"></i>
                     Simpan ke Wishlist
                 </button>
-        </form>
+            </form>
+        @endif
     </div>
 
     <!-- Tampilkan Ulasan dan Rating -->
@@ -336,18 +345,21 @@
                 <p class="text-lg text-gray-900">{{ $book->stok }}</p>
             </div>
             <div>
+                <p class="text-sm font-medium text-gray-600">Halaman:</p>
+                <p class="text-lg text-gray-900">{{ $book->halaman }}</p>
+            </div>
+            <div>
                 <p class="text-sm font-medium text-gray-600">Deskripsi:</p>
                 <p class="text-lg text-gray-900">{{ $book->description }}</p>
             </div>
-        </div>
-
-        @if($book->image)
-        <div class="mt-6 text-start">
+            @if($book->image)
+        <div>
             <p class="text-sm font-medium text-gray-600">Gambar Buku:</p>
             <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}"
-                            alt="{{ $book->title }}" class="w-48 h-64 object-cover mx-auto rounded-lg shadow-md ml-6">
+                            alt="{{ $book->title }}" class="mt-3 w-48 h-64 object-cover mx-auto rounded-lg shadow-md ml-6">
         </div>
         @endif
+        </div>
 
         <div class="mt-6 flex gap-4">
             <a href="{{ route('books.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600">Kembali</a>
@@ -390,18 +402,21 @@
                 <p class="text-lg text-gray-900">{{ $book->stok }}</p>
             </div>
             <div>
+                <p class="text-sm font-medium text-gray-600">Halaman:</p>
+                <p class="text-lg text-gray-900">{{ $book->halaman }}</p>
+            </div>
+            <div>
                 <p class="text-sm font-medium text-gray-600">Deskripsi:</p>
                 <p class="text-lg text-gray-900">{{ $book->description }}</p>
             </div>
-        </div>
-
-        @if($book->image)
-        <div class="mt-6 text-center">
+            @if($book->image)
+        <div>
             <p class="text-sm font-medium text-gray-600">Gambar Buku:</p>
             <img src="{{ asset($book->image ?? 'images/default-book.jpg') }}"
-                            alt="{{ $book->title }}" class="w-48 h-64 object-cover mx-auto rounded-lg shadow-md">
+                            alt="{{ $book->title }}" class="w-48 h-64 object-cover mx-auto rounded-lg shadow-md ml-2 mt-3">
         </div>
         @endif
+        </div>
 
         <div class="mt-6 flex gap-4">
             <a href="{{ route('books.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600">Kembali</a>

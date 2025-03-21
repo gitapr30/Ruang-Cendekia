@@ -6,6 +6,8 @@ use App\Models\Books;
 use App\Models\Borrow;
 use App\Models\Category;
 use App\Models\Review;
+use App\Models\Bookshelves;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -26,14 +28,14 @@ class BooksController extends Controller
     $books = Books::where('title', 'like', '%' . $search . '%')
         ->orWhere('kode_buku', 'like', '%' . $search . '%')
         ->orWhereHas('category', function ($query) use ($search) {
-            $query->where('name', 'like', '%' . $search . '%'); // Jika kategori berbasis relasi
+            $query->where('name', 'like', '%' . $search . '%');
         })
         ->orWhere('penulis', 'like', '%' . $search . '%')
         ->orWhere('description', 'like', '%' . $search . '%')
         ->orWhere('penerbit', 'like', '%' . $search . '%')
         ->orWhere('stok', 'like', '%' . $search . '%')
         ->orWhere('thn_terbit', 'like', '%' . $search . '%')
-        ->get();
+        ->paginate(10); // Gunakan paginate()
 
     if ($search) {
         $title = 'Hasil pencarian dari ' . $search . ' | ';
@@ -48,7 +50,7 @@ class BooksController extends Controller
     }
 
     $categories = Category::with('books')->get();
-    $newBooks = Books::orderByDesc('created_at')->get();
+    $newBooks = Books::orderByDesc('created_at')->paginate(10); // Gunakan paginate()
 
     return view('book.books', [
         'title' => $title,
@@ -58,18 +60,21 @@ class BooksController extends Controller
     ]);
 }
 
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('book.create', [
-            'title' => 'Add a new book',
-            'categories' => Category::all(),
-        ]);
-    }
+{
+    return view('book.create', [
+        'title' => 'Add a new book',
+        'categories' => Category::all(),
+        'racks' => bookshelves::all(), // Ambil semua rak dari database
+    ]);
+}
+
 
     /**
      * Store a newly created resource in storage.
@@ -78,41 +83,42 @@ class BooksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $request['user_id'] = auth()->user()->id;
-        $request['slug'] = Str::slug($request->title);
+{
+    $request['user_id'] = auth()->user()->id;
+    $request['slug'] = Str::slug($request->title);
 
-        $validateData = $request->validate([
-            'title' => 'required|max:255',
-            'slug' => 'required|unique:books',
-            'kode_buku' => 'required|unique:books',
-            'category_id' => 'required',
-            'user_id' => 'required',
-            'penulis' => 'required',
-            'description' => 'required',
-            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-            'penerbit' => 'required',
-            'stok' => 'required',
-            'thn_terbit' => 'required',
-        ]);
+    $validateData = $request->validate([
+        'title' => 'required|max:255',
+        'slug' => 'required|unique:books',
+        'kode_buku' => 'required|unique:books',
+        'category_id' => 'required',
+        'rak_id' => 'required|exists:bookshelves,id', // Validasi rak_id harus ada di tabel raks
+        'user_id' => 'required',
+        'penulis' => 'required',
+        'description' => 'required',
+        'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'penerbit' => 'required',
+        'stok' => 'required',
+        'thn_terbit' => 'required',
+        'halaman' => 'required|numeric',
+    ]);
 
-        $validateData['suka'] = 0;
-        $validateData['penonton'] = 0;
+    $validateData['suka'] = 0;
+    // $validateData['penonton'] = 0;
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $fileName = $file->getClientOriginalName(); // Ambil nama asli file
-            $path = $file->storeAs('book', $fileName, 'public'); // Simpan dengan nama asli
-            $validateData['image'] = 'storage/book/' . $fileName; // Simpan path lengkap ke database
-        }
-
-
-        $store = Books::create($validateData);
-
-        return $store
-            ? redirect()->route('books.index')->with('success', 'New book has been added!')
-            : redirect()->route('books.index')->with('failed', 'Failed to add new book.');
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $fileName = $file->getClientOriginalName();
+        $path = $file->storeAs('book', $fileName, 'public');
+        $validateData['image'] = 'storage/book/' . $fileName;
     }
+
+    $store = Books::create($validateData);
+
+    return $store
+        ? redirect()->route('books.index')->with('success', 'New book has been added!')
+        : redirect()->route('books.index')->with('failed', 'Failed to add new book.');
+}
 
 
     /**
@@ -195,6 +201,7 @@ class BooksController extends Controller
             'penerbit' => 'sometimes|required',
             'stok' => 'sometimes|required',
             'thn_terbit' => 'sometimes|required',
+            'halaman' => 'sometimes|required|numeric',
         ];
         $slug = Str::of($request->title)->slug('-');
         if ($slug != $book->slug) {
