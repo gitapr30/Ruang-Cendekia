@@ -22,8 +22,7 @@
         </div>
         <div class="flex items-center">
             {{-- <img src="{{ asset('/assets/logo ruangcendekia 2.png') }}" alt="My Logo" width="100"> --}}
-            <span class="font-bold text-xl tracking-wide ml-3 text-[#303030]" style="color: white;">Ruang
-                Cendekia</span>
+            <span class="font-bold text-xl tracking-wide ml-3 text-[#303030]" style="color: white;">{{ $change->nama_website }}</span>
         </div>
     </div>
     @can('isUser')
@@ -96,7 +95,7 @@
                 <a href="{{ route('wishlist.index') }}"
                 class="transition-all ease-in-out duration-300 flex items-center p-3 rounded-lg mb-1 {{ Request::is('wishlist*') ? 'rounded-lg bg-gradient-to-br from-blue-400 to-blue-500' : '' }}">
                 <img src="{{ asset('wishlist.svg') }}" alt="Wishlist" class="w-6 h-6 filter invert">
-                <p class="ml-2 font-medium text-white">Wishlist</p>
+                <p class="ml-2 font-medium text-white">wishlist</p>
             </a>
             </li>
 

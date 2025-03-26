@@ -25,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        View::composer('layouts.sidebar', function ($view) {
+        $change = Change::latest()->first();
+        $view->with('change', $change);
+        });
     }
 }

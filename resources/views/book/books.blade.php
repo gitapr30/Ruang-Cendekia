@@ -182,14 +182,14 @@
 
 
 <!-- Tabs for Categories -->
-<div class="mt-20 mb-12">
-    <h1 class="text-lg font-semibold text-gray-800 mb-3" style="margin-left: 25px; font-size: 21px;">Kategori</h1>
-    <ul class="flex space-x-6 overflow-x-auto px-4">
+<div class="">
+    <h1 class="text-lg font-semibold text-gray-800 mb-3" style="font-size: 21px;">Kategori</h1>
+    <ul class="flex space-x-6 overflow-x-auto">
         <!-- Tab All -->
         <li>
             <button type="button"
                     class="category-tab p-3 px-6 cursor-pointer transition duration-300 rounded-full focus:outline-none bg-blue-500 text-white font-semibold active"
-                    onclick="showCategory(event, 'all', this)" style="margin-left: 10px;">
+                    onclick="showCategory(event, 'all', this)" >
                     Semua
                 </button>
         </li>
@@ -205,9 +205,9 @@
     </ul>
 </div>
 @foreach ($categories as $category)
-<div id="category-{{ $category->id }}" class="category-content mt-6">
+<div id="category-{{ $category->id }}" class="category-content">
     <h2 class="text-gray-700 text-xl font-bold mb-4" style="margin-left: 21px;">{{ $category->name }}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style="margin-left: 21px;">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach ($category->books as $book)
         <a href="{{ route('books.show', parameters: $book->slug) }}" class="group transition rounded-md hover:scale-95 duration-300 relative flex space-x-4 p-4 bg-white shadow-md border border-gray-300 rounded-md">
             <img src="{{ asset($book->image) }}" alt="{{ $book->title }}" class="w-32 h-48 object-cover rounded shadow">
@@ -235,7 +235,7 @@
                                 $isInWishlist = \App\Models\Wishlists::where('user_id', auth()->id())
                                     ->where('book_id', $book->id)
                                     ->exists();
-                            @endphp
+                @endphp
 
                 <!-- Wishlist Button -->
                 <form action="{{ route('wishlist.store', $book->slug) }}" method="POST" class="absolute bottom-2 right-2 flex justify-end items-end">
@@ -305,14 +305,13 @@
     }
 
 </script>
-
-<footer class="mt-12 py-4 bg-gray-200 text-grey text-center" style="font-size: 14px;">
-    <p>&copy; {{ date('Y') }} RuangCendekia. Hak Cipta Dilindungi Undang-Undang.</p>
-</footer>
-
+    </div>
+        <footer class="mt-12 py-4 bg-gray-200 text-grey text-center" style="font-size: 14px;">
+            <p>&copy; {{ date('Y') }} RuangCendekia. Hak Cipta Dilindungi Undang-Undang.</p>
+        </footer>
+    </div>
     </div>
 </div>
-</div>    </div>
 
 
 

@@ -52,10 +52,10 @@
                         <button type="submit"
                             class="w-full text-white bg-sky-600 hover:bg-sky-700 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Masuk
                         </button>
-                        <p class="text-sm font-light text-black">
+                        <!-- <p class="text-sm font-light text-black">
                             Lupa Kata Sandi? <a href="" class="font-medium text-sky-600 hover:underline">Ganti Kata
                                 Sandi</a>
-                        </p>
+                        </p> -->
                     </form>
                 </div>
             </div>
