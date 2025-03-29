@@ -97,10 +97,10 @@ Route::get('/bookshelves/{id}', [BookshelvesController::class, 'show'])->name('b
     Route::get('/books', [BooksController::class, 'index'])->name('books.index');
     // Route::get('/books/{slug}/detail', [BooksController::class, 'detail'])->name('books.detail');
 
-    Route::get('/notifications', [BorrowController::class, 'getNotifications'])->name('notifications');
-
-
-
+    Route::get('/borrow/notifications', [BorrowController::class, 'getNotifications'])->name('notifications');
+    // Route::post('/notifications/mark-as-read', [BorrowController::class, 'markAsRead'])
+    // ->middleware('auth')
+    // ->name('notifications.markAsRead');
 
     // Tambahan route untuk form peminjaman dan penyimpanan
     Route::get('/barcode/{kodePeminjaman}', [BarcodeController::class, 'saveBarcode']);

@@ -16,7 +16,6 @@ use BaconQrCode\Writer;
 use BaconQrCode\Renderer\Image\Png;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 
-
 class BorrowController extends Controller
 {
     /**
@@ -174,31 +173,101 @@ public function selectBook(Request $request)
 
     public function getNotifications()
 {
-    $today = Carbon::today()->format('Y-m-d');
-
-    // Ambil daftar peminjaman yang masih dipinjam dan pastikan relasi buku ada
-    $borrows = Borrow::where('status', 'dipinjam')->with('book')->get();
-
-    $notifications = [];
-
-    foreach ($borrows as $borrow) {
-        if (!$borrow->book) continue; // Skip jika buku tidak ditemukan
-
-        $returnDate = Carbon::parse($borrow->tanggal_kembali)->format('Y-m-d');
-
-        $notifications[] = [
-            'book_id' => $borrow->book->id, // ID buku
-            'book_title' => $borrow->book->title, // Ambil judul buku dari relasi
-            'tanggal_kembali' => $returnDate, // Pastikan ini cocok dengan frontend
-            'status' => $borrow->status // Kirim status juga
-        ];
+    $userId = Auth::id();
+    if (!$userId) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Unauthorized',
+            'notifications' => []
+        ], 401);
     }
 
-    return response()->json($notifications);
+    $today = Carbon::today();
+    $threeDaysLater = $today->copy()->addDays(3);
+
+    try {
+        // Peminjaman aktif yang akan jatuh tempo dalam 3 hari
+        $upcomingReturns = Borrow::with('book')
+            ->where('user_id', $userId)
+            ->where('status', 'dipinjam')
+            ->whereBetween('tanggal_kembali', [$today, $threeDaysLater])
+            ->get()
+            ->map(function ($borrow) use ($today) {
+                $returnDate = Carbon::parse($borrow->tanggal_kembali);
+                $daysLeft = $today->diffInDays($returnDate, false);
+
+                if ($daysLeft === 0) {
+                    $message = 'Buku "' . $borrow->book->title . '" harus dikembalikan hari ini!';
+                } elseif ($daysLeft === 1) {
+                    $message = 'Buku "' . $borrow->book->title . '" kurang 1 hari jatuh tempo!';
+                } else {
+                    $message = 'Buku "' . $borrow->book->title . '" harus dikembalikan dalam ' . $daysLeft . ' hari';
+                }
+
+                return [
+                    'type' => 'reminder',
+                    'message' => $message,
+                    'book_id' => $borrow->book_id,
+                    'return_date' => $borrow->tanggal_kembali,
+                    'days_left' => $daysLeft,
+                    'created_at' => now()
+                ];
+            });
+
+        // Peminjaman yang sudah lewat jatuh tempo
+        $overdueReturns = Borrow::with('book')
+            ->where('user_id', $userId)
+            ->where('status', 'dipinjam')
+            ->whereDate('tanggal_kembali', '<', $today)
+            ->get()
+            ->map(function ($borrow) use ($today) {
+                $daysOverdue = $today->diffInDays(Carbon::parse($borrow->tanggal_kembali));
+
+                return [
+                    'type' => 'overdue',
+                    'message' => 'Buku "' . $borrow->book->title . '" sudah terlambat ' . $daysOverdue . ' hari!',
+                    'book_id' => $borrow->book_id,
+                    'return_date' => $borrow->tanggal_kembali,
+                    'days_overdue' => $daysOverdue,
+                    'created_at' => now()
+                ];
+            });
+
+        $notifications = $upcomingReturns->merge($overdueReturns);
+
+        return response()->json([
+            'success' => true,
+            'notifications' => $notifications->values()->all(),
+            'unread_count' => $notifications->count()
+        ]);
+
+    } catch (\Exception $e) {
+        \Log::error('Error fetching notifications: '.$e->getMessage());
+        return response()->json([
+            'success' => false,
+            'message' => 'Error fetching notifications',
+            'error' => $e->getMessage(),
+            'notifications' => []
+        ], 500);
+    }
 }
 
-
-
+public function markAsRead()
+{
+    try {
+        // Logic untuk menandai notifikasi sebagai sudah dibaca
+        // Contoh sederhana - dalam implementasi nyata Anda mungkin perlu update database
+        return response()->json([
+            'success' => true,
+            'message' => 'Notifications marked as read'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error marking notifications as read'
+        ], 500);
+    }
+}
     /**
      * Hapus data peminjaman.
      */

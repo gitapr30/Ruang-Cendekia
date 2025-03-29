@@ -113,30 +113,37 @@ class BorrowadminController extends Controller
         return view('borrow.kembali', compact('borrows', 'title'));
     }
 
-    public function denda()
+    // BorrowadminController.php
+
+public function denda()
 {
     $title = 'Buku Belum Dikembalikan';
     $today = now();
+
+    // Ambil nilai denda dari tabel changes
+    $dendaPerHari = \App\Models\Change::first()->denda ?? 2000;
 
     // Ambil semua peminjaman yang statusnya "dipinjam" dan sudah melewati tanggal kembali
     $borrows = Borrow::where('status', 'dipinjam')
         ->whereDate('tanggal_kembali', '<', $today)
         ->with(['user', 'book'])
         ->get()
-        ->map(function ($borrow) use ($today) {
+        ->map(function ($borrow) use ($today, $dendaPerHari) {
             $dueDate = \Carbon\Carbon::parse($borrow->tanggal_kembali);
-            $lateDays = $dueDate->diffInDays($today, false); // Pastikan tidak negatif
+            $lateDays = $dueDate->diffInDays($today, false); // Hitung hari terlambat
 
-            $borrow->calculated_denda = $lateDays > 0 ? $lateDays * 2000 : 0;
+            // Hitung denda berdasarkan nilai dari tabel changes
+            $borrow->calculated_denda = $lateDays > 0 ? $lateDays * $dendaPerHari : 0;
             return $borrow;
         });
 
-    return view('borrow.denda', compact('borrows', 'title'));
+    return view('borrow.denda', compact('borrows', 'title', 'dendaPerHari'));
 }
 
 public function updateDenda(Request $request)
 {
     $borrow = Borrow::find($request->borrow_id);
+    $dendaSettings = \App\Models\Change::first();
 
     if (!$borrow) {
         return redirect()->back()->with('error', 'Data tidak ditemukan.');
@@ -146,11 +153,11 @@ public function updateDenda(Request $request)
 
     if ($request->keterangan == 'terlambat') {
         $daysLate = now()->diffInDays($borrow->tanggal_kembali, false);
-        $borrow->denda = $daysLate > 0 ? $daysLate * 2000 : 0;
+        $borrow->denda = $daysLate > 0 ? $daysLate * $dendaSettings->denda : 0;
     } elseif ($request->keterangan == 'hilang') {
-        $borrow->denda = 300000;
+        $borrow->denda = $dendaSettings->denda_hilang;
     } elseif ($request->keterangan == 'rusak') {
-        $borrow->denda = 300000;
+        $borrow->denda = $dendaSettings->denda_rusak;
     } else {
         $borrow->denda = 0;
     }
