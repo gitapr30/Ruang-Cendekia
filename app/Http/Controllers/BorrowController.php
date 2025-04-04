@@ -145,6 +145,7 @@ public function selectBook(Request $request)
     {
         $title = 'History Borrowing';
         $userId = Auth::id();
+        $dendaSettings = \App\Models\Change::first();
 
         if (!$userId) {
             return redirect()->route('login')->with('errorMessage', 'Anda harus login terlebih dahulu.');
@@ -168,25 +169,25 @@ public function selectBook(Request $request)
 
         $history = $history->paginate(6);
 
-        return view('borrow.history', compact('history', 'title'));
+        return view('borrow.history', compact('history', 'title', 'dendaSettings'));
     }
-
     public function getNotifications()
 {
-    $userId = Auth::id();
-    if (!$userId) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Unauthorized',
-            'notifications' => []
-        ], 401);
-    }
-
-    $today = Carbon::today();
-    $threeDaysLater = $today->copy()->addDays(3);
-
     try {
-        // Peminjaman aktif yang akan jatuh tempo dalam 3 hari
+        $userId = Auth::id();
+
+        if (!$userId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+                'notifications' => []
+            ], 401);
+        }
+
+        $today = Carbon::today();
+        $threeDaysLater = $today->copy()->addDays(3);
+
+        // Peminjaman aktif yang akan jatuh tempo
         $upcomingReturns = Borrow::with('book')
             ->where('user_id', $userId)
             ->where('status', 'dipinjam')
@@ -233,21 +234,17 @@ public function selectBook(Request $request)
                 ];
             });
 
-        $notifications = $upcomingReturns->merge($overdueReturns);
-
         return response()->json([
             'success' => true,
-            'notifications' => $notifications->values()->all(),
-            'unread_count' => $notifications->count()
+            'notifications' => $upcomingReturns->merge($overdueReturns)->values()->all()
         ]);
 
     } catch (\Exception $e) {
-        \Log::error('Error fetching notifications: '.$e->getMessage());
+        \Log::error('Notification error: '.$e->getMessage());
         return response()->json([
             'success' => false,
-            'message' => 'Error fetching notifications',
-            'error' => $e->getMessage(),
-            'notifications' => []
+            'message' => 'Server error',
+            'error' => $e->getMessage()
         ], 500);
     }
 }

@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('content');
             $table->string('footer');
             $table->string('denda');
+            $table->string('denda_hilang');
             $table->string('max_peminjaman');
             $table->string('waktu_operasional');
             $table->timestamps();

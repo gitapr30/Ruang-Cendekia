@@ -17,6 +17,7 @@ class Change extends Model
         email',
         'maps',
         'denda',
+        'denda_hilang',
         'max_peminjaman',
         'tittle',
         'description',

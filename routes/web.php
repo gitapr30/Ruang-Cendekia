@@ -29,6 +29,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+
+
+
 Route::get('/login', function () {
     return view('login', [
         'title' => 'Login',
@@ -52,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/borrow-update', [BorrowController::class, 'update'])->name('borrow.update');
     Route::post('/borrow/selectBook', [BorrowController::class, 'selectBook'])->name('borrow.selectBook');
 
+    Route::get('/borrow/notifications', [BorrowController::class, 'getNotifications']);
+    Route::post('/borrow/mark-as-read', [BorrowController::class, 'markAsRead']);
 
     Route::get('/borrow/konfirmasi', [BorrowadminController::class, 'konfirmasi'])->name('borrow.konfirmasi');
     Route::get('/borrow/dipinjam', [BorrowadminController::class, 'dipinjam'])->name('borrow.dipinjam');
@@ -69,6 +74,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/borrow', [BorrowadminController::class, 'index'])->name('borrow.index');
     // Route::post('/borrow-store', [BorrowadminController::class, 'store'])->name('borrow.store');
     Route::post('/borrow-update', [BorrowadminController::class, 'update'])->name('borrow.update');
+    // Add this new route
+    Route::post('/borrow/update-from-denda', [BorrowadminController::class, 'updateFromDenda'])->name('borrow.updateFromDenda');
 
     //ubah
     Route::get('/change', [ChangeController::class, 'index'])->name('change.index');
@@ -97,10 +104,6 @@ Route::get('/bookshelves/{id}', [BookshelvesController::class, 'show'])->name('b
     Route::get('/books', [BooksController::class, 'index'])->name('books.index');
     // Route::get('/books/{slug}/detail', [BooksController::class, 'detail'])->name('books.detail');
 
-    Route::get('/borrow/notifications', [BorrowController::class, 'getNotifications'])->name('notifications');
-    // Route::post('/notifications/mark-as-read', [BorrowController::class, 'markAsRead'])
-    // ->middleware('auth')
-    // ->name('notifications.markAsRead');
 
     // Tambahan route untuk form peminjaman dan penyimpanan
     Route::get('/barcode/{kodePeminjaman}', [BarcodeController::class, 'saveBarcode']);

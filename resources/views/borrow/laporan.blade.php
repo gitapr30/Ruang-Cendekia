@@ -212,7 +212,7 @@
                 {{ \Carbon\Carbon::parse($borrow->tanggal_kembali)->format('d-m-Y') }}
             </td>
             <td class="px-4 py-2 text-sm text-gray-600 text-center">
-                Rp {{ number_format((int) $borrow->denda, 0, ',', '.') }}
+                Rp {{ number_format($borrow->denda, 0, ',', '.') }},-
             </td>
         </tr>
         @endforeach
@@ -220,7 +220,9 @@
     <tfoot>
         <tr class="bg-gray-200">
             <td colspan="5" class="px-4 py-2 text-sm font-semibold text-gray-700 text-right">Total Denda:</td>
-            <td class="px-4 py-2 text-sm font-semibold text-gray-700 text-center" id="totalDenda">Rp 0</td>
+            <td class="px-4 py-2 text-sm font-semibold text-gray-700 text-center" id="totalDenda">
+                Rp {{ number_format($borrows->sum('denda'), 0, ',', '.') }},-
+            </td>
         </tr>
     </tfoot>
 </table>
@@ -231,11 +233,14 @@
         let total = 0;
 
         rows.forEach(row => {
-            let dendaText = row.querySelector('td:last-child').innerText.replace('Rp ', '').replace(/\./g, '');
+            let dendaText = row.querySelector('td:last-child').innerText
+                .replace('Rp ', '')
+                .replace(/\./g, '')
+                .replace(',-', '');
             total += parseInt(dendaText) || 0;
         });
 
-        document.getElementById('totalDenda').innerText = "Rp " + total.toLocaleString('id-ID');
+        document.getElementById('totalDenda').innerText = "Rp " + (total).toLocaleString('id-ID') + ",-";
     }
 
     function updateReportTitle() {

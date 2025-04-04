@@ -279,80 +279,95 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fetch notifications from server
     function fetchNotifications() {
-        fetch('/borrow/notifications')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.notifications.length > 0) {
-                    // Update badge count
-                    notifBadge.textContent = data.notifications.length;
-                    notifBadge.classList.remove('hidden');
+    fetch('/borrow/notifications', {
+        headers: {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'include'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Notification data:', data); // Debugging
 
-                    // Sort notifications by urgency (overdue first, then by days left)
-                    data.notifications.sort((a, b) => {
-                        if (a.type === 'overdue' && b.type !== 'overdue') return -1;
-                        if (a.type !== 'overdue' && b.type === 'overdue') return 1;
-                        return (a.days_left || 0) - (b.days_left || 0);
-                    });
+        if (data.success && data.notifications && data.notifications.length > 0) {
+            // Update badge count
+            const notifBadge = document.getElementById('notifBadge');
+            notifBadge.textContent = data.notifications.length;
+            notifBadge.classList.remove('hidden');
 
-                    // Populate notifications
-                    let html = '';
-                    data.notifications.forEach(notif => {
-                        let bgColor, textColor, icon;
+            // Sort notifications by urgency (overdue first, then by days left)
+            data.notifications.sort((a, b) => {
+                if (a.type === 'overdue' && b.type !== 'overdue') return -1;
+                if (a.type !== 'overdue' && b.type === 'overdue') return 1;
+                return (a.days_left || 0) - (b.days_left || 0);
+            });
 
-                        if (notif.type === 'overdue') {
-                            bgColor = 'bg-red-50';
-                            textColor = 'text-red-800';
-                            icon = `<svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>`;
-                        } else {
-                            bgColor = 'bg-blue-50';
-                            textColor = 'text-blue-800';
-                            icon = `<svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>`;
-                        }
+            // Populate notifications
+            let html = '';
+            data.notifications.forEach(notif => {
+                let bgColor, textColor, icon;
 
-                        html += `
-                            <div class="p-3 ${bgColor} ${textColor} border-b border-gray-200">
-                                <div class="flex items-start">
-                                    ${icon}
-                                    <div>
-                                        <p class="text-sm font-medium">${notif.message}</p>
-                                        <p class="text-xs text-gray-500 mt-1">
-                                            Jatuh tempo: ${formatIndonesianDate(notif.return_date)}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    notifList.innerHTML = html;
+                if (notif.type === 'overdue') {
+                    bgColor = 'bg-red-50';
+                    textColor = 'text-red-800';
+                    icon = `<svg class="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>`;
                 } else {
-                    notifList.innerHTML = `
-                        <div class="p-4 text-center text-gray-500">
-                            <svg class="w-8 h-8 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                            </svg>
-                            <p class="mt-2">Tidak ada notifikasi baru</p>
-                        </div>
-                    `;
-                    notifBadge.classList.add('hidden');
+                    bgColor = 'bg-blue-50';
+                    textColor = 'text-blue-800';
+                    icon = `<svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>`;
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching notifications:', error);
-                notifList.innerHTML = `
-                    <div class="p-4 text-center text-red-500">
-                        <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                        <p class="mt-2">Gagal memuat notifikasi</p>
+
+                html += `
+                    <div class="p-3 ${bgColor} ${textColor} border-b border-gray-200">
+                        <div class="flex items-start">
+                            ${icon}
+                            <div>
+                                <p class="text-sm font-medium">${notif.message}</p>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Jatuh tempo: ${formatIndonesianDate(notif.return_date)}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 `;
             });
-    }
 
+            document.getElementById('notifList').innerHTML = html;
+        } else {
+            document.getElementById('notifList').innerHTML = `
+                <div class="p-4 text-center text-gray-500">
+                    <svg class="w-8 h-8 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+                    </svg>
+                    <p class="mt-2">Tidak ada notifikasi baru</p>
+                </div>
+            `;
+
+            document.getElementById('notifBadge').classList.add('hidden');
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        document.getElementById('notifList').innerHTML = `
+            <div class="p-4 text-center text-red-500">
+                <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                <p class="mt-2">Gagal memuat notifikasi</p>
+            </div>
+        `;
+    });
+}
     // Check for notifications every 5 minutes
     setInterval(fetchNotifications, 300000);
 

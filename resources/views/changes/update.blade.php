@@ -41,6 +41,10 @@
                         <label class="block text-gray-600 mt-2">Denda</label>
                         <input type="text" name="denda" value="{{ old('denda', $change->denda) }}"
                             class="w-full p-2 border rounded-md focus:ring focus:ring-blue-300">
+
+                        <label class="block text-gray-600 mt-2">Denda Hilang/Rusak</label>
+                            <input type="text" name="denda_hilang" value="{{ old('denda_hilang', $change->denda_hilang) }}"
+                                class="w-full p-2 border rounded-md focus:ring focus:ring-blue-300">
                             <label class="block text-gray-600 mt-2">Max Peminjaman</label>
                             <input type="text" name="max_peminjaman" value="{{ old('max_peminjaman', $change->max_peminjaman) }}"
                                 class="w-full p-2 border rounded-md focus:ring focus:ring-blue-300">

@@ -13,6 +13,8 @@
                 <p class="p-4 text-gray-600"><strong>No. Telepon:</strong> {{ $change->no_telp }}</p>
                 <p class="p-4 text-gray-600"><strong>Email:</strong> {{ $change->email }}</p>
                 <p class="p-4 text-gray-600"><strong>Maps:</strong> <a href="{{ $change->maps }}" target="_blank" class="text-blue-500 underline">Lihat Lokasi</a></p>
+                <p class="p-4 text-gray-600"><strong>Denda Terlambat:</strong> Rp. {{ $change->denda }}</p>
+                <p class="p-4 text-gray-600"><strong>Denda Hilang/Rusak:</strong> Rp. {{ $change->denda_hilang }}</p>
             </div>
 
             <div>

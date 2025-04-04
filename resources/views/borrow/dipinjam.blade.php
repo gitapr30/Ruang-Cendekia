@@ -103,16 +103,15 @@
                     </button>
                 </form>
                 @elseif($borrow->status === 'dipinjam')
-                <form action="{{ route('borrow.update')}}" method="post">
-                    @csrf
-                    <input type="hidden" name="borrow_id" value="{{$borrow->id}}">
-                    <input type="hidden" name="status" value="dikembalikan">
-                    <form action="{{ route('borrow.return', $borrow->id) }}" method="POST">
+                    <form action="{{ route('borrow.update') }}" method="post">
                         @csrf
-                        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">Kembalikan</button>
+                        <input type="hidden" name="borrow_id" value="{{ $borrow->id }}">
+                        <input type="hidden" name="status" value="dikembalikan">
+                        <input type="hidden" name="keterangan" value="dikembalikan">
+                        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">
+                            Kembalikan
+                        </button>
                     </form>
-
-                </form>
                 @endif
             </td>
         </tr>
