@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookshelvesController;
 use App\Http\Controllers\ChangeController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\NotificationsController;
 use App\Models\Borrow;
 use Illuminate\Support\Facades\Route;
 
@@ -55,8 +56,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/borrow-update', [BorrowController::class, 'update'])->name('borrow.update');
     Route::post('/borrow/selectBook', [BorrowController::class, 'selectBook'])->name('borrow.selectBook');
 
-    Route::get('/borrow/notifications', [BorrowController::class, 'getNotifications']);
-    Route::post('/borrow/mark-as-read', [BorrowController::class, 'markAsRead']);
+    Route::prefix('notifications')->group(function() {
+        Route::get('/', [NotificationsController::class, 'index'])->name('notification.index');
+        Route::get('/get', [NotificationsController::class, 'getNotifications'])->name('notification.get');
+        Route::post('/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notification.markAsRead');
+    });
 
     Route::get('/borrow/konfirmasi', [BorrowadminController::class, 'konfirmasi'])->name('borrow.konfirmasi');
     Route::get('/borrow/dipinjam', [BorrowadminController::class, 'dipinjam'])->name('borrow.dipinjam');

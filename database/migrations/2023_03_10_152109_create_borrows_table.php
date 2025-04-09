@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('denda')->default(0)->after('keterangan');
             $table->date('tanggal_pinjam'); // Ubah string ke date
             $table->date('tanggal_kembali'); // Ubah string ke date
+            $table->date('tanggal_dikembalikan')->nullable()->after('tanggal_kembali');
             $table->string('kode_peminjaman')->unique();
             $table->timestamps();
         });

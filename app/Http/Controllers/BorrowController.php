@@ -85,6 +85,7 @@ public function selectBook(Request $request)
             'book_id' => $request->book_id,
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'tanggal_kembali' => $request->tanggal_kembali,
+            'tanggal_dikembalikan' => $request->tanggal_dikembalikan,
             'kode_peminjaman' => hexdec(substr(uniqid(), -8)),
             'status' => 'menunggu konfirmasi',
         ]);

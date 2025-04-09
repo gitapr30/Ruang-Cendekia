@@ -18,6 +18,7 @@ class Borrow extends Model
         'keterangan',
         'tanggal_pinjam',
         'tanggal_kembali',
+        'tanggal_dikembalikan',
         'kode_peminjaman',
         'denda',
     ];

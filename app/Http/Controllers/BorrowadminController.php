@@ -72,11 +72,10 @@ class BorrowadminController extends Controller
     return view('borrow.borrow', compact('borrows', 'title', 'users', 'books'));
 }
 
-
-
     /**
      * Tampilkan daftar peminjaman yang masih menunggu konfirmasi.
      */
+
     public function konfirmasi()
     {
         $title = 'Menunggu Konfirmasi';
@@ -88,20 +87,19 @@ class BorrowadminController extends Controller
     /**
      * Tampilkan daftar peminjaman yang sedang dipinjam.
      */
-    public function dipinjam()
-{
-    $title = 'Buku Sedang Dipinjam';
-    $today = now();
 
-    $borrows = Borrow::where('status', 'dipinjam')
-        ->whereDate('tanggal_kembali', '>=', $today)
-        ->with(['user', 'book'])
-        ->get();
+     public function dipinjam()
+     {
+         $title = 'Buku Sedang Dipinjam';
+         $today = now();
 
-    return view('borrow.dipinjam', compact('borrows', 'title'));
-}
+         $borrows = Borrow::where('status', 'dipinjam')
+             ->whereDate('tanggal_kembali', '>=', $today) // Only books not yet due
+             ->with(['user', 'book'])
+             ->get();
 
-
+         return view('borrow.dipinjam', compact('borrows', 'title'));
+     }
     /**
      * Tampilkan daftar peminjaman yang sudah dikembalikan.
      */
@@ -122,28 +120,54 @@ class BorrowadminController extends Controller
 
     // Get all fine settings from changes table
     $dendaSettings = \App\Models\Change::first();
-    $dendaPerHari = ($dendaSettings->denda ?? 2000) * 1000; // Tambahkan 000
-    $dendaHilang = ($dendaSettings->denda_hilang ?? 0) * 1000; // Tambahkan 000
-    $dendaRusak = ($dendaSettings->denda_hilang ?? 0) * 1000; // Tambahkan 000
+    $dendaPerHari = ($dendaSettings->denda ?? 2000) * 1000;
+    $dendaHilang = ($dendaSettings->denda_hilang ?? 0) * 1000;
+    $dendaRusak = ($dendaSettings->denda_rusak ?? 0) * 1000;
 
-    // Get only borrows that are still 'dipinjam' and past the return date
-    $borrows = Borrow::where('status', 'dipinjam')
-        ->whereDate('tanggal_kembali', '<', $today)
+    // Get borrows that:
+    // 1. Have keterangan (terlambat/hilang/rusak) OR
+    // 2. Are overdue (status dipinjam but past return date)
+    $borrows = Borrow::where(function($query) use ($today) {
+            $query->where(function($q) {
+                    $q->where('keterangan', 'terlambat')
+                      ->orWhere('keterangan', 'hilang')
+                      ->orWhere('keterangan', 'rusak');
+                })
+                ->orWhere(function($q) use ($today) {
+                    $q->where('status', 'dipinjam')
+                      ->whereDate('tanggal_kembali', '<', $today);
+                });
+        })
+        ->where('status', '!=', 'dikembalikan')
         ->with(['user', 'book'])
-        ->get()
-        ->map(function ($borrow) use ($today, $dendaPerHari) {
+        ->get();
+
+    // Calculate late fines for those marked as late or overdue
+    foreach ($borrows as $borrow) {
+        if ($borrow->keterangan == 'terlambat' ||
+            ($borrow->status == 'dipinjam' && $borrow->tanggal_kembali < $today)) {
+
             $dueDate = \Carbon\Carbon::parse($borrow->tanggal_kembali);
             $lateDays = max($dueDate->diffInDays($today), 0);
+            $dendaTerlambat = $lateDays * $dendaPerHari;
 
-            if ($borrow->keterangan == 'terlambat') {
-                $borrow->calculated_denda = $lateDays * $dendaPerHari;
+            // Update status to terlambat if it's dipinjam and overdue
+            if ($borrow->status == 'dipinjam' && $borrow->tanggal_kembali < $today) {
+                $borrow->update([
+                    'status' => 'terlambat',
+                    'keterangan' => 'terlambat'
+                ]);
             }
-            return $borrow;
-        });
+
+            // Update denda in database if it's different
+            if ($borrow->denda != $dendaTerlambat) {
+                $borrow->update(['denda' => $dendaTerlambat]);
+            }
+        }
+    }
 
     return view('borrow.denda', compact('borrows', 'title', 'dendaPerHari', 'dendaHilang', 'dendaRusak'));
 }
-
 public function updateDenda(Request $request)
 {
     $borrow = Borrow::find($request->borrow_id);
@@ -252,50 +276,49 @@ public function returnBook(Request $request, Borrow $borrow)
      */
     // Add this new method for handling returns from denda page
     public function updateFromDenda(Request $request)
-    {
-        $request->validate([
-            'borrow_id' => 'required|exists:borrows,id',
-            'status' => 'required|string',
-            'keterangan' => 'required|string'
-        ]);
+{
+    $request->validate([
+        'borrow_id' => 'required|exists:borrows,id',
+        'status' => 'required|string',
+        'keterangan' => 'required|string'
+    ]);
 
-        $borrow = Borrow::findOrFail($request->borrow_id);
-        $book = Books::findOrFail($borrow->book_id);
-        $dendaSettings = \App\Models\Change::first();
+    $borrow = Borrow::findOrFail($request->borrow_id);
+    $book = Books::findOrFail($borrow->book_id);
+    $dendaSettings = \App\Models\Change::first();
 
-        // Calculate fine based on keterangan
-        $denda = 0;
-        $status = 'dikembalikan'; // Default status
+    // Calculate fine based on keterangan
+    $denda = 0;
+    $status = 'dikembalikan';
+    $tanggal_dikembalikan = now(); // Tanggal pengembalian aktual
 
-        switch ($request->keterangan) {
-            case 'terlambat':
-                $lateDays = max(now()->diffInDays(\Carbon\Carbon::parse($borrow->tanggal_kembali)), 0);
-                $denda = $lateDays * ($dendaSettings->denda * 1000);
-                $status = 'terlambat';
-                break;
-            case 'hilang':
-                $denda = $dendaSettings->denda_hilang * 1000;
-                $status = 'hilang';
-                break;
-            case 'rusak':
-                $denda = $dendaSettings->denda_rusak * 1000;
-                $status = 'rusak';
-                break;
-            default:
-                $denda = 0;
-                $status = 'dikembalikan';
-        }
-
-        // Update book stock and borrow status
-        $book->increment('stok');
-        $borrow->update([
-            'status' => $status,
-            'keterangan' => $request->keterangan,
-            'denda' => $denda
-        ]);
-
-        return back()->with('successMessage', 'Buku berhasil dikembalikan dengan status ' . $request->keterangan);
+    switch ($request->keterangan) {
+        case 'terlambat':
+            $lateDays = max(now()->diffInDays(\Carbon\Carbon::parse($borrow->tanggal_kembali)), 0);
+            $denda = $lateDays * ($dendaSettings->denda * 1000);
+            break;
+        case 'hilang':
+            $denda = $dendaSettings->denda_hilang * 1000;
+            break;
+        case 'rusak':
+            $denda = $dendaSettings->denda_rusak * 1000;
+            break;
     }
+
+    // Update book stock and borrow status
+    if ($request->keterangan != 'hilang') {
+        $book->increment('stok');
+    }
+
+    $borrow->update([
+        'status' => $status,
+        'keterangan' => $request->keterangan,
+        'denda' => $denda,
+        'tanggal_dikembalikan' => $tanggal_dikembalikan // Simpan tanggal pengembalian
+    ]);
+
+    return back()->with('successMessage', 'Buku berhasil dikembalikan dengan status ' . $request->keterangan);
+}
 
 // Modify the existing update method for regular returns
 public function update(Request $request)

@@ -31,6 +31,7 @@
                         {{ $item->status }}
                     </span>
                 </p>
+                <p class="text-sm text-slate-700"><strong>Keterangan:</strong> {{ $item->keterangan }}</p>
                 <p class="text-sm text-slate-700"><strong>Tanggal Peminjaman:</strong> {{ $item->tanggal_pinjam->format('d M Y') }}</p>
                 <p class="text-sm text-slate-700"><strong>Tanggal Pengembalian:</strong> {{ $item->tanggal_kembali ? $item->tanggal_kembali->format('d M Y') : 'Not Returned Yet' }}</p>
                 <p class="text-sm text-slate-700"><strong>Denda:</strong> {{ $item->denda ? 'Rp ' . number_format($item->denda, 2) : 'Tidak Ada Denda' }}</p>

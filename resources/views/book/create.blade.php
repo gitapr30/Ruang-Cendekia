@@ -163,7 +163,7 @@
                             @endif
                             text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring-offset-1 focus:ring-2 focus:ring-blue-500 focus:border-white block w-full p-2.5">
                             @foreach ($racks as $rack)
-                                <option value="{{ $rack->id }}">{{ $rack->rak }}</option>
+                                <option value="{{ $rack->id }}">Rak {{ $rack->rak }}</option>
                             @endforeach
                         </select>
                         @error('rak_id')
@@ -172,7 +172,6 @@
                             </p>
                         @enderror
                     </div>
-
                     <div>
                         <label for="Halaman" class="block mb-2 text-sm font-medium text-gray-900">Halaman</label>
                         <input type="text" name="halaman" id="Halaman"
@@ -380,7 +379,7 @@
                             @endif
                             text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring-offset-1 focus:ring-2 focus:ring-blue-500 focus:border-white block w-full p-2.5">
                             @foreach ($racks as $rack)
-                                <option value="{{ $rack->id }}">{{ $rack->rak }}</option>
+                                <option value="{{ $rack->id }}">Rak {{ $rack->rak }}</option>
                             @endforeach
                         </select>
                         @error('rak_id')

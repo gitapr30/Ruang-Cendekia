@@ -7,6 +7,7 @@ use App\Models\Borrow;
 use App\Models\Category;
 use App\Models\Review;
 use App\Models\Bookshelves;
+use App\Models\Wishlists;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -52,11 +53,19 @@ class BooksController extends Controller
     $categories = Category::with('books')->get();
     $newBooks = Books::orderByDesc('created_at')->paginate(10); // Gunakan paginate()
 
+    $wishlistStatus = [];
+    if (auth()->check()) {
+        $wishlistStatus = Wishlists::where('user_id', auth()->id())
+            ->pluck('book_id')
+            ->toArray();
+    }
+
     return view('book.books', [
         'title' => $title,
         'books' => $books,
         'categories' => $categories,
         'newBooks' => $newBooks,
+        'wishlistStatus' => $wishlistStatus
     ]);
 }
 
@@ -67,13 +76,13 @@ class BooksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-{
-    return view('book.create', [
-        'title' => 'Add a new book',
-        'categories' => Category::all(),
-        'racks' => bookshelves::all(), // Ambil semua rak dari database
-    ]);
-}
+    {
+        return view('book.create', [
+            'title' => 'Add a new book',
+            'categories' => Category::all(),
+            'racks' => Bookshelves::orderBy('rak', 'asc')->get(), // Pastikan diurutkan secara ascending
+        ]);
+    }
 
 
     /**
@@ -92,7 +101,7 @@ class BooksController extends Controller
         'slug' => 'required|unique:books',
         'kode_buku' => 'required|unique:books',
         'category_id' => 'required',
-        'rak_id' => 'required|exists:bookshelves,id', // Validasi rak_id harus ada di tabel raks
+        'rak_id' => 'required|exists:bookshelves,id',
         'user_id' => 'required',
         'penulis' => 'required',
         'description' => 'required',
