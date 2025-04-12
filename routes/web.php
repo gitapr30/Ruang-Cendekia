@@ -95,11 +95,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bookshelves/create', [BookshelvesController::class, 'create'])->name('bookshelves.create');
 Route::get('/bookshelves', [BookshelvesController::class, 'index'])->name('bookshelves.index');
 Route::post('/bookshelves', [BookshelvesController::class, 'store'])->name('bookshelves.store');
-Route::get('/bookshelves/{bookshelves}/edit', [BookshelvesController::class, 'edit'])->name('bookshelves.edit');
-
+Route::get('/bookshelves/{bookshelf}/edit', [BookshelvesController::class, 'edit'])->name('bookshelves.edit');
+Route::put('bookshelves/{bookshelf}', [BookshelvesController::class, 'update'])
+     ->name('bookshelves.update');
 Route::put('/bookshelves/{id}', [BookshelvesController::class, 'update'])->name('bookshelves.update');
 Route::delete('/bookshelves/{id}', [BookshelvesController::class, 'destroy'])->name('bookshelves.destroy');
-Route::get('/bookshelves/{id}', [BookshelvesController::class, 'show'])->name('bookshelves.show');
+Route::get('/bookshelves/{bookshelf}', [BookshelvesController::class, 'show'])
+     ->name('bookshelves.show');
 
 
 

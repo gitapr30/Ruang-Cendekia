@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bookshelves;
 use App\Models\Category;
+use App\Models\Books;
 use Illuminate\Http\Request;
 
 class BookshelvesController extends Controller
@@ -13,22 +14,20 @@ class BookshelvesController extends Controller
      */
     public function index()
     {
-        $bookshelves = Bookshelves::paginate(10);
+        $bookshelves = Bookshelves::withCount('books')->paginate(10);
 
         if ($bookshelves->total() == 0) {
             return view('bookshelves.index', ['message' => 'Tidak ada rak buku.']);
         }
 
         return view('bookshelves.index', compact('bookshelves'));
-    } 
+    }
 
     public function create()
-{
-    $categories = Category::all(); // Get all categories
-    $bookshelves = Bookshelves::all(); // Fetch all bookshelves
-    return view('bookshelves.create', compact('categories', 'bookshelves')); // Pass both categories and bookshelves to the view
-}
-
+    {
+        $categories = Category::all();
+        return view('bookshelves.create', compact('categories'));
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,43 +48,58 @@ class BookshelvesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Bookshelves $bookshelves)
-    {
-        return view('bookshelves.show', compact('bookshelves'));
-    }
+    public function show(Bookshelves $bookshelf)
+{
+    $books = $bookshelf->books()
+                ->with(['category', 'borrows'])
+                ->paginate(10);
 
+    return view('bookshelves.show', [
+        'bookshelf' => $bookshelf,
+        'books' => $books
+    ]);
+}
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Bookshelves $bookshelves) 
+    public function edit(Bookshelves $bookshelf)
 {
     $categories = Category::all();
-    return view('bookshelves.update', compact('bookshelves', 'categories')); 
+    return view('bookshelves.update', [
+        'bookshelf' => $bookshelf,
+        'categories' => $categories
+    ]);
 }
-
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Bookshelves $bookshelves) // Gunakan route model binding
-    {
-        $request->validate([
-            'rak' => 'required|string|max:255',
-            'baris' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-        ]);
+    public function update(Request $request, Bookshelves $bookshelf)
+{
+    $request->validate([
+        'rak' => 'required|string|max:255',
+        'baris' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',
+    ]);
 
-        $bookshelves->update($request->only(['rak', 'baris', 'category_id']));
+    $bookshelf->update($request->only(['rak', 'baris', 'category_id']));
 
-        return redirect()->route('bookshelves.index')->with('success', 'Rak buku berhasil diperbarui.');
-    }
+    return redirect()->route('bookshelves.index')
+        ->with('success', 'Rak buku berhasil diperbarui.');
+}
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Bookshelves $bookshelves) // Perbaikan huruf kapital
+    public function destroy(Bookshelves $bookshelf)
     {
-        $bookshelves->delete();
+        // Cek apakah rak memiliki buku sebelum dihapus
+        if ($bookshelf->books()->count() > 0) {
+            return redirect()->back()
+                ->with('error', 'Tidak dapat menghapus rak karena masih terdapat buku di dalamnya.');
+        }
+
+        $bookshelf->delete();
 
         return redirect()->route('bookshelves.index')->with('success', 'Rak buku berhasil dihapus.');
     }

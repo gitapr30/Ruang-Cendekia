@@ -13,13 +13,15 @@ class Bookshelves extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class)->withDefault([
+            'name' => 'Tidak Berkategori'
+        ]);
     }
     // app/Models/Bookshelves.php
 
-public function books()
-{
-    return $this->hasMany(Books::class);
-}
+    public function books()
+    {
+        return $this->hasMany(Books::class, 'rak_id');
+    }
 
 }

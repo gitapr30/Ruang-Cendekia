@@ -27,7 +27,6 @@
                             `{{ addslashes($book->description) }}`,
                             `{{ route('books.show', ['slug' => $book->slug]) }}`)"
                             class="group flex flex-col items-center space-y-3 bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 relative">
-
                             <div class="bg-blue-600 px-3 py-1 text-white rounded-md text-xs absolute top-2 left-2">
                                 Baru
                             </div>
@@ -45,7 +44,7 @@
             <div class="swiper-button-prev"></div>
 
             <!-- Pagination -->
-<div class="swiper-pagination mt-4"></div>
+{{-- <div class="swiper-pagination mx-8"></div> --}}
         </div>
     @endif
 </div>
@@ -136,9 +135,9 @@
 </div>
 
     <!-- Tambahkan pagination di bawah -->
-    <div class="mt-6">
+    {{-- <div class="mt-6">
         {{ $books->links() }}
-    </div>
+    </div> --}}
 @endif
 
       <!-- Modal Container -->
@@ -424,7 +423,7 @@
                 Buku</a>
         </div>
         <div class="mt-6">
-            <div class="overflow-auto rounded-lg shadow block w-full ">
+            <div class="overflow-auto rounded-lg shadow block w-full" style="max-height: 70vh;">
                 <table class="table-auto w-full">
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
                         <tr>

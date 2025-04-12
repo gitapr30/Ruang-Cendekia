@@ -36,7 +36,7 @@ class BooksController extends Controller
         ->orWhere('penerbit', 'like', '%' . $search . '%')
         ->orWhere('stok', 'like', '%' . $search . '%')
         ->orWhere('thn_terbit', 'like', '%' . $search . '%')
-        ->paginate(10); // Gunakan paginate()
+        ->get(); // Gunakan paginate()
 
     if ($search) {
         $title = 'Hasil pencarian dari ' . $search . ' | ';

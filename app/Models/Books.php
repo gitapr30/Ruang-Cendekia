@@ -48,9 +48,9 @@ class Books extends Model
     // app/Models/Books.php
 
 // Model Book
-    public function bookshelves()
+public function bookshelf()
     {
-        return $this->belongsTo(Bookshelf::class, 'rak_id'); // pastikan 'rak_id' adalah nama kolom yang benar
+        return $this->belongsTo(Bookshelves::class, 'rak_id');
     }
 
 
