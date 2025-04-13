@@ -152,58 +152,58 @@ php artisan serve
 
     -   Dashboard
 
-        ![login](./readme/dashboard.png)
+        ![daashboard](./readme/dashboard.png)
 
     -   Buku
 
-        ![registrasi](./readme/buku_admin.png)
+        ![buku](./readme/buku_admin.png)
 
     -   kategori
 
-        ![user-allbook](./readme/kategori.png)
+        ![kategori](./readme/kategori.png)
 
     -   Konfirmasi Peminjaman
 
-        ![bookborrowing](./readme/konfirmasi.png)
+        ![konfirmasi](./readme/konfirmasi.png)
 
     -   Buku Dipinjam
 
-        ![borrowedbook](./readme/dipinjam.png)
+        ![dipinjam](./readme/dipinjam.png)
 
     -   Buku Dikembalikan
 
-        ![userallcategory](./readme/dikembalikan.png)
+        ![dikembalikan](./readme/dikembalikan.png)
         
     -   Denda
 
-        ![landing](./readme/denda.png)
+        ![denda](./readme/denda.png)
 
     -   Wishlist
 
-        ![login](./readme/wishlist.png)
+        ![wishlist](./readme/wishlist.png)
 
     -   Rak
 
-        ![bukuuser](./readme/rak.png)
+        ![rak](./readme/rak.png)
 
     -   Pengguna Pustakawan
 
-        ![wishlistuser](./readme/user_pustakawan.png)
+        ![userpustakawan](./readme/user_pustakawan.png)
 
     -   Pengguna Admin
 
-        ![riwayatuser](./readme/user_admin.png)
+        ![useradmin](./readme/user_admin.png)
 
     -   Ulasan
 
-        ![detailpeminjaman](./readme/ulasan.png)
+        ![ulasan](./readme/ulasan.png)
 
     -   Laporan Peminjaman
 
-        ![login](./readme/laporan.png)
+        ![laporan](./readme/laporan.png)
 
     -   Customize
 
-        ![registrasi](./readme/ubah.png)
+        ![ubah](./readme/ubah.png)
 
 
