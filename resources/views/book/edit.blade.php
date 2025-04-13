@@ -1,11 +1,14 @@
-@extends('layouts.main')
+@extends('layouts.main') {{-- Menggunakan layout utama --}}
 
-@section('contentAdmin')
+@section('contentAdmin') {{-- Section untuk konten admin/edit buku --}}
+    {{-- Form untuk mengupdate data buku --}}
     <form action="{{ route('books.update', $book->slug) }}" method="POST" class="p-4" enctype="multipart/form-data">
-        @method('put')
-        @csrf
+        @method('put') {{-- Method spoofing untuk PUT request --}}
+        @csrf {{-- CSRF token untuk keamanan form --}}
         <div class="bg-white rounded-xl overflow-hidden">
+            {{-- Header form edit --}}
             <div class="p-3 bg-blue-500">
+                {{-- Tombol kembali ke halaman daftar buku --}}
                 <a href="/books" class="text-sm font-medium text-blue-500 flex items-center">
                     <i data-feather="arrow-left" class="w-5 h-5 text-white"></i>
                     <span class="ml-2 text-white">Edit Buku</span>
@@ -13,6 +16,7 @@
             </div>
             <div class="w-full p-3">
                 <div class="grid grid-cols-2 gap-4">
+                    {{-- Input untuk judul buku --}}
                     <div>
                         <label for="judul" class="block mb-2 text-sm font-medium text-gray-900">Judul</label>
                         <input type="text" name="title" id="judul"
@@ -30,6 +34,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk penulis buku --}}
                     <div>
                         <label for="penulis" class="block mb-2 text-sm font-medium text-gray-900">Penulis</label>
                         <input type="text" name="penulis" id="penulis"
@@ -47,6 +53,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk penerbit buku --}}
                     <div>
                         <label for="penerbit" class="block mb-2 text-sm font-medium text-gray-900">Penerbit</label>
                         <input type="text" name="penerbit" id="penerbit"
@@ -64,10 +72,10 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk stok buku --}}
                     <div>
-                        <label for="Jumlah
-                            Buku"
-                            class="block mb-2 text-sm font-medium text-gray-900">Jumlah Buku</label>
+                        <label for="Jumlah Buku" class="block mb-2 text-sm font-medium text-gray-900">Jumlah Buku</label>
                         <input type="text" name="stok" id="Jumlah Buku"
                             class="bg-gray-50 border-2
                             @if($errors->has('stok'))
@@ -83,6 +91,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Dropdown untuk kategori buku --}}
                     <div>
                         <label for="Category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
                         <select name="category_id" id="category"
@@ -93,7 +103,7 @@
                                 dark:border-gray-300
                             @endif
                             text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring-offset-1 focus:ring-2 focus:ring-blue-500 focus:border-white block w-full p-2.5">
-                            @foreach ($categories as $category)
+                            @foreach ($categories as $category) {{-- Loop semua kategori --}}
                                 <option value="{{ $category->id }}"
                                     @if ($category->id == $book->category_id) @selected(true) @endif>{{ $category->name }}</option>
                             @endforeach
@@ -104,6 +114,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk jumlah halaman --}}
                     <div>
                         <label for="Halaman" class="block mb-2 text-sm font-medium text-gray-900">Halaman</label>
                         <input type="text" name="halaman" id="Halaman"
@@ -121,6 +133,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk tahun terbit --}}
                     <div>
                         <label for="thn_terbit" class="block mb-2 text-sm font-medium text-gray-900">Tahun Terbit</label>
                         <input type="date" name="thn_terbit" id="thn_terbit"
@@ -137,6 +151,8 @@
                                 {{ $message }}
                             </p>
                         @enderror
+
+                        {{-- Input untuk upload gambar buku --}}
                         <label class="block mt-3">
                         <span class="sr-only">Choose profile photo</span>
                         <input type="file"
@@ -146,19 +162,22 @@
                               file:text-sm file:font-semibold
                               file:bg-gray-50 file:text-blue-500
                               hover:file:bg-violet-100"
-                            onchange="showPreview(event)"
+                            onchange="showPreview(event)" {{-- Event untuk preview gambar --}}
                             name="image" />
                         @error('image')
                             <p class="mt-1 text-left text-sm text-red-600 mb-0">
                                 {{ $message }}
                             </p>
                         @enderror
+                        {{-- Menampilkan gambar saat ini jika ada --}}
                         @if(isset($book->image) && $book->image)
                             <img id="file-ip-1-preview" class="rounded-lg mt-3" src="{{ asset($book->image) }}" width="150">
                         @endif
                     </label>
                     </div>
+
                     <div class="w-full">
+                        {{-- Input untuk kode buku --}}
                         <div>
                             <label for="kodebuku" class="block mb-2 text-sm font-medium text-gray-900">Kode Buku</label>
                             <input type="text" name="kode_buku" id="kodebuku"
@@ -176,6 +195,8 @@
                                 </p>
                             @enderror
                         </div>
+
+                        {{-- Textarea untuk deskripsi buku --}}
                         <div>
                             <label for="desc" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
                             <textarea name="description" id="desc" cols="30" rows="10"
@@ -194,20 +215,24 @@
                         </div>
                     </div>
                 </div>
+                {{-- Tombol submit untuk update data --}}
                 <button class="w-full bg-blue-600 mt-3 rounded-lg text-white font-medium p-3 text-sm">Submit</button>
             </div>
         </div>
     </form>
 @endsection
 
-@extends('layouts.main')
+@extends('layouts.main') {{-- Menggunakan layout utama --}}
 
-@section('contentPustakawan')
+@section('contentPustakawan') {{-- Section untuk konten admin/edit buku --}}
+    {{-- Form untuk mengupdate data buku --}}
     <form action="{{ route('books.update', $book->slug) }}" method="POST" class="p-4" enctype="multipart/form-data">
-        @method('put')
-        @csrf
+        @method('put') {{-- Method spoofing untuk PUT request --}}
+        @csrf {{-- CSRF token untuk keamanan form --}}
         <div class="bg-white rounded-xl overflow-hidden">
+            {{-- Header form edit --}}
             <div class="p-3 bg-blue-500">
+                {{-- Tombol kembali ke halaman daftar buku --}}
                 <a href="/books" class="text-sm font-medium text-blue-500 flex items-center">
                     <i data-feather="arrow-left" class="w-5 h-5 text-white"></i>
                     <span class="ml-2 text-white">Edit Buku</span>
@@ -215,6 +240,7 @@
             </div>
             <div class="w-full p-3">
                 <div class="grid grid-cols-2 gap-4">
+                    {{-- Input untuk judul buku --}}
                     <div>
                         <label for="judul" class="block mb-2 text-sm font-medium text-gray-900">Judul</label>
                         <input type="text" name="title" id="judul"
@@ -232,6 +258,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk penulis buku --}}
                     <div>
                         <label for="penulis" class="block mb-2 text-sm font-medium text-gray-900">Penulis</label>
                         <input type="text" name="penulis" id="penulis"
@@ -249,6 +277,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk penerbit buku --}}
                     <div>
                         <label for="penerbit" class="block mb-2 text-sm font-medium text-gray-900">Penerbit</label>
                         <input type="text" name="penerbit" id="penerbit"
@@ -266,10 +296,10 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk stok buku --}}
                     <div>
-                        <label for="Jumlah
-                            Buku"
-                            class="block mb-2 text-sm font-medium text-gray-900">Jumlah Buku</label>
+                        <label for="Jumlah Buku" class="block mb-2 text-sm font-medium text-gray-900">Jumlah Buku</label>
                         <input type="text" name="stok" id="Jumlah Buku"
                             class="bg-gray-50 border-2
                             @if($errors->has('stok'))
@@ -285,6 +315,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Dropdown untuk kategori buku --}}
                     <div>
                         <label for="Category" class="block mb-2 text-sm font-medium text-gray-900">Category</label>
                         <select name="category_id" id="category"
@@ -295,7 +327,7 @@
                                 dark:border-gray-300
                             @endif
                             text-gray-900 sm:text-sm rounded-lg focus:outline-none focus:ring-offset-1 focus:ring-2 focus:ring-blue-500 focus:border-white block w-full p-2.5">
-                            @foreach ($categories as $category)
+                            @foreach ($categories as $category) {{-- Loop semua kategori --}}
                                 <option value="{{ $category->id }}"
                                     @if ($category->id == $book->category_id) @selected(true) @endif>{{ $category->name }}</option>
                             @endforeach
@@ -306,6 +338,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk jumlah halaman --}}
                     <div>
                         <label for="Halaman" class="block mb-2 text-sm font-medium text-gray-900">Halaman</label>
                         <input type="text" name="halaman" id="Halaman"
@@ -323,6 +357,8 @@
                             </p>
                         @enderror
                     </div>
+
+                    {{-- Input untuk tahun terbit --}}
                     <div>
                         <label for="thn_terbit" class="block mb-2 text-sm font-medium text-gray-900">Tahun Terbit</label>
                         <input type="date" name="thn_terbit" id="thn_terbit"
@@ -339,6 +375,8 @@
                                 {{ $message }}
                             </p>
                         @enderror
+
+                        {{-- Input untuk upload gambar buku --}}
                         <label class="block mt-3">
                         <span class="sr-only">Choose profile photo</span>
                         <input type="file"
@@ -348,19 +386,22 @@
                               file:text-sm file:font-semibold
                               file:bg-gray-50 file:text-blue-500
                               hover:file:bg-violet-100"
-                            onchange="showPreview(event)"
+                            onchange="showPreview(event)" {{-- Event untuk preview gambar --}}
                             name="image" />
                         @error('image')
                             <p class="mt-1 text-left text-sm text-red-600 mb-0">
                                 {{ $message }}
                             </p>
                         @enderror
+                        {{-- Menampilkan gambar saat ini jika ada --}}
                         @if(isset($book->image) && $book->image)
                             <img id="file-ip-1-preview" class="rounded-lg mt-3" src="{{ asset($book->image) }}" width="150">
                         @endif
-                        </label>
+                    </label>
                     </div>
+
                     <div class="w-full">
+                        {{-- Input untuk kode buku --}}
                         <div>
                             <label for="kodebuku" class="block mb-2 text-sm font-medium text-gray-900">Kode Buku</label>
                             <input type="text" name="kode_buku" id="kodebuku"
@@ -378,6 +419,8 @@
                                 </p>
                             @enderror
                         </div>
+
+                        {{-- Textarea untuk deskripsi buku --}}
                         <div>
                             <label for="desc" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
                             <textarea name="description" id="desc" cols="30" rows="10"
@@ -396,9 +439,9 @@
                         </div>
                     </div>
                 </div>
+                {{-- Tombol submit untuk update data --}}
                 <button class="w-full bg-blue-600 mt-3 rounded-lg text-white font-medium p-3 text-sm">Submit</button>
             </div>
         </div>
     </form>
 @endsection
-

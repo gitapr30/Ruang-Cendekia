@@ -1,141 +1,209 @@
-# Documentation ilibray 
+# Documentation ilibray
 
-Sitem ilibiray digunakan ditujukan untuk peminjaman buku secara online di sebuah perpustakaan. Project ini merupakan tugas Uji Kompetensi Keahlian yang diselenggarakan oleh Lembaga Sertifikasi Kompetensi (LSK). Dalam ujian tersebut kami sebagai siswa di beri tugas untuk membuat sistem yang bisa menjalankan CRUD serta Authentication dan bisa menambahkan fitur sesuai kreatifitas/pengembangan masing masing.
+Ruang Cendekia adalah platform perpustakaan digital yang memudahkan pengguna dalam meminjam buku secara online. Dengan fitur booking buku yang praktis, pengguna dapat mengecek ketersediaan koleksi, melakukan pemesanan, dan mengatur jadwal pengambilan dengan cepat. Website ini dirancang untuk mendukung kegiatan literasi dengan akses mudah, katalog lengkap, dan sistem peminjaman yang efisien.
 
 ## Fitur Fitur
 
-- *Admin*
+-   _Admin_
 
-    - Melakukan Login
-    - Menambahkan Buku
-    - Memperbarui Buku
-    - Menghapus Buku
-    - Mengembalikan Buku
-    - Menambahkan Kategori Buku
-    - Memperbarui Kategori Buku
-    - Mencari Buku
-    - Menghapus Kategori
+    -   Melakukan Login
+    -   Mencari Buku
+    -   Menambahkan Buku
+    -   Memperbarui Buku
+    -   Menghapus Buku
+    -   Mengembalikan Buku
+    -   Menambahkan Kategori Buku
+    -   Memperbarui Kategori Buku
+    -   Menghapus Kategori
+    -   Melihat WIshlit
+    -   Menambah Rak 
+    -   Memperbarui Rak
+    -   Melihat Detail Rak
+    -   Menghapus Rak
+    -   Melihat Daftar Pengguna
+    -   Menghapus Ulasan
+    -   Melihat Laporan Peminjaman
+    -   Mengubah Tampilan Landing 
 
-- *User*
+-   _Admin_
 
-    - Melakukan Login
-    - Melakukan Registrasi
-    - Mencari Buku
-    - Meminjam Buku
-    - Export PDF terkait peminjaman buku
-    - Melihat Semua Buku
-    - Melihat Semua Category
+    -   Melakukan Login
+    -   Mencari Buku
+    -   Menambahkan Buku
+    -   Memperbarui Buku
+    -   Menghapus Buku
+    -   Mengembalikan Buku
+    -   Menambahkan Kategori Buku
+    -   Memperbarui Kategori Buku
+    -   Mengkonfirmasi Peminjaman
+    -   Mengubah status pinjaman
+    -   Mengubah status denda
+    -   Menghapus Kategori
+    -   Melihat WIshlit
+    -   Menambah Rak 
+    -   Memperbarui Rak
+    -   Melihat Detail Rak
+    -   Menghapus Rak
+    -   Menambah Daftar Pengguna
+    -   Mengubah Data Pengguna
+    -   Menghapus Data Pengguna
+    -   Menghapus Ulasan
+    -   Melihat Laporan Peminjaman
+    -   Mengubah Tampilan Landing 
+
+
+-   _User_
+
+    -   Melakukan Login
+    -   Mencari Buku
+    -   Meminjam Buku
+    -   Memasukkan buku ke Wishlist
+    -   Menghapus buku dari Wishlist
+    -   Melihat Riwayat Peminjaman
+    -   Melihat Notifikasi
+    -   Mengubah data profil
+
 
 ## Tech Stack
 
-- HTML
-- CSS
-- Tailwind CSS
-- PHP
-- Laravel
-- MySQL
+-   HTML
+-   CSS
+-   Bootsrap
+-   PHP
+-   Laravel
+-   MySQL
 
 ## Install Project
 
-Ikuti Instruksi Dibawah 
+### Clone Repository
 
-### Installasi
-Buat Database dengan nama `laravel` atau jika ingin custom ubah file `.env.example` pada bagian `DB_DATABASE` sesuai yang anda inginkan
+git clone https://github.com/gitapr30/Ruang-Cendekia.git
 
-```
-git clone https://github.com/fadhluibnu/perpustakaan_laravel.git
-cd perpustakaan_laravel
+### Download Zip
+
+extract file zip
+
+## Buka di kode editor
+
+### Install composer
+
 composer install
-npm install
-ren .env.example .env
+
+### Install composer
+
+copy .env.example menjadi .env
+
+### Buka Web Server
+
+## Buat database di localhost
+
+nama database : laravel
+
+## Setting database di .env
+
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=
+
+## Generate key
+
 php artisan key:generate
-php artisan migrate
-```
 
-### Run Project
+## Jalankan migrate dan seeder
 
-Buka terminal, jalankan perintah
+php artisan migrate --seed
 
-```
+## Buat Storage Link
+
+php artisan storage:link
+
+## Jalankan Serve 
+
 php artisan serve
-```
-
-Buka terminal Baru, jalankan perintah
-
-```
-npm run dev
-```
-
-## To Try
-
-Setelah anda jalankan, Jika ingin masuk sebagai admin, gunakan email dan password berikut
-
-```
-Email : admin@gmail.com
-Password : 123
-```
 
 ## Screenshot
 
-- *Admin*
+-   _tampilan - tampilan_
 
-    - Login
+    -   Landing
 
-        ![login](./readme/login.png)
+        ![landing](./readme/tampilan_landing.png)
 
-    - All Book
+    -   Login
 
-        ![allbook](./readme/admin-allbook.png)
+        ![login](./readme/tampilan_login.png)
 
-    - Add Book
+    -   Buku user
 
-        ![addbook](./readme/admin-add-a-new-book.png)
+        ![bukuuser](./readme/tampilan_buku_user.png)
 
-    - Edit Book
+    -   Wishlist user
 
-        ![editbook](./readme/admin-edit-book.png)
+        ![wishlistuser](./readme/tampilan_wishlist_user.png)
 
-    - Book return
+    -   Riwayat user
 
-        ![pengembalianbook](./readme/admin-pengembalian-book.png)
+        ![riwayatuser](./readme/tampilan_riwayat_user.png)
 
-    - Category Buku
+    -   Detail buku
 
-        ![categorybook](./readme/admin-allcategory.png)
+        ![detailpeminjaman](./readme/tampilan_detail_peminjaman.png)
 
-    - Create Category
+    -   Dashboard
 
-        ![createcategory](./readme/admin-create-category.png)
+        ![daashboard](./readme/dashboard.png)
 
-    - Edit Category
+    -   Buku
 
-        ![createcategory](./readme/admin-editcategory.png)
+        ![buku](./readme/buku_admin.png)
 
-- *User*
+    -   kategori
 
-    - Login
+        ![kategori](./readme/kategori.png)
 
-        ![login](./readme/login.png)
+    -   Konfirmasi Peminjaman
 
-    - Registrasi
+        ![konfirmasi](./readme/konfirmasi.png)
 
-        ![registrasi](./readme/registrasi.png)
+    -   Buku Dipinjam
 
-    - All Book
+        ![dipinjam](./readme/dipinjam.png)
 
-        ![user-allbook](./readme/user-allbook.png)
+    -   Buku Dikembalikan
 
-    - Book Borrowing
+        ![dikembalikan](./readme/dikembalikan.png)
+        
+    -   Denda
 
-        ![bookborrowing](./readme/bookborrowing.png)
+        ![denda](./readme/denda.png)
 
+    -   Wishlist
 
-    - Borrowed Book
+        ![wishlist](./readme/wishlist.png)
 
-        ![borrowedbook](./readme/borrowedbook.png)
+    -   Rak
 
+        ![rak](./readme/rak.png)
 
-    - All Category
+    -   Pengguna Pustakawan
 
-        ![userallcategory](./readme/userallcategory.png)
+        ![userpustakawan](./readme/user_pustakawan.png)
+
+    -   Pengguna Admin
+
+        ![useradmin](./readme/user_admin.png)
+
+    -   Ulasan
+
+        ![ulasan](./readme/ulasan.png)
+
+    -   Laporan Peminjaman
+
+        ![laporan](./readme/laporan.png)
+
+    -   Customize
+
+        ![ubah](./readme/ubah.png)
+
 

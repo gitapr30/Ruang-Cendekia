@@ -1,13 +1,16 @@
 @extends('layouts.main')
 
+{{-- Section untuk konten Admin --}}
 @section('contentAdmin')
     <div class="p-4">
         <div class="flex justify-between items-center">
             <h1 class="text-lg font-semibold text-gray-800 mb-3">Data Ulasan</h1>
         </div>
         <div class="mt-6">
+            {{-- Tabel untuk menampilkan data ulasan --}}
             <div class="overflow-auto rounded-lg shadow block w-full mt-5 md:mt-0 md:col-span-2">
                 <table class="table-auto w-full">
+                    {{-- Header tabel --}}
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
                         <tr>
                             <th class="w-10 p-3 text-sm font-semibold tracking-wide text-left">#</th>
@@ -17,7 +20,9 @@
                             <th class="w-64 p-3 text-sm font-semibold tracking-wide text-left">Aksi</th>
                         </tr>
                     </thead>
+                    {{-- Body tabel --}}
                     <tbody class="divide-y divide-gray-200">
+                        {{-- Pengecekan jika tidak ada review --}}
                         @if ($reviews->isEmpty())
                             <tr>
                                 <td colspan="4">
@@ -25,20 +30,26 @@
                                 </td>
                             </tr>
                         @endif
+                        {{-- Loop untuk menampilkan setiap review --}}
                         @foreach ($reviews as $review)
                             <tr>
+                                {{-- Nomor urut --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     {{ $loop->iteration }}
                                 </td>
+                                {{-- Nama user yang memberi review --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     {{ $review->user->name }}
                                 </td>
+                                {{-- Judul buku yang di-review --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     {{ $review->book->title }}
                                 </td>
+                                {{-- Isi review --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     {{ $review->review }}
                                 </td>
+                                {{-- Tombol aksi untuk menghapus review --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="inline">
                                         @csrf
@@ -63,14 +74,17 @@
     </div>
 @endsection
 
+{{-- Section untuk konten Pustakawan --}}
 @section('contentPustakawan')
     <div class="p-4">
         <div class="flex justify-between items-center">
             <h1 class="text-lg font-semibold text-gray-800 mb-3">Data Ulasan</h1>
         </div>
         <div class="mt-6">
+            {{-- Tabel untuk menampilkan data ulasan --}}
             <div class="overflow-auto rounded-lg shadow block w-full mt-5 md:mt-0 md:col-span-2">
                 <table class="table-auto w-full">
+                    {{-- Header tabel --}}
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
                         <tr>
                             <th class="w-10 p-3 text-sm font-semibold tracking-wide text-left">#</th>
@@ -80,7 +94,9 @@
                             <th class="w-64 p-3 text-sm font-semibold tracking-wide text-left">Aksi</th>
                         </tr>
                     </thead>
+                    {{-- Body tabel --}}
                     <tbody class="divide-y divide-gray-200">
+                        {{-- Pengecekan jika tidak ada review --}}
                         @if ($reviews->isEmpty())
                             <tr>
                                 <td colspan="4">
@@ -88,20 +104,26 @@
                                 </td>
                             </tr>
                         @endif
+                        {{-- Loop untuk menampilkan setiap review --}}
                         @foreach ($reviews as $review)
                             <tr>
+                                {{-- Nomor urut --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     {{ $loop->iteration }}
                                 </td>
+                                {{-- Nama user yang memberi review --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     {{ $review->user->name }}
                                 </td>
+                                {{-- Judul buku yang di-review --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     {{ $review->book->title }}
                                 </td>
+                                {{-- Isi review --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     {{ $review->review }}
                                 </td>
+                                {{-- Tombol aksi untuk menghapus review --}}
                                 <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                                     <form action="{{ route('reviews.destroy', $review->id) }}" method="POST" class="inline">
                                         @csrf
@@ -125,4 +147,3 @@
         </div>
     </div>
 @endsection
-

@@ -1,10 +1,11 @@
 @extends('layouts.main')
 
+{{-- Section untuk konten Admin --}}
 @section('contentAdmin')
 <div class="container mt-5">
     <h1 class="mb-4 text-center text-lg font-semibold">Daftar Pengguna</h1>
 
-    <!-- Table -->
+    <!-- Tabel untuk menampilkan daftar pengguna -->
     <div class="overflow-auto rounded-lg shadow hidden lg:block w-full mt-5 md:mt-0 md:col-span-2">
         <table class="table-auto w-full">
             <thead class="bg-gray-50 border-b-2 border-gray-200">
@@ -20,6 +21,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
+                {{-- Pengecekan jika tidak ada user --}}
                 @if ($users->isEmpty())
                 <tr>
                     <td colspan="8">
@@ -27,6 +29,7 @@
                     </td>
                 </tr>
                 @endif
+                {{-- Loop untuk menampilkan setiap user --}}
                 @foreach($users as $index => $user)
                 <tr>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ $index + 1 }}</td>
@@ -35,6 +38,7 @@
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ $user->username }}</td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ $user->email }}</td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{-- Badge untuk role user --}}
                         <span class="badge bg-{{ $user->role == 'Admin' ? 'success' : 'info' }}">
                             {{ $user->role }}
                         </span>
@@ -43,6 +47,7 @@
                         {{ $user->last_login_at ? $user->last_login_at->format('d-m-Y H:i') : 'Never' }}
                     </td> --}}
                     <td class="p-3 text-sm text-gray-700">
+                        {{-- Menampilkan foto profil jika ada --}}
                         @if($user->image)
                         <img src="{{ asset($user->image) }}" alt="Profile Image" class="rounded-full w-12 h-12 object-cover">
                         @else
@@ -59,14 +64,15 @@
 @endsection
 
 
+{{-- Section untuk konten Pustakawan --}}
 @section('contentPustakawan')
 <div class="container mt-5">
     <h1 class="mb-4 text-center text-lg font-semibold">User List</h1>
 
-    <!-- Tombol untuk membuka modal -->
+    <!-- Tombol untuk membuka modal registrasi -->
     <button class="bg-blue-500 text-white px-4 py-2 rounded-md ml-5" onclick="openModal()">Registrasi</button>
 
-    <!-- Modal -->
+    <!-- Modal untuk registrasi user baru -->
     <div id="registerModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-md w-1/3">
             <h2 class="text-lg font-semibold mb-3">Registras</h2>
@@ -98,14 +104,12 @@
                 <div class="mt-4 flex justify-end">
                     <button type="button" class="bg-gray-400 text-white px-4 py-2 rounded-md mr-2" onclick="closeModal()">Cancel</button>
                     <button type="button" id="submitRegister" class="bg-blue-500 text-white px-4 py-2 rounded-md">Register</button>
-
                 </div>
             </form>
-
         </div>
     </div>
 
-    <!-- Table User List -->
+    <!-- Tabel untuk menampilkan daftar user -->
     <div class="overflow-auto rounded-lg shadow hidden lg:block w-full mt-5">
         <table class="table-auto w-full">
             <thead class="bg-gray-50 border-b-2 border-gray-200">
@@ -121,11 +125,13 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
+                {{-- Pengecekan jika tidak ada user --}}
                 @if ($users->isEmpty())
                 <tr>
                     <td colspan="8" class="p-5 text-sm text-center">Tidak terdapat user</td>
                 </tr>
                 @endif
+                {{-- Loop untuk menampilkan setiap user --}}
                 @foreach($users as $index => $user)
                 <tr>
                     <td class="p-3 text-sm text-gray-700">{{ $index + 1 }}</td>
@@ -136,6 +142,7 @@
                     <td class="p-3 text-sm text-gray-700">{{ $user->role }}</td>
                     {{-- <td class="p-3 text-sm text-gray-700">{{ $user->last_login_at ? $user->last_login_at->format('d-m-Y H:i') : 'Never' }}</td> --}}
                     <td class="p-3 text-sm text-gray-700">
+                        {{-- Menampilkan foto profil jika ada --}}
                         @if($user->image)
                         <img src="{{ asset($user->image) }}" alt="Profile Image" class="rounded-full w-12 h-12 object-cover">
                         @else
@@ -149,13 +156,15 @@
     </div>
 </div>
 
-<!-- Script untuk modal -->
+<!-- Script untuk mengelola modal dan registrasi AJAX -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Handler untuk tombol submit registrasi
         $("#submitRegister").click(function () {
             let formData = new FormData($("#registerForm")[0]);
 
+            // AJAX request untuk registrasi
             $.ajax({
                 url: "{{ route('register') }}",
                 type: "POST",
@@ -199,10 +208,12 @@
         });
     });
 
+    // Fungsi untuk membuka modal
     function openModal() {
         $("#registerModal").removeClass("hidden");
     }
 
+    // Fungsi untuk menutup modal
     function closeModal() {
         $("#registerModal").addClass("hidden");
     }

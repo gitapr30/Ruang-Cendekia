@@ -3,17 +3,18 @@
 @section('contentAdmin')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-3xl mx-auto">
-        <!-- Card Container -->
+        {{-- Container untuk card form edit --}}
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <!-- Card Header -->
+            {{-- Header card dengan gradient background --}}
             <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-4">
                 <h2 class="text-2xl font-bold text-white">
                     <i class="fas fa-edit mr-2"></i>Edit Rak Buku
                 </h2>
             </div>
 
-            <!-- Card Body -->
+            {{-- Body card yang berisi form --}}
             <div class="p-6">
+                {{-- Validasi error message --}}
                 @if ($errors->any())
                 <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
                     <div class="flex">
@@ -34,11 +35,12 @@
                 </div>
                 @endif
 
+                {{-- Form untuk mengupdate data rak buku --}}
                 <form action="{{ route('bookshelves.update', $bookshelf) }}" method="POST">
                     @csrf
                     @method('PUT')
 
-                    <!-- Input Rak -->
+                    {{-- Input untuk nomor rak --}}
                     <div class="mb-6">
                         <label for="rak" class="block text-sm font-medium text-gray-700 mb-1">
                             <i class="fas fa-hashtag mr-1 text-blue-600"></i>Nomor Rak
@@ -52,7 +54,7 @@
                         @enderror
                     </div>
 
-                    <!-- Input Baris -->
+                    {{-- Input untuk baris rak --}}
                     <div class="mb-6">
                         <label for="baris" class="block text-sm font-medium text-gray-700 mb-1">
                             <i class="fas fa-layer-group mr-1 text-blue-600"></i>Baris Rak
@@ -66,7 +68,7 @@
                         @enderror
                     </div>
 
-                    <!-- Input Kategori -->
+                    {{-- Dropdown untuk memilih kategori buku --}}
                     <div class="mb-6">
                         <label for="category_id" class="block text-sm font-medium text-gray-700 mb-1">
                             <i class="fas fa-tag mr-1 text-blue-600"></i>Kategori Buku
@@ -84,12 +86,14 @@
                         @enderror
                     </div>
 
-                    <!-- Tombol Aksi -->
+                    {{-- Container untuk tombol aksi --}}
                     <div class="flex justify-end space-x-3 pt-4">
+                        {{-- Tombol batal untuk kembali ke halaman sebelumnya --}}
                         <a href="{{ route('bookshelves.index') }}"
                            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <i class="fas fa-times mr-2"></i> Batal
                         </a>
+                        {{-- Tombol submit untuk menyimpan perubahan --}}
                         <button type="submit"
                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <i class="fas fa-save mr-2"></i> Simpan Perubahan
@@ -107,17 +111,18 @@
 @section('contentPustakawan')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-3xl mx-auto">
-        <!-- Card Container -->
+        {{-- Container untuk card form edit --}}
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <!-- Card Header -->
+            {{-- Header card dengan gradient background --}}
             <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-4">
                 <h2 class="text-2xl font-bold text-white">
                     <i class="fas fa-edit mr-2"></i>Edit Rak Buku
                 </h2>
             </div>
 
-            <!-- Card Body -->
+            {{-- Body card yang berisi form --}}
             <div class="p-6">
+                {{-- Validasi error message --}}
                 @if ($errors->any())
                 <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
                     <div class="flex">
@@ -138,11 +143,12 @@
                 </div>
                 @endif
 
+                {{-- Form untuk mengupdate data rak buku --}}
                 <form action="{{ route('bookshelves.update', $bookshelf) }}" method="POST">
                     @csrf
                     @method('PUT')
 
-                    <!-- Input Rak -->
+                    {{-- Input untuk nomor rak --}}
                     <div class="mb-6">
                         <label for="rak" class="block text-sm font-medium text-gray-700 mb-1">
                             <i class="fas fa-hashtag mr-1 text-blue-600"></i>Nomor Rak
@@ -156,7 +162,7 @@
                         @enderror
                     </div>
 
-                    <!-- Input Baris -->
+                    {{-- Input untuk baris rak --}}
                     <div class="mb-6">
                         <label for="baris" class="block text-sm font-medium text-gray-700 mb-1">
                             <i class="fas fa-layer-group mr-1 text-blue-600"></i>Baris Rak
@@ -170,7 +176,7 @@
                         @enderror
                     </div>
 
-                    <!-- Input Kategori -->
+                    {{-- Dropdown untuk memilih kategori buku --}}
                     <div class="mb-6">
                         <label for="category_id" class="block text-sm font-medium text-gray-700 mb-1">
                             <i class="fas fa-tag mr-1 text-blue-600"></i>Kategori Buku
@@ -188,12 +194,14 @@
                         @enderror
                     </div>
 
-                    <!-- Tombol Aksi -->
+                    {{-- Container untuk tombol aksi --}}
                     <div class="flex justify-end space-x-3 pt-4">
+                        {{-- Tombol batal untuk kembali ke halaman sebelumnya --}}
                         <a href="{{ route('bookshelves.index') }}"
                            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <i class="fas fa-times mr-2"></i> Batal
                         </a>
+                        {{-- Tombol submit untuk menyimpan perubahan --}}
                         <button type="submit"
                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <i class="fas fa-save mr-2"></i> Simpan Perubahan
